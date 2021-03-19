@@ -17,9 +17,8 @@ namespace DiabloII_Cookbook.Application.Wireup
             services.AddDbContext<DatabaseContext>((provider, builder) =>
             {
                 var options = provider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
-                builder.UseNpgsql($"Server={options.Host}; Port={options.Port}; Database={options.Database}; User Id={options.UserName}; Password={options.Password}");
+                builder.UseNpgsql($"Server={options.Host}; Port={options.Port}; Database={options.Database}; User Id={options.UserName}; Password={options.Password}");    
             });
-
         }
     }
 }

@@ -2,8 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>DiabloII_Cookbook</RootNamespace>
+    <RootNamespace>DiabloII_Cookbook.Api</RootNamespace>
     <AssemblyName>DiabloII-Cookbook.Api</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Netension.Request" Version="0.0.1-beta.49" />
+  </ItemGroup>
 
 </Project>

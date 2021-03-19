@@ -9,6 +9,10 @@
     <PackageReference Include="LightInject" Version="6.4.0" />
     <PackageReference Include="LightInject.Microsoft.DependencyInjection" Version="3.3.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Netension.Extensions.Correlation" Version="0.0.1-beta.17" />
     <PackageReference Include="Netension.Request.NetCore.Asp.Hosting.LightInject" Version="0.0.1-beta.49" />
     <PackageReference Include="Serilog" Version="2.10.0" />
