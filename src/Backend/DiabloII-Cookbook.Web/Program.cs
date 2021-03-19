@@ -1,3 +1,4 @@
+using DiabloII_Cookbook.Application.Wireup;
 using LightInject.Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,10 +24,6 @@ namespace DiabloII_Cookbook.Web
                 {
                     configuration.ReadFrom.Configuration(context.Configuration);
                 })
-                .ConfigureServices((services) =>
-                {
-                    services.AddControllers();
-                })
                 .UseRequesting((builder) =>
                 {
                     builder.RegistrateCorrelation();
@@ -36,6 +33,12 @@ namespace DiabloII_Cookbook.Web
                         builder.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
                         builder.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
                     });
+                })
+                .ConfigureServices((services) =>
+                {
+                    services.AddControllers();
+
+                    services.AddDatabase();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
