@@ -1,11 +1,11 @@
+using LightInject.Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Netension.Request.Hosting.LightInject.Builders;
+using Serilog;
 
 namespace DiabloII_Cookbook.Web
 {
@@ -18,9 +18,36 @@ namespace DiabloII_Cookbook.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseLightInject()
+                .UseSerilog((context, configuration) =>
+                {
+                    configuration.ReadFrom.Configuration(context.Configuration);
+                })
+                .ConfigureServices((services) =>
+                {
+                    services.AddControllers();
+                })
+                .UseRequesting((builder) =>
+                {
+                    builder.RegistrateCorrelation();
+
+                    builder.RegistrateRequestReceivers((builder) =>
+                    {
+                        builder.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
+                        builder.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
+                    });
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.Configure((app) =>
+                    {
+                        app.UseRouting();
+
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapRequestReceiver();
+                        });
+                    });
                 });
     }
 }
