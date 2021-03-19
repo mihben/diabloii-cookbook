@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Api", "DiabloII-Cookbook\DiabloII-Cookbook.Api.csproj", "{9B24B6FB-682A-4790-9D3C-1724ADB43591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Application", "DiabloII-Cookbook.Application\DiabloII-Cookbook.Application.csproj", "{B15AD36A-FF28-4933-B088-642CC0C1D010}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Web", "DiabloII-Cookbook.Web\DiabloII-Cookbook.Web.csproj", "{AF890994-8D08-4F6F-A7E5-024430FB6F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Test", "DiabloII-Cookbook.Test\DiabloII-Cookbook.Test.csproj", "{8155A4EF-C910-45D9-9105-FD37672A6DE5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B24B6FB-682A-4790-9D3C-1724ADB43591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B24B6FB-682A-4790-9D3C-1724ADB43591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B24B6FB-682A-4790-9D3C-1724ADB43591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B24B6FB-682A-4790-9D3C-1724ADB43591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B15AD36A-FF28-4933-B088-642CC0C1D010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B15AD36A-FF28-4933-B088-642CC0C1D010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B15AD36A-FF28-4933-B088-642CC0C1D010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B15AD36A-FF28-4933-B088-642CC0C1D010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF890994-8D08-4F6F-A7E5-024430FB6F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF890994-8D08-4F6F-A7E5-024430FB6F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF890994-8D08-4F6F-A7E5-024430FB6F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF890994-8D08-4F6F-A7E5-024430FB6F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8155A4EF-C910-45D9-9105-FD37672A6DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8155A4EF-C910-45D9-9105-FD37672A6DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8155A4EF-C910-45D9-9105-FD37672A6DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8155A4EF-C910-45D9-9105-FD37672A6DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {909F03E2-9A87-4CFA-8B7C-7269A2AACD54}
+	EndGlobalSection
+EndGlobal
