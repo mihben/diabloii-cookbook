@@ -43,11 +43,20 @@ namespace DiabloII_Cookbook.Web
                         .AddRequestReceiverController(); ;
 
                     services.AddDatabase();
+
+                    services.AddCors();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.Configure((app) =>
                     {
+                        app.UseCors((builder) =>
+                        {
+                            builder.AllowAnyOrigin();
+                            builder.AllowAnyHeader();
+                            builder.AllowAnyMethod();
+                        });
+
                         app.UseRouting();
 
                         app.UseEndpoints(endpoints =>

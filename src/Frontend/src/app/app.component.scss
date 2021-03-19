@@ -1,0 +1,16 @@
+input[type=checkbox] {
+    -webkit-appearance: none;
+    background-image: url('../assets/icons/Unchecked.png');
+	padding: 9px;
+    vertical-align: middle;
+}
+
+input[type=checkbox]:checked {
+    background-image: url('../assets/icons/Checked.png');
+}
+
+label {
+    color: white;
+    margin-left: 4px;
+    vertical-align: middle;
+}
