@@ -1,15 +1,39 @@
-<div style="background-color: black;overflow: hidden;" >
-  <h1>Diablo II - Cookbook</h1>
-  <div style="float: left; width: 20%;">
-    <mat-grid-list  cols="3" rowHeight="1.5em" style="align-items: stretch;" >
-      <li *ngFor="let rune of runes">
-        <mat-grid-tile>
-          <div style="width: 100%;">
-            <input type="checkbox" />
-            <label>{{rune.name}}</label>
-          </div>
-        </mat-grid-tile>
-      </li>
-    </mat-grid-list>
+<div class="main">
+  <div class="panel">
+    <div class="left-panel">
+      <img [src]="classImage" class="character" />
+      <table>
+        <tr>
+          <td><label>Name:</label></td>
+          <td><input type="text" value={{character.name}}></td>
+        </tr>
+        <tr>
+          <td><label>Level:</label></td>
+          <td><input type="text" value={{character.level}}></td>
+        </tr>
+        <tr>
+          <td><label>Ladder:</label></td>
+          <td><input type="checkbox" checked={{character.isLadder}}></td>
+        </tr>
+        <tr>
+          <td><label>Expansion:</label></td>
+          <td><input type="checkbox" checked={{character.isExpansion}}></td>
+        </tr>
+      </table>
+
+      <div class="headered-item">
+        <label>Runes:</label>
+        <mat-grid-list cols="3" rowHeight="1.5em" style="align-items: stretch;">
+          <li *ngFor="let rune of runes">
+            <mat-grid-tile>
+              <div style="width: 100%;">
+                <input type="checkbox" />
+                <label>{{rune.name}}</label>
+              </div>
+            </mat-grid-tile>
+          </li>
+        </mat-grid-list>
+      </div>
+    </div>
   </div>
 </div>

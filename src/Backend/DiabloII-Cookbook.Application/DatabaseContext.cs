@@ -1,6 +1,5 @@
 ﻿using DiabloII_Cookbook.Application.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DiabloII_Cookbook.Application
@@ -8,6 +7,7 @@ namespace DiabloII_Cookbook.Application
     public class DatabaseContext : DbContext
     {
         public DbSet<RuneEntity> Runes { get; set; }
+        public DbSet<CharacterEntity> Characters { get; set; }
 
         public DatabaseContext([NotNull] DbContextOptions options) 
             : base(options)
@@ -51,6 +51,34 @@ namespace DiabloII_Cookbook.Application
             modelBuilder.Entity<RuneEntity>()
                 .Property(re => re.InShield)
                 .HasColumnName("in_shield")
+                .IsRequired();
+
+            modelBuilder.Entity<CharacterEntity>()
+                .ToTable("characters")
+                .HasKey(ce => new { ce.Id });
+
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.Id)
+                .HasColumnName("id");
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.Class)
+                .HasColumnName("class")
+                .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.Name)
+                .HasColumnName("name")
+                .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.Level)
+                .HasColumnName("level")
+                .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.IsLadder)
+                .HasColumnName("is_ladder")
+                .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.IsExpansion)
+                .HasColumnName("is_expansion")
                 .IsRequired();
         }
 

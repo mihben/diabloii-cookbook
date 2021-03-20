@@ -14,3 +14,57 @@ label {
     margin-left: 4px;
     vertical-align: middle;
 }
+
+div.main {
+    background-color: black;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+div.left-panel {
+    float: left;
+    width: 20%;    
+}
+
+div.panel {
+    width: 80%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-image: url('../assets/Background.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+}
+
+img.character {
+    margin-left: auto; 
+    margin-right: auto; 
+    display: block; 
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+div.headered-item {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+input[type=text] {
+    background-image: url('../assets/icons/TextBox.png');
+    border: hidden;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 22px;
+    color: white;
+    padding-left: 4px;
+    vertical-align: middle;
+    
+}
+
+input[type=text]:focus {
+    outline: none !important;
+    border:hidden;
+}

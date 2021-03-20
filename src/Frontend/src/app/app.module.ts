@@ -8,6 +8,7 @@ import { RuneService } from 'src/shared/services/rune.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatGridListModule } from '@angular/material/grid-list';
+import { CharacterService } from 'src/shared/services/character.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     BrowserAnimationsModule,
     MatGridListModule
   ],
-  providers: [RuneService],
+  providers: [RuneService, CharacterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
