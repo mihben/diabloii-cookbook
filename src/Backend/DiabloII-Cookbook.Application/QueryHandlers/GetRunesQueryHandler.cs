@@ -28,7 +28,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 
             await _context.Database.EnsureCreatedAsync();
 
-            return (await _context.Runes.ToListAsync())
+            return (await _context.Runes.OrderBy(r => r.Order).ToListAsync())
                     .Select(re => re.ToDto());
         }
     }
