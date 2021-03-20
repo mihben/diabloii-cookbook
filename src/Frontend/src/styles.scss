@@ -37,3 +37,117 @@ $diabloii-cookbook-theme: mat-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@font-face {
+  font-family: Diablo Light;
+  src: url('assets/fonts/DiabloLight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Diablo Heavy;
+  src: url('assets/fonts/DiabloHeavy.ttf') format('truetype');
+}
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  background-image: url('/assets/icons/Unchecked.png');
+padding: 9px;
+  vertical-align: middle;
+}
+
+input[type=checkbox]:checked {
+  background-image: url('/assets/icons/Checked.png');
+}
+
+label {
+  color: white;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-family: Diablo Light;
+}
+
+div.main {
+  background-color: black;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+div.left-panel {
+  margin: 4px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 30%;   
+  border-image: url('/assets/icons/border.png') 30 round; 
+  border-image-width: auto;
+  border-style: solid;
+  border-image-outset: 2px;
+  background-color: rgba($color: #000000, $alpha: 0.9);
+}
+
+div.top-panel {
+  margin: 4px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 68%;   
+  border-image: url('/assets/icons/border.png') 30 round; 
+  border-image-width: auto;
+  border-style: solid;
+  border-image-outset: 2px;
+  background-color: rgba($color: #000000, $alpha: 0.9)
+}
+
+div.panel {
+  width: 80%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url('/assets/Background.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 45%;
+}
+
+img.character {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  min-height: 241px;
+}
+
+div.headered-item {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+input[type=text] {
+  background-image: url('/assets/icons/TextBox.png');
+  border: hidden;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 25px;
+  color: white;
+  padding-left: 8px;
+  vertical-align: middle;
+  font-family: Diablo Light;
+  font-size: 12px;
+}
+
+input[type=text]:focus {
+  outline: none !important;
+  border:hidden;
+}
+
+.tool-tip {
+  white-space: pre-line;
+  font-family: Diablo Light;
+  background: black;
+  max-width: unset !important;
+  border-image: url('/assets/icons/border.png') 30 round; 
+  border-image-width: auto;
+  border-style: solid;
+  border-image-outset: 2px;
+}

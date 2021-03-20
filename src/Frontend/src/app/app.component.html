@@ -1,9 +1,23 @@
 <div class="main">
   <div class="panel">
     <div class="left-panel">
-      <img [src]="classImage" class="character" />
-      <table>
-        <tr>
+      <div style="display: flex;">
+        <div style="display: block; margin-top: auto; margin-bottom: auto;">
+          <button type="button" style="border: 0; background: transparent" (click)="previous()">
+            <img src="../assets/icons/Left.png"/>
+          </button>
+        </div>
+        <div style="display: block; margin-left: auto; margin-right: auto;">
+          <img [src]="classImage" class="character"/>
+        </div>
+        <div style="display: block; margin-top: auto; margin-bottom: auto;">
+          <button type="button" style="border: 0; background: transparent" (click)="next()">
+            <img src="../assets/icons/Right.png"/>
+          </button>
+        </div>
+    </div>
+      <table style="width: 100%;">
+        <tr style="width: 100%;">
           <td><label>Name:</label></td>
           <td><input type="text" value={{character.name}}></td>
         </tr>
@@ -22,18 +36,21 @@
       </table>
 
       <div class="headered-item">
-        <label>Runes:</label>
-        <mat-grid-list cols="3" rowHeight="1.5em" style="align-items: stretch;">
+        <mat-grid-list cols="3" rowHeight="2em" style="align-items: stretch;">
           <li *ngFor="let rune of runes">
             <mat-grid-tile>
               <div style="width: 100%;">
                 <input type="checkbox" />
-                <label>{{rune.name}}</label>
+                <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
               </div>
             </mat-grid-tile>
           </li>
         </mat-grid-list>
       </div>
+    </div>
+
+    <div class="top-panel" >
+      <label>Filters</label>
     </div>
   </div>
 </div>
