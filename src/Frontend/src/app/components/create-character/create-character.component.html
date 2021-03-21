@@ -1,0 +1,32 @@
+<div>
+    <table>
+        <tr>
+            <td><label>Name:</label></td>
+            <td><input type="text" [(ngModel)]="name"></td>
+        </tr>
+        <tr>
+            <td><label>Class:</label></td>
+            <td>
+                <mat-select class="select" panelClass="select-panel" [(value)]="class">
+                    <mat-option [value]="class" *ngFor="let class of classes">{{class}}</mat-option>
+                </mat-select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Level:</label></td>
+            <td><input type="text" [(ngModel)]="level"></td>
+        </tr>
+        <tr>
+            <td><label>Ladder:</label></td>
+            <td><input type="checkbox" [(ngModel)]="isLadder"></td>
+        </tr>
+        <tr>
+            <td><label>Expansion:</label></td>
+            <td><input type="checkbox" [(ngModel)]="isExpansion"></td>
+        </tr>
+    </table>
+    <div>
+        <button type="button" class="text-button" (click)="create()">Create</button>
+        <button type="button" class="text-button" (click)="cancel()">Cancel</button>
+    </div>
+</div>

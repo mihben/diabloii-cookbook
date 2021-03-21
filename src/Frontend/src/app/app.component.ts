@@ -1,8 +1,10 @@
 import { Component, HostListener, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Character } from 'src/shared/models/character.model';
 import { Rune } from 'src/shared/models/rune.model';
 import { CharacterService } from 'src/shared/services/character.service';
 import { RuneService } from 'src/shared/services/rune.service';
+import { CreateCharacterComponent } from './components/create-character/create-character.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,7 @@ export class AppComponent implements OnInit {
   character: Character | any;
   classImage: string | undefined;
 
-  constructor(private runeService: RuneService, private characterService: CharacterService) { }
+  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.runeService.getRunes()
@@ -25,14 +27,7 @@ export class AppComponent implements OnInit {
         this.runes = runes;
       });
 
-    this.characterService.getCharacters()
-      .subscribe((characters) => {
-        this.characters = characters;
-        this.characterService.getCharacterDetail(this.characters[0])
-          .subscribe((character) => {
-            this.setCharacter(character);
-          })
-      });
+    this.refreshCharacters();
   }
 
   private setCharacter(character: Character) {
@@ -80,5 +75,28 @@ export class AppComponent implements OnInit {
         this.setCharacter(character);
       });
     }
+  }
+
+  addNew() : void {
+    this.dialog.open(CreateCharacterComponent, { panelClass: 'mat-dialog' })
+      .afterClosed()
+      .subscribe(created => {
+        if (created) {
+          this.refreshCharacters();
+        } else {
+          console.log("Character is not created")
+        }
+      })
+  }
+
+  private refreshCharacters() : void {
+    this.characterService.getCharacters()
+    .subscribe((characters) => {
+      this.characters = characters;
+      this.characterService.getCharacterDetail(this.characters[0])
+        .subscribe((character) => {
+          this.setCharacter(character);
+        })
+    });
   }
 }

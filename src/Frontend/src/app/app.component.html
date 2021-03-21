@@ -16,6 +16,7 @@
           </button>
         </div>
     </div>
+    <div>
       <table style="width: 100%;">
         <tr style="width: 100%;">
           <td><label>Name:</label></td>
@@ -34,9 +35,9 @@
           <td><input type="checkbox" checked={{character.isExpansion}}></td>
         </tr>
       </table>
-
+    </div>
       <div class="headered-item">
-        <mat-grid-list cols="3" rowHeight="2em" style="align-items: stretch;">
+        <mat-grid-list cols="3" rowHeight="2em" style="overflow: hidden;">
           <li *ngFor="let rune of runes">
             <mat-grid-tile>
               <div style="width: 100%;">
@@ -46,6 +47,11 @@
             </mat-grid-tile>
           </li>
         </mat-grid-list>
+      </div>
+
+      <div>
+        <button class="text-button" type="button" (click)="addNew()" style="z-index: 1;">Add</button>
+        <button class="text-button" type="button" (click)="addNew()" style="float: right;">Delete</button>
       </div>
     </div>
 
