@@ -1,61 +1,63 @@
 <div class="main">
   <div class="panel">
     <div class="left-panel">
-      <div style="display: flex;">
-        <div style="display: block; margin-top: auto; margin-bottom: auto;">
-          <button type="button" style="border: 0; background: transparent" (click)="previous()">
-            <img src="../assets/icons/Left.png"/>
-          </button>
+      <form [formGroup]="characterForm">
+        <div style="display: flex;">
+          <div style="display: block; margin-top: auto; margin-bottom: auto;">
+            <button type="button" style="border: 0; background: transparent" (click)="previous()">
+              <img src="../assets/icons/Left.png" />
+            </button>
+          </div>
+          <div style="display: block; margin-left: auto; margin-right: auto;">
+            <img [src]="classImage" class="character" />
+          </div>
+          <div style="display: block; margin-top: auto; margin-bottom: auto;">
+            <button type="button" style="border: 0; background: transparent" (click)="next()">
+              <img src="../assets/icons/Right.png" />
+            </button>
+          </div>
         </div>
-        <div style="display: block; margin-left: auto; margin-right: auto;">
-          <img [src]="classImage" class="character"/>
+        <div>
+          <table style="width: 100%;">
+            <tr style="width: 100%;">
+              <td><label>Name:</label></td>
+              <td><label>{{character.name}}</label></td>
+            </tr>
+            <tr>
+              <td><label>Level:</label></td>
+              <td><input type="text" formControlName="level"></td>
+            </tr>
+            <tr>
+              <td><label>Ladder:</label></td>
+              <td><input type="checkbox" readonly="true" checked={{character.isLadder}}></td>
+            </tr>
+            <tr>
+              <td><label>Expansion:</label></td>
+              <td><input type="checkbox" readonly="true" checked={{character.isExpansion}}></td>
+            </tr>
+          </table>
         </div>
-        <div style="display: block; margin-top: auto; margin-bottom: auto;">
-          <button type="button" style="border: 0; background: transparent" (click)="next()">
-            <img src="../assets/icons/Right.png"/>
-          </button>
+        <div class="headered-item">
+          <mat-grid-list cols="3" rowHeight="2em" style="overflow: hidden;">
+            <li *ngFor="let rune of runes">
+              <mat-grid-tile>
+                <div style="width: 100%;">
+                  <input type="checkbox" />
+                  <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
+                </div>
+              </mat-grid-tile>
+            </li>
+          </mat-grid-list>
         </div>
-    </div>
-    <div>
-      <table style="width: 100%;">
-        <tr style="width: 100%;">
-          <td><label>Name:</label></td>
-          <td><input type="text" value={{character.name}}></td>
-        </tr>
-        <tr>
-          <td><label>Level:</label></td>
-          <td><input type="text" value={{character.level}}></td>
-        </tr>
-        <tr>
-          <td><label>Ladder:</label></td>
-          <td><input type="checkbox" checked={{character.isLadder}}></td>
-        </tr>
-        <tr>
-          <td><label>Expansion:</label></td>
-          <td><input type="checkbox" checked={{character.isExpansion}}></td>
-        </tr>
-      </table>
-    </div>
-      <div class="headered-item">
-        <mat-grid-list cols="3" rowHeight="2em" style="overflow: hidden;">
-          <li *ngFor="let rune of runes">
-            <mat-grid-tile>
-              <div style="width: 100%;">
-                <input type="checkbox" />
-                <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
-              </div>
-            </mat-grid-tile>
-          </li>
-        </mat-grid-list>
-      </div>
 
-      <div>
-        <button class="text-button" type="button" (click)="addNew()" style="z-index: 1;">Add</button>
-        <button class="text-button" type="button" (click)="addNew()" style="float: right;">Delete</button>
-      </div>
+        <div>
+          <button class="text-button" type="button" (click)="addCharacter()" style="z-index: 1;">Add</button>
+          <button class="text-button" type="button" (click)="deleteCharacter()" style="float: right;">Delete</button>
+        </div>
+      </form>
     </div>
 
-    <div class="top-panel" >
+    <div class="top-panel">
       <label>Filters</label>
     </div>
   </div>

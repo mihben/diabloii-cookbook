@@ -5,6 +5,10 @@ import { Rune } from 'src/shared/models/rune.model';
 import { CharacterService } from 'src/shared/services/character.service';
 import { RuneService } from 'src/shared/services/rune.service';
 import { CreateCharacterComponent } from './components/create-character/create-character.component';
+import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { of, Subscription } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { FormGroup, FormBuilder  } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +23,15 @@ export class AppComponent implements OnInit {
   character: Character | any;
   classImage: string | undefined;
 
-  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog) { }
+  characterForm: FormGroup;
+
+  save: Subscription | undefined;
+
+  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder) { 
+    this.characterForm = this.formBuidler.group({
+      level: []
+    });
+  }
 
   ngOnInit(): void {
     this.runeService.getRunes()
@@ -33,6 +45,14 @@ export class AppComponent implements OnInit {
   private setCharacter(character: Character) {
     this.character = character;
     this.classImage = `../assets/classes/${this.character.class}.gif`;
+    this.save?.unsubscribe();
+    this.characterForm.setValue({ level: this.character.level });
+    this.save = this.characterForm?.valueChanges
+      .pipe(debounceTime(1500), switchMap((value) => of(value)))
+      .subscribe(value => 
+          this.characterService.updateCharacter(this.character.id, value.level)
+            .subscribe()
+        );
   }
 
   @HostListener('wheel', ['$event']) 
@@ -77,16 +97,26 @@ export class AppComponent implements OnInit {
     }
   }
 
-  addNew() : void {
+  addCharacter() : void {
     this.dialog.open(CreateCharacterComponent, { panelClass: 'mat-dialog' })
       .afterClosed()
       .subscribe(created => {
         if (created) {
           this.refreshCharacters();
-        } else {
-          console.log("Character is not created")
-        }
+        } else { }
       })
+  }
+
+  deleteCharacter() : void {
+    this.dialog.open(DeleteConfirmationDialogComponent, { panelClass: 'mat-dialog' })
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.characterService.deleteCharacter(this.character.id)
+            .subscribe(() => this.refreshCharacters());
+        } else { }
+      });
+
   }
 
   private refreshCharacters() : void {

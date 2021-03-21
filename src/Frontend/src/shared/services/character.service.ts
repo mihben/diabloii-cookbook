@@ -41,7 +41,7 @@ export class CharacterService {
   }
 
   createCharacter(character: Character) {
-    return this.client.post<string[]>("http://localhost:5000/api", character, {
+    return this.client.post("http://localhost:5000/api", character, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Commands.CreateCharacterCommand, DiabloII-Cookbook.Api',
         'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
@@ -49,4 +49,24 @@ export class CharacterService {
       }
     });
   }
+
+  deleteCharacter(id: string) {
+    return this.client.post("http://localhost:5000/api", { id: id }, {
+      headers: {
+        'Message-Type': 'DiabloII_Cookbook.Api.Commands.DeleteCharacterCommand, DiabloII-Cookbook.Api',
+        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
+        'Content-Type': "application/json"
+      }
+    });
+  }
+
+    updateCharacter(id: string, level: number) {
+      return this.client.post("http://localhost:5000/api", { id: id, level: level }, {
+        headers: {
+          'Message-Type': 'DiabloII_Cookbook.Api.Commands.UpdateCharacterCommand, DiabloII-Cookbook.Api',
+          'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
+          'Content-Type': "application/json"
+        }
+      });
+    }
 }

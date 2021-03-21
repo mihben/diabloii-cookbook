@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import {FormsModule} from '@angular/forms';  
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';  
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,12 +15,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CreateCharacterComponent } from './components/create-character/create-character.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
+import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RuneComponent,
-    CreateCharacterComponent
+    CreateCharacterComponent,
+    DeleteConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -31,9 +33,10 @@ import {MatSelectModule} from '@angular/material/select';
     MatTooltipModule,
     MatDialogModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [RuneService, CharacterService],
+  providers: [RuneService, CharacterService, FormBuilder],
   entryComponents: [CreateCharacterComponent],
   bootstrap: [AppComponent]
 })
