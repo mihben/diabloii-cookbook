@@ -42,7 +42,7 @@
             <li *ngFor="let rune of runes">
               <mat-grid-tile>
                 <div style="width: 100%;">
-                  <input type="checkbox" />
+                  <input type="checkbox" formControlName={{rune.id}}/>
                   <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
                 </div>
               </mat-grid-tile>

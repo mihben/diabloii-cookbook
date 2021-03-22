@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Character } from '../models/character.model';
+import { Rune } from '../models/rune.model';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +51,7 @@ export class CharacterService {
     });
   }
 
-  deleteCharacter(id: string) {
+  deleteCharacter(id: string| undefined) {
     return this.client.post("http://localhost:5000/api", { id: id }, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Commands.DeleteCharacterCommand, DiabloII-Cookbook.Api',
@@ -60,8 +61,8 @@ export class CharacterService {
     });
   }
 
-    updateCharacter(id: string, level: number) {
-      return this.client.post("http://localhost:5000/api", { id: id, level: level }, {
+    updateCharacter(id: string | undefined, level: number, runes: Rune[]) {
+      return this.client.post("http://localhost:5000/api", { id: id, level: level, runes: runes }, {
         headers: {
           'Message-Type': 'DiabloII_Cookbook.Api.Commands.UpdateCharacterCommand, DiabloII-Cookbook.Api',
           'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',

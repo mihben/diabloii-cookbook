@@ -8,7 +8,8 @@ import { CreateCharacterComponent } from './components/create-character/create-c
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { of, Subscription } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { FormGroup, FormBuilder  } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { BrowserStack } from 'protractor/built/driverProviders';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ import { FormGroup, FormBuilder  } from '@angular/forms';
 
 export class AppComponent implements OnInit {
   title = 'diabloii-cookbook';
-  runes : Rune[] = [];
+  runes: Rune[] = [];
   characters: string[] = [];
   character: Character | any;
   classImage: string | undefined;
@@ -27,39 +28,55 @@ export class AppComponent implements OnInit {
 
   save: Subscription | undefined;
 
-  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder) { 
+  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder) {
     this.characterForm = this.formBuidler.group({
       level: []
     });
   }
 
   ngOnInit(): void {
+    this.save?.unsubscribe();
+
     this.runeService.getRunes()
       .subscribe((runes) => {
-        this.runes = runes;
-      });
+        runes.forEach(rune => {
+          this.characterForm.addControl(rune.id, new FormControl(false));
+        });
 
-    this.refreshCharacters();
+        this.runes = runes;
+
+        this.refreshCharacters();
+
+        this.save = this.characterForm?.valueChanges
+        .pipe(debounceTime(1500), switchMap((value) => of(value)))
+        .subscribe(value => {
+          console.log('Update character');
+          var selectedRunes: Rune[] = [];
+          this.runes.forEach(rune => {
+            if (this.characterForm.get(rune.id)?.value) {
+              selectedRunes.push(rune);
+            }
+          });
+          this.characterService.updateCharacter(this.character?.id, value.level, selectedRunes)
+            .subscribe();
+        });
+      });
   }
 
   private setCharacter(character: Character) {
+    console.log("Set character");
+
     this.character = character;
     this.classImage = `../assets/classes/${this.character.class}.gif`;
-    this.save?.unsubscribe();
-    this.characterForm.setValue({ level: this.character.level });
-    this.save = this.characterForm?.valueChanges
-      .pipe(debounceTime(1500), switchMap((value) => of(value)))
-      .subscribe(value => 
-          this.characterService.updateCharacter(this.character.id, value.level)
-            .subscribe()
-        );
+
+    this.characterForm.controls['level'].setValue(character.level, {onlySelf: true, emitEvent: false})
+    this.runes.forEach(rune => {
+      this.characterForm.controls[rune.id].setValue(character.runes.some(cr => cr.id === rune.id), {onlySelf: true, emitEvent: false});
+    });
   }
 
-  @HostListener('wheel', ['$event']) 
+  @HostListener('wheel', ['$event'])
   onMousewheel(event: WheelEvent) {
-    console.log(event);
-    
-
     if (event.deltaX < 0)
       this.previous();
     else if (event.deltaX > 0)
@@ -67,66 +84,66 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('window:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent)
-  {
+  onKeyDown(event: KeyboardEvent) {
     if (event.key === 'ArrowLeft')
       this.previous();
     else if (event.key === 'ArrowRight')
       this.next();
   }
 
-  previous() : void {
-    var index = this.characters.indexOf(this.character.id);
-    if (--index >= 0)
-    {
+  previous(): void {
+    var index = this.characters?.indexOf(this.character.id);
+    if (--index >= 0) {
       this.characterService.getCharacterDetail(this.characters[index])
-      .subscribe((character) => {
-        this.setCharacter(character);
-      });
-    }
-  }
-  
-  next() : void {
-    var index = this.characters.indexOf(this.character.id);
-    if (++index < this.characters.length)
-    {
-      this.characterService.getCharacterDetail(this.characters[index])
-      .subscribe((character) => {
-        this.setCharacter(character);
-      });
+        .subscribe((character) => {
+          this.setCharacter(character);
+        });
     }
   }
 
-  addCharacter() : void {
+  next(): void {
+    var index = this.characters.indexOf(this.character.id);
+    if (++index < this.characters.length) {
+      this.characterService.getCharacterDetail(this.characters[index])
+        .subscribe((character) => {
+          this.setCharacter(character);
+        });
+    }
+  }
+
+  addCharacter(): void {
     this.dialog.open(CreateCharacterComponent, { panelClass: 'mat-dialog' })
       .afterClosed()
       .subscribe(created => {
         if (created) {
+          console.log('Created');
+
           this.refreshCharacters();
-        } else { }
+        }
       })
   }
 
-  deleteCharacter() : void {
+  deleteCharacter(): void {
     this.dialog.open(DeleteConfirmationDialogComponent, { panelClass: 'mat-dialog' })
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.characterService.deleteCharacter(this.character.id)
+          this.characterService.deleteCharacter(this.character?.id)
             .subscribe(() => this.refreshCharacters());
         } else { }
       });
 
   }
 
-  private refreshCharacters() : void {
+  private refreshCharacters(): void {
+    this.character = null;
     this.characterService.getCharacters()
-    .subscribe((characters) => {
-      this.characters = characters;
-      this.characterService.getCharacterDetail(this.characters[0])
-        .subscribe((character) => {
-          this.setCharacter(character);
-        })
-    });
+      .subscribe((characters) => {
+        this.characters = characters;
+        this.characterService.getCharacterDetail(this.characters[0])
+          .subscribe((character) => {
+            this.setCharacter(character);
+          })
+      });
   }
 }

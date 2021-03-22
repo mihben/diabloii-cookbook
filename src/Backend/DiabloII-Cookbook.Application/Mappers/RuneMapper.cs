@@ -9,5 +9,20 @@ namespace DiabloII_Cookbook.Application.Mappers
         {
             return new Rune(entity.Id, entity.Name, entity.Order, entity.Level, entity.InWeapon, entity.InHelm, entity.InArmor, entity.InShield);
         }
+
+        public static RuneEntity ToEntity(this Rune rune)
+        {
+            return new RuneEntity
+            {
+                Id = rune.Id,
+                Order = rune.Order,
+                Name = rune.Name,
+                Level = rune.Level,
+                InWeapon = rune.InWeapon,
+                InArmor = rune.InArmor,
+                InHelm = rune.InHelm,
+                InShield = rune.InShield
+            };
+        }
     }
 }

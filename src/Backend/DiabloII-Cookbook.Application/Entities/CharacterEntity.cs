@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DiabloII_Cookbook.Application.Entities
 {
@@ -10,5 +11,6 @@ namespace DiabloII_Cookbook.Application.Entities
         public int Level { get; set; }
         public bool IsLadder { get; set; }
         public bool IsExpansion { get; set; }
+        public ICollection<CharacterRuneEntity> Runes { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace DiabloII_Cookbook.Api.DataTransferObjects
 {
@@ -10,8 +12,9 @@ namespace DiabloII_Cookbook.Api.DataTransferObjects
         public int Level { get; }
         public bool IsLadder { get; }
         public bool IsExpansion { get; }
+        public IEnumerable<Rune> Runes { get; }
 
-        public Character(Guid id, string @class, string name, int level, bool isLadder, bool isExpansion)
+        public Character(Guid id, string @class, string name, int level, bool isLadder, bool isExpansion, IEnumerable<Rune> runes)
         {
             Id = id;
             Class = @class;
@@ -19,6 +22,7 @@ namespace DiabloII_Cookbook.Api.DataTransferObjects
             Level = level;
             IsLadder = isLadder;
             IsExpansion = isExpansion;
+            Runes = runes;
         }
     }
 }

@@ -29,7 +29,7 @@ export class CreateCharacterComponent implements OnInit {
   }
 
   create(): void {
-    this.characterService.createCharacter(new Character("", this.class, this.name, this.level, this.isLadder, this.isExpansion))
+    this.characterService.createCharacter(new Character("", this.class, this.name, this.level, this.isLadder, this.isExpansion, []))
       .subscribe(() => this.dialogRef.close(true));    
   }
 

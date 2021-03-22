@@ -1,5 +1,6 @@
 ﻿using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Application.Entities;
+using System.Linq;
 
 namespace DiabloII_Cookbook.Application.Mappers
 {
@@ -7,7 +8,7 @@ namespace DiabloII_Cookbook.Application.Mappers
     {
         public static Character ToDto(this CharacterEntity entity)
         {
-            return new Character(entity.Id, entity.Class, entity.Name, entity.Level, entity.IsLadder, entity.IsExpansion);
+            return new Character(entity.Id, entity.Class, entity.Name, entity.Level, entity.IsLadder, entity.IsExpansion, entity.Runes.Select(r => r.Rune.ToDto()));
         }
     }
 }

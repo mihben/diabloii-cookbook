@@ -80,6 +80,33 @@ namespace DiabloII_Cookbook.Application
                 .Property(ce => ce.IsExpansion)
                 .HasColumnName("is_expansion")
                 .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .HasMany(ce => ce.Runes)
+                .WithOne((cre) => cre.Character)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CharacterRuneEntity>()
+                .ToTable("character_rune_switch")
+                .HasKey(crse => new { crse.CharacterId, crse.RuneId });
+
+            modelBuilder.Entity<CharacterRuneEntity>()
+                 .HasOne(crse => crse.Character)
+                 .WithMany(c => c.Runes)
+                 .HasForeignKey(crse => crse.CharacterId)
+                 .HasConstraintName("fk_character_rune_character_id");
+            modelBuilder.Entity<CharacterRuneEntity>()
+                 .Property(crse => crse.CharacterId)
+                 .HasColumnName("character_id");
+            modelBuilder.Entity<CharacterRuneEntity>()
+                 .HasOne(crse => crse.Rune)
+                 .WithMany(r => r.Characters)
+                 .HasForeignKey(crse => crse.RuneId)
+                 .HasConstraintName("fk_character_rune_rune_id");
+            modelBuilder.Entity<CharacterRuneEntity>()
+                 .Property(crse => crse.RuneId)
+                 .HasColumnName("rune_id");
+
+            base.OnModelCreating(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

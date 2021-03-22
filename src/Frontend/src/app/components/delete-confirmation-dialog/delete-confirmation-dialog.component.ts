@@ -18,6 +18,6 @@ export class DeleteConfirmationDialogComponent implements OnInit {
   }
 
   no(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
 }

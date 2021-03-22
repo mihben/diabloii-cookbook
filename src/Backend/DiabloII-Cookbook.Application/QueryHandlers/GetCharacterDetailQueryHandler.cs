@@ -1,7 +1,7 @@
 ﻿using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Entities;
 using DiabloII_Cookbook.Application.Mappers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Handlers;
 using System.Threading;
@@ -23,7 +23,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
         public async Task<Character> HandleAsync(GetCharacterDetailQuery query, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Get {id} character detail", query.Id);
-            return (await _context.FindAsync<CharacterEntity>(new object[] { query.Id }, cancellationToken))
+            return (await _context.Characters.Include(c => c.Runes).ThenInclude(ce => ce.Rune).SingleAsync(c => c.Id == query.Id, cancellationToken))
                     .ToDto();
         }
     }
