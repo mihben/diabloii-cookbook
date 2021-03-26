@@ -1,4 +1,5 @@
 ﻿using DiabloII_Cookbook.Api.Queries;
+using DiabloII_Cookbook.Application.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Handlers;
@@ -12,10 +13,10 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 {
     public class GetCharactersQueryHandler : IQueryHandler<GetCharactersQuery, IEnumerable<Guid>>
     {
-        private readonly DatabaseContext _databaseContext;
+        private readonly CharacterContext _databaseContext;
         private readonly ILogger<GetCharactersQueryHandler> _logger;
 
-        public GetCharactersQueryHandler(DatabaseContext databaseContext, ILogger<GetCharactersQueryHandler> logger)
+        public GetCharactersQueryHandler(CharacterContext databaseContext, ILogger<GetCharactersQueryHandler> logger)
         {
             _databaseContext = databaseContext;
             _logger = logger;

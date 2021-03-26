@@ -42,7 +42,7 @@
             <li *ngFor="let rune of runes">
               <mat-grid-tile>
                 <div style="width: 100%;">
-                  <input type="checkbox" formControlName={{rune.id}}/>
+                  <input type="checkbox" formControlName={{rune.id}} />
                   <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
                 </div>
               </mat-grid-tile>
@@ -58,7 +58,35 @@
     </div>
 
     <div class="top-panel">
-      <label>Filters</label>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: max-content;">
+            <mat-grid-list cols="1" rowHeight="2em" style="overflow: hidden;">
+              <li *ngFor="let armor of armors">
+                <mat-grid-tile>
+                  <div>
+                    <input type="checkbox" />
+                    <label>{{armor.name}}</label>
+                  </div>
+                </mat-grid-tile>
+              </li>
+            </mat-grid-list>
+          </td>
+
+          <td style="width: max-content;">
+            <mat-grid-list cols="5" rowHeight="2em" style="overflow: hidden;">
+              <li *ngFor="let weapon of weapons">
+                <mat-grid-tile >
+                  <div style="width: max-content;">
+                    <input type="checkbox" />
+                    <label>{{weapon.name}}</label>
+                  </div>
+                </mat-grid-tile>
+              </li>
+            </mat-grid-list>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

@@ -1,8 +1,10 @@
-﻿using DiabloII_Cookbook.Application.Options;
+﻿using DiabloII_Cookbook.Application.Contexts;
+using DiabloII_Cookbook.Application.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace DiabloII_Cookbook.Application.Wireup
 {
@@ -14,11 +16,14 @@ namespace DiabloII_Cookbook.Application.Wireup
                 .Configure<IConfiguration>((options, configuration) => configuration.GetSection("Database").Bind(options))
                 .ValidateDataAnnotations();
 
-            services.AddDbContext<DatabaseContext>((provider, builder) =>
-            {
-                var options = provider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
-                builder.UseNpgsql($"Server={options.Host}; Port={options.Port}; Database={options.Database}; User Id={options.UserName}; Password={options.Password}");    
-            });
+            services.AddDbContext<CharacterContext>(ConfigureDataContext);
+            services.AddDbContext<FilterContext>(ConfigureDataContext);
+        }
+
+        private static void ConfigureDataContext(IServiceProvider provider, DbContextOptionsBuilder builder)
+        {
+            var options = provider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+            builder.UseNpgsql($"Server={options.Host}; Port={options.Port}; Database={options.Database}; User Id={options.UserName}; Password={options.Password}");
         }
     }
 }

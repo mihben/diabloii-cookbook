@@ -1,4 +1,5 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
+using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.Entities;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Handlers;
@@ -9,10 +10,10 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 {
     public class DeleteCharacterCommandHandler : ICommandHandler<DeleteCharacterCommand>
     {
-        private readonly DatabaseContext _context;
+        private readonly CharacterContext _context;
         private readonly ILogger<DeleteCharacterCommandHandler> _logger;
 
-        public DeleteCharacterCommandHandler(DatabaseContext context, ILogger<DeleteCharacterCommandHandler> logger)
+        public DeleteCharacterCommandHandler(CharacterContext context, ILogger<DeleteCharacterCommandHandler> logger)
         {
             _context = context;
             _logger = logger;
