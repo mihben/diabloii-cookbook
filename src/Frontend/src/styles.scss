@@ -80,6 +80,7 @@ div.main {
 }
 
 div.panel {
+    background-color: rgba($color: #000000, $alpha: 0.8);
     border-image: url('/assets/icons/border.png') 30 round; 
     border-image-width: auto;
     border-style: solid;
@@ -95,6 +96,25 @@ div.left-panel {
   height: 98%;
   display: flex;
   flex-flow: column wrap;
+  margin-right: 4px;
+}
+
+div.right-panel {
+  flex: 1;
+  height: 99%;
+  align-self: flex-start;
+  display: flex;
+  flex-flow: column wrap;
+  margin-left: 4px;
+}
+
+div.filter-panel {
+  margin-bottom: 4px;
+}
+
+div.result-panel {
+  margin-top: 4px;
+  flex: 1;
 }
 
 div.character-panel {  
