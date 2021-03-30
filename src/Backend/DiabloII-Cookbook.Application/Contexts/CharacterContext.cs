@@ -2,17 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DiabloII_Cookbook.Application
+namespace DiabloII_Cookbook.Application.Contexts
 {
-    public class DatabaseContext : DbContext
+    public class CharacterContext : DbContext
     {
         public DbSet<RuneEntity> Runes { get; set; }
         public DbSet<CharacterEntity> Characters { get; set; }
 
-        public DatabaseContext([NotNull] DbContextOptions options) 
+        public CharacterContext([NotNull] DbContextOptions<CharacterContext> options)
             : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

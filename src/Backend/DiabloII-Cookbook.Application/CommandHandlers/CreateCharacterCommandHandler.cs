@@ -1,4 +1,5 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
+using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.Entities;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Handlers;
@@ -10,10 +11,10 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 {
     public class CreateCharacterCommandHandler : ICommandHandler<CreateCharacterCommand>
     {
-        private readonly DatabaseContext _context;
+        private readonly CharacterContext _context;
         private readonly ILogger<CreateCharacterCommandHandler> _logger;
 
-        public CreateCharacterCommandHandler(DatabaseContext context, ILogger<CreateCharacterCommandHandler> logger)
+        public CreateCharacterCommandHandler(CharacterContext context, ILogger<CreateCharacterCommandHandler> logger)
         {
             _context = context;
             _logger = logger;
@@ -21,7 +22,7 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 
         public async Task HandleAsync(CreateCharacterCommand command, CancellationToken cancellationToken)
         {
-            _context.Database.EnsureCreated();
+            await _context.Database.EnsureCreatedAsync(cancellationToken);
 
             var id = Guid.NewGuid();
             _logger.LogDebug("Insert {id} character", id);

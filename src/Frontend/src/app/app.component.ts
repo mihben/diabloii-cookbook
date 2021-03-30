@@ -9,7 +9,8 @@ import { DeleteConfirmationDialogComponent } from './components/delete-confirmat
 import { of, Subscription } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { BrowserStack } from 'protractor/built/driverProviders';
+import { ItemType } from 'src/shared/models/itemType.model';
+import { FilterService } from 'src/shared/services/filter.service';
 
 @Component({
   selector: 'app-root',
@@ -25,11 +26,14 @@ export class AppComponent implements OnInit {
   characterIndex: number = 0;
   classImage: string | undefined;
 
+  armors: ItemType[] = [];
+  weapons: ItemType[] = [];
+
   characterForm: FormGroup;
 
   save: Subscription | undefined;
 
-  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder) {
+  constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder, private filterService: FilterService) {
     this.characterForm = this.formBuidler.group({
       level: [],
       isLadder: [],
@@ -53,7 +57,6 @@ export class AppComponent implements OnInit {
         this.save = this.characterForm?.valueChanges
         .pipe(debounceTime(1500), switchMap((value) => of(value)))
         .subscribe(value => {
-          console.log('Update character');
           var selectedRunes: Rune[] = [];
           this.runes.forEach(rune => {
             if (this.characterForm.get(rune.id)?.value) {
@@ -67,9 +70,8 @@ export class AppComponent implements OnInit {
       });
   }
 
-  private setCharacter(character: Character) {
-    console.log("Set character");
-
+  setCharacter(character: Character)
+  {
     this.character = character;    
     this.characterIndex = this.characters.indexOf(this.character.id) + 1;
 

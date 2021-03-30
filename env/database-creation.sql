@@ -17,6 +17,25 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.runes
     OWNER to admin;
+
+CREATE TABLE public.item_types
+(
+    id uuid NOT NULL,
+    flag text COLLATE pg_catalog."default" NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL,
+    item_group text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK_item_types" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.item_types
+    OWNER to admin;
+
+CREATE UNIQUE INDEX "IX_item_types_flag"
+    ON public.item_types USING btree
+    (flag COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
 	
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('0dd9b0be-af67-41e3-9bf6-5861321246fd', 'El', 11, 1, '+50 Attack Rating, +1 Light Radius', '+1 Light Radius, +15 Defense', '+1 Light Radius, +15 Defense', '+1 Light Radius, +15 Defense');
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('231d1911-ad45-4c2b-8476-45992e2017a2', 'Eld', 11, 4, '+75% Damage vs. Undead, +50 Attack Rating vs. Undead', 'Lowers Stamina drain by 15%', 'Lowers Stamina drain by 15%', '+7% Blocking');
@@ -51,3 +70,23 @@ INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_s
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('438a1645-a8c1-4702-8119-abe764376405', 'Jah', 65, 27, 'Ignores Target Defense', '+5% of total Hit Points', '+5% of total Hit Points', '+50 Hit Points');
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('5d0c695e-272d-42b3-ab67-eba45fb108fe', 'Cham', 67, 30, '32% Chance of Hit Freezing Target for 3 seconds', 'Cannot be Frozen', 'Cannot be Frozen', 'Cannot be Frozen');
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('3ad5bf94-4216-46e2-a946-c0390046ddb1', 'Zod', 69, 33, 'Indestructible', 'Indestructible', 'Indestructible', 'Indestructible');
+
+
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Body armor', 'Armor');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Shield' , 'Armor');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Helmet' , 'Armor');
+
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Sword', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Dagger', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Club', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Mace', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Hammer', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Scepter', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Staff', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Wand', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Spear', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Polearm', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Bow', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Crossbow', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Katar', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Orb', 'Weapon');

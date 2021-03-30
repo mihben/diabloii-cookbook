@@ -16,6 +16,7 @@ import { CreateCharacterComponent } from './components/create-character/create-c
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { FilterService } from 'src/shared/services/filter.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { DeleteConfirmationDialogComponent } from './components/delete-confirmat
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [RuneService, CharacterService, FormBuilder],
+  providers: [RuneService, CharacterService, FormBuilder, FilterService],
   entryComponents: [CreateCharacterComponent],
   bootstrap: [AppComponent]
 })
