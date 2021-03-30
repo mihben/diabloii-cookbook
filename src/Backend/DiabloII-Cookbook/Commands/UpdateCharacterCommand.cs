@@ -9,13 +9,17 @@ namespace DiabloII_Cookbook.Api.Commands
     {
         public Guid Id { get; }
         public int Level { get; }
+        public bool IsLadder { get; }
+        public bool IsExpansion { get; }
         public IEnumerable<Rune> Runes {get;}
 
-        public UpdateCharacterCommand(Guid id, int level, IEnumerable<Rune> runes)
+        public UpdateCharacterCommand(Guid id, int level, bool isExpansion, bool isLadder, IEnumerable<Rune> runes)
         {
             Id = id;
             Level = level;
             Runes = runes;
+            IsExpansion = isExpansion;
+            IsLadder = isLadder;
         }
     }
 }

@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   runes: Rune[] = [];
   characters: string[] = [];
   character: Character | any;
+  characterIndex: number = 0;
   classImage: string | undefined;
 
   characterForm: FormGroup;
@@ -30,7 +31,9 @@ export class AppComponent implements OnInit {
 
   constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder) {
     this.characterForm = this.formBuidler.group({
-      level: []
+      level: [],
+      isLadder: [],
+      isExpansion: []
     });
   }
 
@@ -46,7 +49,7 @@ export class AppComponent implements OnInit {
         this.runes = runes;
 
         this.refreshCharacters();
-
+        
         this.save = this.characterForm?.valueChanges
         .pipe(debounceTime(1500), switchMap((value) => of(value)))
         .subscribe(value => {
@@ -57,8 +60,9 @@ export class AppComponent implements OnInit {
               selectedRunes.push(rune);
             }
           });
-          this.characterService.updateCharacter(this.character?.id, value.level, selectedRunes)
-            .subscribe();
+          this.characterService.updateCharacter(this.character?.id, value.level, value.isLadder, value.isExpansion, selectedRunes)
+          .subscribe();
+          
         });
       });
   }
@@ -66,29 +70,17 @@ export class AppComponent implements OnInit {
   private setCharacter(character: Character) {
     console.log("Set character");
 
-    this.character = character;
+    this.character = character;    
+    this.characterIndex = this.characters.indexOf(this.character.id) + 1;
+
     this.classImage = `../assets/classes/${this.character.class}.gif`;
 
     this.characterForm.controls['level'].setValue(character.level, {onlySelf: true, emitEvent: false})
+    this.characterForm.controls['isLadder'].setValue(character.isLadder, {onlySelf: true, emitEvent: false})
+    this.characterForm.controls['isExpansion'].setValue(character.isExpansion, {onlySelf: true, emitEvent: false})
     this.runes.forEach(rune => {
       this.characterForm.controls[rune.id].setValue(character.runes.some(cr => cr.id === rune.id), {onlySelf: true, emitEvent: false});
     });
-  }
-
-  @HostListener('wheel', ['$event'])
-  onMousewheel(event: WheelEvent) {
-    if (event.deltaX < 0)
-      this.previous();
-    else if (event.deltaX > 0)
-      this.next();
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'ArrowLeft')
-      this.previous();
-    else if (event.key === 'ArrowRight')
-      this.next();
   }
 
   previous(): void {
@@ -97,6 +89,7 @@ export class AppComponent implements OnInit {
       this.characterService.getCharacterDetail(this.characters[index])
         .subscribe((character) => {
           this.setCharacter(character);
+          this.characterIndex = index + 1;
         });
     }
   }
@@ -107,6 +100,7 @@ export class AppComponent implements OnInit {
       this.characterService.getCharacterDetail(this.characters[index])
         .subscribe((character) => {
           this.setCharacter(character);
+          this.characterIndex = index + 1;
         });
     }
   }

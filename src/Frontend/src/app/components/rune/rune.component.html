@@ -1,4 +1,32 @@
-<div style="display: inline;height: fit-content;" matTooltipClass="tool-tip" matTooltip="In weapon: {{rune?.inWeapon}}&#13;In armor: {{rune?.inArmor}}&#13;In helm: {{rune?.inHelm}}&#13;In shield: {{rune?.inShield}}">
-    <img src={{imageSource}} style="vertical-align: middle;"/>
-    <label>{{rune?.name}}</label>
+<div style="display: inline;height: fit-content;" class="tool-tip">
+    <div style="display: inline;height: fit-content;">
+        <img src={{imageSource}} style="vertical-align: middle;"/>
+        <label style="color: #CE8800;">{{rune?.name}}</label>
+    </div>
+
+    <div class="tool-tip-text panel">
+        <p style="color: #CE8800; font-family: Diablo Heavy; font-size: 16px; margin-top: 4px; margin-bottom: 8px;">{{rune?.name}}</p>
+        <p style="margin-top: 0px; margin-bottom: 0px;">
+            <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">In Weapon:</span>
+            <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.inWeapon}}</span>
+        </p>
+        <p style="margin-top: 0px; margin-bottom: 0px;">
+            <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">In Armor:</span>
+            <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.inArmor}}</span>
+        </p>
+        <p style="margin-top: 0px; margin-bottom: 0px;">
+            <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">In Helm:</span>
+            <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.inHelm}}</span>
+        </p>
+        <p style="margin-top: 0px; margin-bottom: 0px;">
+            <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">In Shield:</span>
+            <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.inShield}}</span>
+        </p>
+
+        <p style="margin-top: 16px; margin-bottom: 0px;">
+            <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">Required level:</span>
+            <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.level}}</span>
+        </p>
+    </div>
 </div>
+

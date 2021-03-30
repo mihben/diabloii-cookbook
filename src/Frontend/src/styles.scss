@@ -36,7 +36,7 @@ $diabloii-cookbook-theme: mat-light-theme((
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-image:url('assets/Background.gif'); background-repeat: no-repeat; background-size: 35%; background-position: center; background-color: black; font-size: 14px; }
 
 @font-face {
   font-family: Diablo Light;
@@ -53,78 +53,92 @@ input[type=checkbox] {
   background-image: url('/assets/icons/Unchecked.png');
   padding: 9px;
   vertical-align: middle;
+  background-repeat: no-repeat;
 }
 
 input[type=checkbox]:checked {
   background-image: url('/assets/icons/Checked.png');
+  background-repeat: no-repeat;
 }
 
 label {
   color: #7b7b7b;
   margin-left: 4px;
-  vertical-align: middle;
   font-family: Diablo Light;
 }
 
-p {
-  color: #7b7b7b;
-  font-family: Diablo Light;
-}
+// p {
+//   color: #7b7b7b;
+//   font-family: Diablo Light;
+// }
 
 div.main {
-  background-color: black;
-  overflow: hidden;
-  width: 100%;
+  width: auto;
   height: 100%;
-  position: relative;
-}
-
-div.left-panel {
-  margin: 4px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 30%;   
-  border-image: url('/assets/icons/border.png') 30 round; 
-  border-image-width: auto;
-  border-style: solid;
-  border-image-outset: 2px;
-  background-color: rgba($color: #000000, $alpha: 0.9);
-}
-
-div.top-panel {
-  margin: 4px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 68%;   
-  border-image: url('/assets/icons/border.png') 30 round; 
-  border-image-width: auto;
-  border-style: solid;
-  border-image-outset: 2px;
-  background-color: rgba($color: #000000, $alpha: 0.9)
+  display: flex;
+  flex-flow: row wrap;
 }
 
 div.panel {
-  width: 80%;
-  height: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  background-image: url('/assets/Background.gif');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 45%;
+    border-image: url('/assets/icons/border.png') 30 round; 
+    border-image-width: auto;
+    border-style: solid;
+    border-image-outset: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
-img.character {
-  margin-top: 16px;
-  margin-bottom: 16px;
-  max-height: 173px;
+div.left-panel {
+  width: auto;
+  height: 98%;
+  display: flex;
+  flex-flow: column wrap;
 }
 
-div.headered-item {
-  margin-top: 4px;
-  margin-bottom: 4px;
+div.character-panel {  
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+}
+
+div.character-selector {  
+  display: flex;
+  align-self: stretch;
+  flex: 1;
+}
+
+div.character-page {
+  display: grid;
+  grid-template-columns: [header] auto [item] auto;
+  row-gap: 4px;
+  column-gap: 4px;
+  padding: 4px;
+  align-items: center;
+}
+
+div.rune-selector {
+  display: grid;
+  grid-template-columns: repeat(3, [rune] auto);
+  row-gap: 4px;
+  column-gap: 4px;
+  padding: 4px;
+}
+
+div.button-row {
+  display: flex;    
+}
+
+button.text-button {
+  background-image: url('assets/icons/Button.png');
+  background-size: 140px 25px;
+  height: 25px;
+  width: 140px;
+  border-width: 0px;
+  margin: 4px;
+  font-family: Diablo Heavy;
+  color: black;
 }
 
 input[type=text] {
@@ -147,15 +161,26 @@ input[type=text]:focus {
   border:hidden;
 }
 
-.tool-tip {
-  white-space: pre-line;
-  font-family: Diablo Light;
-  background: black;
-  max-width: unset !important;
-  border-image: url('/assets/icons/border.png') 30 round; 
-  border-image-width: auto;
-  border-style: solid;
-  border-image-outset: 2px;
+div.tool-tip {
+    position: relative;
+    display: inline-block;
+}
+
+div.tool-tip .tool-tip-text {
+  visibility: hidden;
+  width: fit-content;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  position: absolute;
+  z-index: 1;
+}
+
+div.tool-tip:hover .tool-tip-text {
+  visibility: visible;
 }
 
 .mat-dialog-container {
@@ -164,20 +189,6 @@ input[type=text]:focus {
   border-image-width: auto;
   border-style: solid;
   border-image-outset: 2px;
-}
-
-.text-button {
-  background-image: url('/assets/icons/Button.png');
-  background-position: center;
-  background-size: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  height: 25px;
-  width: 185px; 
-  border-width: 0px;
-  font-family: Diablo Heavy;
-  color: black;
-  margin: 4px;
 }
 
 .select {  
@@ -213,4 +224,9 @@ input[type=text]:focus {
 .mat-select-value-text {
   display: block;
   margin-top: 4px;
+}
+
+p {
+  color: #7b7b7b !important;
+  font-family: Diablo Light;
 }

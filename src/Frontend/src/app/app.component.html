@@ -1,64 +1,47 @@
 <div class="main">
-  <div class="panel">
-    <div class="left-panel">
-      <form [formGroup]="characterForm">
-        <div style="display: flex;">
-          <div style="display: block; margin-top: auto; margin-bottom: auto;">
-            <button type="button" style="border: 0; background: transparent" (click)="previous()">
-              <img src="../assets/icons/Left.png" />
-            </button>
+  <div class="left-panel panel">
+    <form [formGroup]="characterForm" style="display: flex; height: 100%; flex-flow: column;">
+      <div class="character-panel">
+        <label style="margin-left: auto; margin-right: auto; margin-bottom: 8px;">{{characterIndex}}/{{characters.length}}</label>
+        <div class="character-selector">
+          <button type="button" style="border: 0; background: transparent; height: max-content; align-self: center;"
+            (click)="previous()">
+            <img src="../assets/icons/Left.png" />
+          </button>
+          <div style="flex: 1; height: 100%; display: flex; margin-left: 16px; margin-right: 16px;">
+            <img [src]="classImage" style="height: fit-content; width: 98%; margin: auto;" />
           </div>
-          <div style="display: block; margin-left: auto; margin-right: auto;">
-            <img [src]="classImage" class="character" />
-          </div>
-          <div style="display: block; margin-top: auto; margin-bottom: auto;">
-            <button type="button" style="border: 0; background: transparent" (click)="next()">
-              <img src="../assets/icons/Right.png" />
-            </button>
-          </div>
+          <button type="button" style="border: 0; background: transparent; height: max-content; align-self: center"
+            (click)="next()">
+            <img src="../assets/icons/Right.png" />
+          </button>
         </div>
-        <div>
-          <table style="width: 100%;">
-            <tr style="width: 100%;">
-              <td><label>Name:</label></td>
-              <td><label>{{character.name}}</label></td>
-            </tr>
-            <tr>
-              <td><label>Level:</label></td>
-              <td><input type="text" formControlName="level"></td>
-            </tr>
-            <tr>
-              <td><label>Ladder:</label></td>
-              <td><input type="checkbox" readonly="true" checked={{character.isLadder}}></td>
-            </tr>
-            <tr>
-              <td><label>Expansion:</label></td>
-              <td><input type="checkbox" readonly="true" checked={{character.isExpansion}}></td>
-            </tr>
-          </table>
-        </div>
-        <div class="headered-item">
-          <mat-grid-list cols="3" rowHeight="2em" style="overflow: hidden;">
-            <li *ngFor="let rune of runes">
-              <mat-grid-tile>
-                <div style="width: 100%;">
-                  <input type="checkbox" formControlName={{rune.id}}/>
-                  <app-rune [rune]="rune" style="margin-left: 4px;"></app-rune>
-                </div>
-              </mat-grid-tile>
-            </li>
-          </mat-grid-list>
-        </div>
+      </div>
+      <div class="character-page">
+        <label style="grid-column: header;">Name:</label>
+        <label style="grid-column: item;">{{character.name}}</label>
 
-        <div>
-          <button class="text-button" type="button" (click)="addCharacter()" style="z-index: 1;">Add</button>
-          <button class="text-button" type="button" (click)="deleteCharacter()" style="float: right;">Delete</button>
-        </div>
-      </form>
-    </div>
+        <label style="grid-column: header;">Level:</label>
+        <input style="grid-column: item;" type="text" formControlName="level"/>
 
-    <div class="top-panel">
-      <label>Filters</label>
-    </div>
+        <label style="grid-column: header;">Ladder:</label>
+        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isLadder"/>
+
+        <label style="grid-column: header;">Expansion:</label>
+        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isExpansion"/>
+      </div>
+
+      <div class="rune-selector">
+        <div *ngFor="let rune of runes">
+          <input style="grid-column: item; width: max-content; margin-right: 4px;" type="checkbox" formControlName="{{rune.id}}"/>
+          <app-rune [rune]="rune"></app-rune>
+        </div>
+      </div>
+       
+      <div class="button-row">
+        <button class="text-button" (click)="addCharacter()">Create</button>
+        <button class="text-button" style="margin-left: auto;" (click)="deleteCharacter()">Delete</button>
+      </div>
+    </form> 
   </div>
 </div>

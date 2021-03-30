@@ -29,6 +29,8 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 
             var character = await _context.Characters.Include(ce => ce.Runes).SingleOrDefaultAsync(ce => ce.Id == command.Id, cancellationToken);
             character.Level = command.Level;
+            character.IsLadder = command.IsLadder;
+            character.IsExpansion = command.IsExpansion;
             character.Runes.Clear();
             foreach (var rune in command.Runes)
             {
