@@ -11,10 +11,10 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 {
     public class CreateCharacterCommandHandler : ICommandHandler<CreateCharacterCommand>
     {
-        private readonly CharacterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<CreateCharacterCommandHandler> _logger;
 
-        public CreateCharacterCommandHandler(CharacterContext context, ILogger<CreateCharacterCommandHandler> logger)
+        public CreateCharacterCommandHandler(DatabaseContext context, ILogger<CreateCharacterCommandHandler> logger)
         {
             _context = context;
             _logger = logger;

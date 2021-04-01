@@ -44,6 +44,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.save?.unsubscribe();
 
+    this.filterService.getItemTypes()
+      .subscribe((itemTypes) => {
+        this.armors = itemTypes.filter(it => it.group === 'Armor');
+        this.weapons = itemTypes.filter(it => it.group === 'Weapon');
+      })
+
     this.runeService.getRunes()
       .subscribe((runes) => {
         runes.forEach(rune => {
@@ -65,7 +71,6 @@ export class AppComponent implements OnInit {
           });
           this.characterService.updateCharacter(this.character?.id, value.level, value.isLadder, value.isExpansion, selectedRunes)
           .subscribe();
-          
         });
       });
   }

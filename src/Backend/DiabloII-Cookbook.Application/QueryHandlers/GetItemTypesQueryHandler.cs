@@ -14,10 +14,10 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 {
     public class GetItemTypesQueryHandler : IQueryHandler<GetItemTypesQuery, IEnumerable<ItemType>>
     {
-        private readonly FilterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<GetItemTypesQueryHandler> _logger;
 
-        public GetItemTypesQueryHandler(FilterContext context, ILogger<GetItemTypesQueryHandler> logger)
+        public GetItemTypesQueryHandler(DatabaseContext context, ILogger<GetItemTypesQueryHandler> logger)
         {
             _context = context;
             _logger = logger;

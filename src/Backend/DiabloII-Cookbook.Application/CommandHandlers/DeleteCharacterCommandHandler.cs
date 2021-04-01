@@ -10,10 +10,10 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 {
     public class DeleteCharacterCommandHandler : ICommandHandler<DeleteCharacterCommand>
     {
-        private readonly CharacterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<DeleteCharacterCommandHandler> _logger;
 
-        public DeleteCharacterCommandHandler(CharacterContext context, ILogger<DeleteCharacterCommandHandler> logger)
+        public DeleteCharacterCommandHandler(DatabaseContext context, ILogger<DeleteCharacterCommandHandler> logger)
         {
             _context = context;
             _logger = logger;

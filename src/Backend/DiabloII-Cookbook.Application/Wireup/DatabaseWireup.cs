@@ -16,8 +16,7 @@ namespace DiabloII_Cookbook.Application.Wireup
                 .Configure<IConfiguration>((options, configuration) => configuration.GetSection("Database").Bind(options))
                 .ValidateDataAnnotations();
 
-            services.AddDbContext<CharacterContext>(ConfigureDataContext);
-            services.AddDbContext<FilterContext>(ConfigureDataContext);
+            services.AddDbContext<DatabaseContext>(ConfigureDataContext);
         }
 
         private static void ConfigureDataContext(IServiceProvider provider, DbContextOptionsBuilder builder)

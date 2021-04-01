@@ -109,6 +109,19 @@ div.right-panel {
 }
 
 div.filter-panel {
+  display: flex;
+  flex-flow: column;
+  margin-bottom: 4px;
+}
+
+div.armor-panel {
+  display: flex;
+  flex-flow: column;
+  margin-bottom: 4px;
+}
+
+div.weapon-panel {
+  display: grid;  
   margin-bottom: 4px;
 }
 
@@ -247,6 +260,6 @@ div.tool-tip:hover .tool-tip-text {
 }
 
 p {
-  color: #7b7b7b !important;
+  color: #7b7b7b;
   font-family: Diablo Light;
 }

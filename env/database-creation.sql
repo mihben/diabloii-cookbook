@@ -1,42 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE public.runes
-(
-    id uuid NOT NULL,
-    name text COLLATE pg_catalog."default" NOT NULL,
-    level integer NOT NULL,
-    "order" integer NOT NULL,
-    in_weapon text COLLATE pg_catalog."default" NOT NULL,
-    in_helm text COLLATE pg_catalog."default" NOT NULL,
-    in_armor text COLLATE pg_catalog."default" NOT NULL,
-    in_shield text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "PK_runes" PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.runes
-    OWNER to admin;
-
-CREATE TABLE public.item_types
-(
-    id uuid NOT NULL,
-    flag text COLLATE pg_catalog."default" NOT NULL,
-    name text COLLATE pg_catalog."default" NOT NULL,
-    item_group text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "PK_item_types" PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.item_types
-    OWNER to admin;
-
-CREATE UNIQUE INDEX "IX_item_types_flag"
-    ON public.item_types USING btree
-    (flag COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
-	
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('0dd9b0be-af67-41e3-9bf6-5861321246fd', 'El', 11, 1, '+50 Attack Rating, +1 Light Radius', '+1 Light Radius, +15 Defense', '+1 Light Radius, +15 Defense', '+1 Light Radius, +15 Defense');
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('231d1911-ad45-4c2b-8476-45992e2017a2', 'Eld', 11, 4, '+75% Damage vs. Undead, +50 Attack Rating vs. Undead', 'Lowers Stamina drain by 15%', 'Lowers Stamina drain by 15%', '+7% Blocking');
 INSERT INTO runes(id, name, "level", "order", in_weapon, in_helm, in_armor, in_shield) VALUES('a0ec93e3-cf73-46e9-a650-575c15b182dd', 'Tir', 13, 7, '+2 Mana Per Kill', '+2 Mana Per Kill.', '+2 Mana Per Kill.', '+2 Mana Per Kill.');
@@ -78,6 +41,7 @@ INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Helmet'
 
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Sword', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Dagger', 'Weapon');
+INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Axe', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Club', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Mace', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Hammer', 'Weapon');
@@ -90,3 +54,1585 @@ INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Bow', '
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Crossbow', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Katar', 'Weapon');
 INSERT INTO item_types(id, name, item_group) VALUES(uuid_generate_v4(), 'Orb', 'Weapon');
+
+INSERT INTO skills(id, name, class, description) VALUES('4fb73b27-aafa-4a0b-b8f3-e29ea5bcd4c4', 'Fanaticism', 'Paladin', 'Fanaticism increases the damage, attack speed, and attack rating of the Paladin and everyone in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('13da073e-750c-40a0-a149-da37fe343c0e', 'Thorns', 'Paladin', 'Creates a spiky barrier around the Paladin and all in his party, reflecting huge damage back against melee, physical attackers. Has no effect against ranged or elemental attacks.');
+INSERT INTO skills(id, name, class, description) VALUES('b5c42def-543a-4fa3-8121-2eae17f3b0fd', 'Holy Freeze', 'Paladin', 'This aura chills and slows the movement and attack speed of all enemies within range.');
+INSERT INTO skills(id, name, class, description) VALUES('92883922-85e7-4d98-8687-43899e942749', 'Holy Fire', 'Paladin', 'Holy Fire adds fire damage to the Paladin''s attacks, as well as dealing a few points of fire damage to every monster in range.');
+INSERT INTO skills(id, name, class, description) VALUES('ae9a691c-f0d4-48c1-8f6a-d8c6945d66f1', 'Holy Shock', 'Paladin', 'Holy Shock adds lightning damage to the Paladin''s attacks, as well as dealing a few points of lightning damage to every monster in range.');
+INSERT INTO skills(id, name, class, description) VALUES('51f35a76-91ba-4d12-925e-7e37706c543d', 'Defiance', 'Paladin', 'This aura boosts the defense of the Paladin and all characters and minions in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('8c761549-a836-4c0f-a4cf-987f5f6ee136', 'Vigor', 'Paladin', 'Vigor boosts the running speed, maximum stamina, and stamina regeneration rate for the Paladin and all in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('b7342a6b-859b-425a-bfc0-d2c90a112bc5', 'Conviction', 'Paladin', 'This aura lowers the defense and fire, lightning, and cold resistances of monsters, making it ideal to pair with an elemental weapon or skill, such as Vengeance.');
+INSERT INTO skills(id, name, class, description) VALUES('c7057577-71db-4be0-ab7b-f4948ab442a1', 'Meditation', 'Paladin', 'Boosts the mana regeneration rate for the Paladin and all his party members.');
+INSERT INTO skills(id, name, class, description) VALUES('ce0d0d1a-5c34-453f-a5cd-dfdb287bf25d', 'Might', 'Paladin', 'Might increases the output of all physical damage attacks by the Paladin or his party.');
+INSERT INTO skills(id, name, class, description) VALUES('5090252e-4f89-4016-9e72-9008cf11d1bd', 'Sanctuary', 'Paladin', 'This aura only works against the Undead, but provides the Paladin with a substantial damage bonus, as well as working to push back and constantly deal holy damage to all Undead in range.');
+INSERT INTO skills(id, name, class, description) VALUES('4788fcf0-f75e-49a5-bc05-2b241514dba8', 'Redemption', 'Paladin', 'Redemption uses up corpses, making them vanish with a lovely rising spirit graphic (also seen coming up from the skeletons after Radament is defeated in the Act Two Sewers), and transferring substantial mana and life to the Paladin.');
+INSERT INTO skills(id, name, class, description) VALUES('04b0afe0-c7aa-46d3-9e9a-4d93ea110a12', 'Concentration', 'Paladin', 'Concentration greatly increases the physical damage of the Paladin and all in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('b6aba5aa-7971-43c7-9fec-b491906f016b', 'Vengeance', 'Paladin', 'A powerful single-hit attack that adds fire, lightning, and cold damage.');
+INSERT INTO skills(id, name, class, description) VALUES('5277cfec-ebeb-4c3b-a564-f6bc285cf91b', 'Zeal', 'Paladin', 'Zeal is a rapid, multi-strike attack with substantial bonuses to attack rating, attack speed, and damage.');
+INSERT INTO skills(id, name, class, description) VALUES('7b99a11a-77d0-4856-8867-730036fc312a', 'Holy Bolt', 'Paladin', 'A glowing, magical projectile is fired out at a medium rate of speed. This projectile will damage enemy undead monsters, and heal friends.');
+INSERT INTO skills(id, name, class, description) VALUES('faac5929-ecd0-446e-a8fe-20c2452a91af', 'Werebear', 'Druid', 'This skill enables the Druid to transform into a Werebear. It includes substantial bonuses to his defense, damage, and life.');
+INSERT INTO skills(id, name, class, description) VALUES('9c51ebe1-3f44-43bc-8c6b-4573ed000a17', 'Lycanthropy', 'Druid', 'This skill adds a passive bonus that allows the Druid to remain in fur form much longer. There is also a substantial hit point boost.');
+INSERT INTO skills(id, name, class, description) VALUES('2ca87fa3-9cdf-498e-b4b5-31ca4673c10f', 'Summon Grizzly', 'Druid', 'Summoned Grizzlies are fierce minions, capable of inflicting heavy damage. Grizzlies move slowly, but have strong attacks that stun and knock back their targets.');
+INSERT INTO skills(id, name, class, description) VALUES('a8ac2268-8786-4660-b0cd-a9d9aae14079', 'Spirit Of Barbs', 'Druid', 'This spirit bestows a Thorns aura on the Druid and all in his party. This skill is largely ignored since the damage reflected is woefully inadequate to make it viable past normal difficulty.');
+INSERT INTO skills(id, name, class, description) VALUES('6e6d5249-cb38-4b07-b11d-501d03bbf83a', 'Summon Spirit Wolf', 'Druid', 'This gift of Nature allows the Druid to conjure forth one or more wolf allies who, with their mystical powers, provide the Druid a potent and ferocious colleague.');
+INSERT INTO skills(id, name, class, description) VALUES('2b3687ce-e130-444b-9518-86592b388aad', 'Volcano', 'Druid', 'A more powerful version of Fissure, the Volcano erupts from one point and deals substantial fire damage to everything in the vicinity.');
+INSERT INTO skills(id, name, class, description) VALUES('7a3e1e8d-f413-41b4-99be-0ca47aa02570', 'Molten Boulder', 'Druid', 'A fun skill to use, this one sends forth a rolling boulder of molten stone.');
+INSERT INTO skills(id, name, class, description) VALUES('8ed922fe-f25c-42df-8a95-74ab6ced42fa', 'Oak Sage', 'Druid', 'The Oak Sage spirit floats around, radiating a hit point enhancing aura that affects the Druid and all characters and minions in his party. Spirits are living things, and if killed their enhancing aura vanishes.');
+INSERT INTO skills(id, name, class, description) VALUES('603bee81-07cd-46f8-ba4e-0d7923ce7fe9', 'Raven', 'Druid', 'Ravens swarm in a cloud and look nifty, but their damage is negligible and their AI is lacking. This skill is useful only as a prerequisite or a novelty.');
+INSERT INTO skills(id, name, class, description) VALUES('81d95aaf-e6ac-4950-972d-e1ea786b077b', 'CycloneArmor', 'Druid', 'This shielding spell is essentially an elemental version of the Necromancer''s Bone Shield. It absorbs a set amount of elemental damage, but has no effect against physical attacks.');
+INSERT INTO skills(id, name, class, description) VALUES('e5d9f4ba-1616-4d2f-9432-ac2146f73179', 'Heart of Wolverine', 'Druid', 'This spirit''s aura provides a hearty attack rating and damage bonus to the Druid and all players and minions in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('a44368b4-78c4-46b9-bc18-ebf2c9cf851b', 'Firestorm', 'Druid', 'Wielding this ability, the Druid projects waves of molten earth that spread outward and burn a wide swath of destruction through his foes.');
+INSERT INTO skills(id, name, class, description) VALUES('c6129f08-59e4-47fb-abb9-96ec20c93e8d', 'Twister', 'Druid', 'Each cast of Twister sets up a small tornado that stuns and deals physical damage to any enemies in the area.');
+INSERT INTO skills(id, name, class, description) VALUES('e585fade-9cb6-4c65-85d3-2a611ab1c70f', 'Tornado', 'Druid', 'An upgraded version of Twister, a Tornado is much larger and more powerful, but lacks the stunning effect of the smaller Twisters.');
+INSERT INTO skills(id, name, class, description) VALUES('f6803b1c-0477-41ff-877d-54806e3cf585', 'Corpse Explosion', 'Necromancer', 'One of the messiest and most fun skills in the game, Corpse Explosion detonates fallen monster corpses in messy sprays of bone and blood, striking all nearby enemies for substantial fire and physical damage.');
+INSERT INTO skills(id, name, class, description) VALUES('07534224-6af1-48b9-8a49-5e150fe7fb05', 'Bone Armor', 'Necromancer', 'An orbiting shield that absorbs a set amount of physical damage before vanishing.');
+INSERT INTO skills(id, name, class, description) VALUES('3fe81c1a-3f7c-4f4f-bdea-220f6a66e098', 'Bone Spear', 'Necromancer', 'Bone Spear fires a straight shot of magical damage bone that can pass through any number of targets. It does less damage to each target than Bone Spirit (until very high levels), but can hit multiple enemies, and is very effective against large mobs, or in narrow hallways, such as inside the Maggot Lair. Their damage is magical so only by raise skill levels can you increase it.');
+INSERT INTO skills(id, name, class, description) VALUES('d5f5af99-2f14-437a-a640-bb4420c6f2f3', 'Amplify Damage', 'Necromancer', 'Amplify damage greatly increases the physical damage taken by any afflicted target. Use this on monsters that are being beaten on by minions or other players.');
+INSERT INTO skills(id, name, class, description) VALUES('c33e9a0d-2eb8-48bd-ae35-510169c30e79', 'Poison Nova', 'Necromancer', 'Poison Nova sends out an expanding circle of toxic bolts, poisoning everything within range, and virtually everything on the screen.');
+INSERT INTO skills(id, name, class, description) VALUES('f1389b2e-1e60-4bd5-b435-021346a6cb11', 'Blood Golem', 'Necromancer', 'Blood Golems are linked to the Necromancer who casts them. As the Blood Golem damages the target it leeches life, and shares this with the Necromancer. Before v1.13, the Necromancer would also lose life as the golem took damage, but this is no longer the case.');
+INSERT INTO skills(id, name, class, description) VALUES('fcef8937-30a5-431c-90c8-fe32d343666f', 'Terror', 'Necromancer', 'Cursed monsters run away at very high speed.');
+INSERT INTO skills(id, name, class, description) VALUES('2cc88139-846b-4553-ac9f-c8432e3c38ce', 'Confuse', 'Necromancer', 'Confused monsters attack whatever target is nearest them, including other monsters.');
+INSERT INTO skills(id, name, class, description) VALUES('7fa05014-5753-4653-af6e-1554883db498', 'Attract', 'Necromancer', 'Attract works in a similar way to confuse, however instead of making monsters behave randomly, it will make them always attack the enemy.');
+INSERT INTO skills(id, name, class, description) VALUES('452f0caa-b1c0-4df5-bee9-838e2af0292d', 'Revive', 'Necromancer', 'Revives the dead monster, raising it up in its living form, but coloured dark gray. Revived monsters retain most of their attributes from life, and deal the same damage, type of damage, attack speed, foot speed, and more. Revives gain a bonus to their hit points, damage, and resistances.');
+INSERT INTO skills(id, name, class, description) VALUES('29febb7c-fde3-4c35-8b19-4374959c9d73', 'Life Tap', 'Necromancer', 'Life Tap causes huge life leech to flow to any physical damage attacker.');
+INSERT INTO skills(id, name, class, description) VALUES('965fab77-d11d-4d35-b09e-6b145af7e38f', 'Dim Vision', 'Necromancer', 'Monsters that have had their vision dimmed no longer see their enemies. They will stand still, or randomly move in short distances, but will fight back against melee attackers.');
+INSERT INTO skills(id, name, class, description) VALUES('1ca6f680-6f71-4b91-8f84-aa0b1d601f65', 'Decrepify', 'Necromancer', 'This powerful curse lowers movement, attack speed, damage and physical resistance by 50%.');
+INSERT INTO skills(id, name, class, description) VALUES('42c308de-aec6-4904-ad45-3c1dbbbb91ea', 'Bone Spirit', 'Necromancer', 'Bone Spirits are slow-moving, homing missiles that will track targets for quite a distance off the screen.');
+INSERT INTO skills(id, name, class, description) VALUES('8ffff204-98e3-4aab-8a18-d99767ac4892', 'Iron Golem', 'Necromancer', 'This golem is created from the item, and takes on properties of the item.');
+INSERT INTO skills(id, name, class, description) VALUES('c36a7e31-e902-446a-885f-d1114c8e0501', 'Iron Maiden', 'Necromancer', 'Causes the physical, melee damage inflicted by the target to reflect back to themselves. Does not effect non-physical damage, or non-melee attacks.');
+INSERT INTO skills(id, name, class, description) VALUES('34ef48f7-03d9-48e3-ae82-53df5ea24c5d', 'Weaken', 'Necromancer', 'Lowers the physical damage the target inflicts by 33%.');
+INSERT INTO skills(id, name, class, description) VALUES('8cff613a-ac31-4d51-8b98-f2a6e2a88255', 'Clay Golem', 'Necromancer', 'Raises a Golem from the earth to fight for you.');
+INSERT INTO skills(id, name, class, description) VALUES('f9168014-0385-4a0e-990c-fc95e8d7e832', 'Poison Explosion', 'Necromancer', 'Like Corpse Explosion, but with poison damage.');
+INSERT INTO skills(id, name, class, description) VALUES('327c7a57-7c36-4b66-b46c-25d9f00b7437', 'Skeleton Mastery', 'Necromancer', 'Increases the hit points and damage dealt by Skeletons, Skeleton Mages, and Revived.');
+INSERT INTO skills(id, name, class, description) VALUES('ed6d516c-8913-4691-835e-fc044a181605', 'Exploding Arrow', 'Amazon', 'Enchants arrows by adding explosive fire damage to them. The flame splashes enough to strike several monsters in a tight cluster, and there is an accuracy bonus as well.');
+INSERT INTO skills(id, name, class, description) VALUES('a26bcbc3-4eff-454a-84b2-c5aa867a8a15', 'Valkyrie', 'Amazon', 'Valkyries are powerful magical tanks. They spawn with high defense and hit points, and can stand up to a tremendous amount of damage.');
+INSERT INTO skills(id, name, class, description) VALUES('42ca68a2-7ff6-41c2-a77a-84270832e37b', 'Slow Missiles', 'Amazon', 'A curse-like debuff skill that slows the missles of all monsters within the skill''s range.');
+INSERT INTO skills(id, name, class, description) VALUES('476b0270-f969-40fc-9f87-6c3c58d018f0', 'Dodge', 'Amazon', 'Allows the Amazon to dodge melee attacks while standing still or attacking.');
+INSERT INTO skills(id, name, class, description) VALUES('b7cedb71-7aff-473f-a6c5-bee90033a47d', 'Critical Strike', 'Amazon', 'This extremely powerful skill gives a chance to deal a critical strike, doubling the physical damage of an attack with any sort of weapon.');
+INSERT INTO skills(id, name, class, description) VALUES('a5294148-91e6-4100-9ce0-7e8107676431', 'Battle Command', 'Barbarian', 'Battle Command adds a +1 to all of the Barbarian''s skills, and does the same for all characters and minions in his party.');
+INSERT INTO skills(id, name, class, description) VALUES('39162751-40fc-4a9d-b811-f6ce3b3151ff', 'Battle Orders', 'Barbarian', 'It works on the Barbarian and all friendly players and their minions, increasing everyone''s maximum hit points, stamina, and mana by a percentage.');
+INSERT INTO skills(id, name, class, description) VALUES('55fe2518-ed45-4798-a7ce-a2fa700ef9f9', 'Battle Cry', 'Barbarian', 'This one frightens nearby monster reducing their AC and damage.');
+INSERT INTO skills(id, name, class, description) VALUES('fc4cdb4a-432b-4229-a90b-05609471b040', 'Whirlwind', 'Barbarian', 'Whirlwind is the Tasmanian Devil of Barbarian skills, turning the character into a spinning death-dealer, capable of passing through huge mobs and hitting dozens of targets with a single use of the skill. There are dangers as well, and a great many details to grasp in order to use this skill expertly.');
+INSERT INTO skills(id, name, class, description) VALUES('bb0ae4a6-b207-40b8-94fa-3499548b1153', 'Frenzy', 'Barbarian', 'Frenzy allows the Barbarian to strike and move much faster, with any skill. Use Frenzy to speed up, then switch to other skills for a hyperfast attack.');
+INSERT INTO skills(id, name, class, description) VALUES('052ae3fe-3908-4373-a4d0-1fd4f305c1db', 'Howl', 'Barbarian', 'Howling will cause affected monsters to cease attacking and retreat as a green ''rain'' drizzles down on them.');
+INSERT INTO skills(id, name, class, description) VALUES('c26fbc52-2b8a-41ef-940c-58fa820eb664', 'Taunt', 'Barbarian', 'Taunt is set up to get those pesky fleeing monsters to come to you.');
+INSERT INTO skills(id, name, class, description) VALUES('21968ee6-411f-4f0d-93b0-1cf790bc48cf', 'Berserk', 'Barbarian', 'Berserk gives the Barbarian a way to deal a huge amount of magical (non-physical) damage with a melee attack, saving him from needing to use elemental damage weapons to kill Stone Skin and Physical Immune monsters.');
+INSERT INTO skills(id, name, class, description) VALUES('17d5571e-c60d-47c4-9912-170917b3ef17', 'Forzen Orb', 'Sorceress', 'One of the more awesome spells in the game, Frozen Orb fires out a glowing orb of ice that spins across most of the visible screen, emitting dozens of tiny Ice Bolts in all directions.');
+INSERT INTO skills(id, name, class, description) VALUES('d8b6ac3d-9fb1-4b22-8d3d-cfaeccad864b', 'Charged Bolt', 'Sorceress', 'Charged bolt is one of the first skills a sorceress can learn, and is one of the few level 1 skills that scales well end game.');
+INSERT INTO skills(id, name, class, description) VALUES('fc790d04-6c4b-4848-a231-83b38d2577c5', 'Chain Lightning', 'Sorceress', 'Chain Lightning jumps from target to target, and can be quite impressive when cast on a cluster of enemies.');
+INSERT INTO skills(id, name, class, description) VALUES('2e986fdf-9020-477a-8b78-6d75d4a2f3b0', 'Static Field', 'Sorceress', 'Static Field hits every monster in range, instantly chopping 25% off of their current hit points (similar to crushing blow).');
+INSERT INTO skills(id, name, class, description) VALUES('ff4fb908-be3f-4b70-b0bd-9b6111b28729', 'Glacial Spike', 'Sorceress', 'Shoots a large snowball that hits with substantial damage and a large splash effect, freezing the targeted monster and anything within 2.6 yards.');
+INSERT INTO skills(id, name, class, description) VALUES('6b37031f-4619-4570-b597-2fb7d439734b', 'Meteor', 'Sorceress', 'A flaming ball of rock is called down from above, dealing explosive damage to the target and leaving a patch of fiery burning earth behind.');
+INSERT INTO skills(id, name, class, description) VALUES('4a97d918-2035-4c7b-8c95-4c235e5904ac', 'Nova', 'Sorceress', 'Nova casts an expanding ring of lightning that strikes everything in its path, extending nearly to the edge of the screen.');
+INSERT INTO skills(id, name, class, description) VALUES('4cce949b-1fa6-45d3-ad10-0282c8529490', 'Hydra', 'Sorceress', 'Hydras are three-headed dragons composed of pure flame. The heads each fire a constant stream of Fire Bolts, dealing damage to the target, but not splashing to the sides.');
+INSERT INTO skills(id, name, class, description) VALUES('d0fa17e3-a60d-4cc7-aa32-df764943f336', 'Teleport', 'Sorceress', 'Teleport moves the Sorceress instantly to any valid location she can point her cursor at.');
+INSERT INTO skills(id, name, class, description) VALUES('94484050-a9ba-4ddd-af33-ea5c37b58071', 'Blaze', 'Sorceress', 'Blaze leaves a trail of fire behind the Sorceress as she walks or runs along, for as long as she keeps the spell active.');
+INSERT INTO skills(id, name, class, description) VALUES('bcd1ea76-58d0-44e0-abb1-46606fa0e0ac', 'Fire Ball', 'Sorceress', 'A substantial upgrade from Firebolt, Fireballs are larger and more damaging, and they hit with splash damage, burning the target and any nearby monsters too.');
+INSERT INTO skills(id, name, class, description) VALUES('41ebb330-2694-452e-9d2d-314ed8f935e0', 'Warmth', 'Sorceress', 'Warmth increases the Sorceress'' mana regeneration rate.');
+INSERT INTO skills(id, name, class, description) VALUES('d42db1ba-c7bc-480c-ba91-7afb0d9d405c', 'Chilling Armor', 'Sorceress', 'Chilling Armor provides a slightly smaller defensive bonus than Shiver Armor (but larger than Frozen Armor).');
+INSERT INTO skills(id, name, class, description) VALUES('febc4d05-5831-4470-bacd-6dd10d2f4e81', 'Blizzard', 'Sorceress', 'Blizzard is an area effect spell, calling down an icy storm that chills and cold damages everything over a wide area.');
+INSERT INTO skills(id, name, class, description) VALUES('2ce0ae88-af41-4353-9bfd-25bd695d4673', 'FrostNova', 'Sorceress', 'Creates and expanding ring of ice that damages enemies with cold damage and slows enemies.');
+INSERT INTO skills(id, name, class, description) VALUES('b6df0224-4e2d-4657-8c4a-d26ae1634a6b', 'Inferno', 'Sorceress', 'Inferno turns a Sorceress into a human flamethrower, capable of emitting a massive spout of flame for as long as the spell is kept active.');
+INSERT INTO skills(id, name, class, description) VALUES('19c2abf7-ed2a-4dac-8f1b-f77de10e459f', 'Fire Bolt', 'Sorceress', 'Shoots a small ball of fire. Fire Bolts hit only one target and have no splash damage.');
+INSERT INTO skills(id, name, class, description) VALUES('619abbed-8439-422d-8118-0d6cb9caa047', 'Energy Shield', 'Sorceress', 'Energy Shield allows the Sorceress to redirect damage from life to mana.');
+INSERT INTO skills(id, name, class, description) VALUES('765619fd-5bbb-4c7b-b065-2908ed4302f5', 'Enchant', 'Sorceress', 'Temporarily grants bonus fire damage and boosts the Attack Rating of any friendly player or minion. Enchant must be cast directly on the recipient.');
+INSERT INTO skills(id, name, class, description) VALUES('0d74a112-7af6-4c41-9af6-5bdcda3469f0', 'Fire Wall', 'Sorceress', 'A wall of flame springs up in both directions from the spot the Sorceress targets for ignition.');
+INSERT INTO skills(id, name, class, description) VALUES('73aab785-7a53-44ed-a1dc-e8d1f3fda134', 'Ice Blast', 'Sorceress', 'Shoots a large snowball that hits with cold damage, freezing the target.');
+INSERT INTO skills(id, name, class, description) VALUES('175ea255-1e43-4eed-9383-3038426e6932', 'Mind Blast', 'Assassin', 'Focusing her anima, an Assassin using this potent ability can crush the will of a group of enemies. Mind Blast stuns and confuses the feeble minded into attacking their comrades.');
+INSERT INTO skills(id, name, class, description) VALUES('1814ee43-882c-4460-a227-4a02fee984a1', 'Venom', 'Assassin', 'Poison use is another technique an Assassin has to help even the odds when battling demons and their ilk.');
+INSERT INTO skills(id, name, class, description) VALUES('7409be2d-118a-47dc-bdde-b9bf5696cfa8', 'Fade', 'Assassin', 'Raises all resistances and resists curses for a period of time.');
+INSERT INTO skills(id, name, class, description) VALUES('7f5eed39-e36a-4a57-a237-b1e67be8fa90', 'Clock of Shadows', 'Assassin', 'This spell blocks some monster effects; sand maggots cannot lay eggs, unravelers cannot use their poison breath, venom lords cannot use their Inferno attack etc.');
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('bb06af9c-b24a-4d30-930e-cb9866c4b4df', 'Ancient''s Pledge', '', 21, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('31c211fc-8a47-4ce4-8d5c-9affdf880e2d', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('51a7fbb6-436a-41a2-b069-79e264a43927', 0, 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3f10f1e0-205b-4bd7-bf28-87dab7291a2b', 1, 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a2346935-f078-49f9-83da-fde67aa75f08', 2, 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e69cc689-55a8-40bc-b330-379eaff8fead', '+50% Enhanced Defense', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('aae7d1a7-1d40-4141-bf28-3c719be683c3', 'Cold Resist +43%', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8396816b-bfc9-4f33-adfd-f50c8fc20352', 'Lightning Resist +48%', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3a403ad5-34fc-438e-ae01-de85f3ca2a3e', 'Fire Resist +48%', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7a553470-fcb4-4a36-8f0e-7fa1c6f3e287', 'Poison Resist +48%', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bffa90e5-9059-4506-a7b3-644e786f1960', '10% Damage Taken Goes to Mana', 'bb06af9c-b24a-4d30-930e-cb9866c4b4df', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('2a686eab-6f60-4601-bd83-553f6fe2356f', 'Beast', 'Druid', 63, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9800f7bc-e27b-4899-8fbd-39e443154227', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fdc59518-1651-4bdc-8b6f-bd1753e15264', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('53cd65fe-650e-4dd3-82fc-88d72c92fb6d', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a831cb77-1a95-4c2b-9323-49969f6b79d4', 0, '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4487b374-cf0a-4553-a059-11363bab7686', 1, '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ea4a4160-2cb3-4116-a97c-7831834893a9', 2, '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b6669882-17a0-4a7d-bb72-e858296eeb2a', 3, '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2ab6cda4-0851-4a2e-a55a-92b2a0938c35', 4, '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c8ce4028-2afb-4315-8ec3-d241e8cd6efd', 'Level 9 {skill} Aura When Equipped', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT s.id FROM skills s WHERE s.name = 'Fanaticism'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('26fb6d01-2c98-45a5-91ef-b8496efddf85', '+40% Increased Attack Speed', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5cd81dd7-8464-452c-af70-869301bf78d5', '+240-270% Enhanced Damage (varies)', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b43577fb-d21f-428c-bdd6-29d6738640ff', '20% Chance of Crushing Blow', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('246a11ac-f4a7-42ef-9d78-d8290500b3b0', '25% Chance of Open Wounds', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('caca4113-466e-4360-a54e-49d8e1a60f6d', '+3 To {skill}', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT s.id FROM skills s WHERE s.name = 'Werebear'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('858c317e-41fe-4114-9637-ae1b44d627bd', '+3 To {skill}', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT s.id FROM skills s WHERE s.name = 'Lycanthropy'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('deba6844-a0f8-4cdf-92a2-d9f19bcb726b', 'Prevent Monster Heal', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9ea45e24-ff0d-4587-9e1b-54b9d38d56ec', '+25-40 To Strength (varies)', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('292bfc80-c4af-4450-8809-3d8e9989bf57', '+10 To Energy', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('84785d61-fa47-473f-af67-30d8ad97a24a', '+2 To Mana After Each Kill', '2a686eab-6f60-4601-bd83-553f6fe2356f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('04bc968e-1479-4691-ba66-8358fcc27bd6', 'Level 13 {skill} (5 Charges)', '2a686eab-6f60-4601-bd83-553f6fe2356f', (SELECT s.id FROM skills s WHERE s.name = 'Summon Grizzly'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('b4381e40-49dd-4355-9ec3-e616c3a1053e', 'Black', '', 35, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('32f5d6e0-69c6-48a9-bb78-57563add4493', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('016db54d-3463-457c-b3ef-2bb70457a2a5', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('06c8f306-f7dc-4045-b598-5cfe43d4460f', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7d07d184-030b-4015-b9b5-29fd80437079', 0, 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('292d6e14-22a3-4242-b44b-38f3e5fcf4f8', 1, 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('58d9bbbf-5bc2-44cd-923a-4c51dfc0bc85', 2, 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dc3025ff-c37a-426a-b97d-8ff96f2060a2', '+15% Increased Attack Speed', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d8d2e531-dc46-4666-9396-2a5a0906f3b1', '+120% Enhanced Damage', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2767e254-067c-4833-bcf2-a7e9c912f00f', '+200 to Attack Rating', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4db52ac8-56b9-492a-83d8-437ff44290a1', 'Adds 3-14 Cold Damage (3 sec)', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('45d209e2-1d59-4456-8ed7-a75881820fc4', '40% Chance of Crushing Blow', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9e065b23-ac83-437f-af44-245b6631f5bf', 'Knockback', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a1b471c0-e9e4-4464-a798-b74f773898c6', '+10 to Vitality', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ef21cab-1e2c-4748-a84e-ed15cb3b82f4', 'Magic Damage Reduced By 2', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f36db54e-2ac0-468f-8f73-4d42f252e677', 'Level 4 {skill} (12 Charges)', 'b4381e40-49dd-4355-9ec3-e616c3a1053e', (SELECT s.id FROM skills s WHERE s.name = 'Corpse Explosion'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('facad0b3-69da-454f-aaed-e3b4735ecf3d', 'Bone', 'Necromancer', 47, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ca147e8e-65a7-48e2-afe3-7f3916371e0d', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e7841455-4c96-4739-ad05-41845dba9aee', 0, 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('66cf67d0-2323-483e-9337-27bd06890f13', 1, 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('775ada08-c289-44d4-8c42-7ec01f1df3fa', 2, 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2d8db143-ee03-470d-a78b-dec500c7a073', '15% Chance To Cast level 10 {skill} When Struck', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT s.id FROM skills s WHERE s.name = 'Bone Armor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('16f0102e-14ef-49d9-b3c9-23035131e18a', '15% Chance To Cast level 10 {skill} When Striking', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', (SELECT s.id FROM skills s WHERE s.name = 'Bone Spear'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f1faa696-e58f-47ff-92b8-997a32070337', '+2 To Necromancer Skill Levels', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d73dc5a8-14e0-4711-812d-afbbba92d91b', '+100-150 To Mana (varies)', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fa9f4c89-bb75-44f6-87e9-953ab1139d73', 'All Resistances +30', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('175e085f-b01c-452e-a318-27a364f9342a', 'Damage Reduced By 7', 'facad0b3-69da-454f-aaed-e3b4735ecf3d', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c827f9f3-15c3-4024-ab25-f9d84199e247', 'Bramble', '', 61, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5f084c02-5c0e-43a6-b4fe-a55f1049ab76', 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f9dcf785-0aff-4490-abf0-6806bf9e6ae3', 0, 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f8824c18-0fa6-4c4a-8ab0-77817187f3a3', 1, 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c488b902-29dc-4526-917c-591a713bd858', 2, 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f67ac58d-0871-48f6-911f-603770c8ffd6', 3, 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ff8fd096-ec6c-4303-9bec-cec86f85e79e', 'Level 15-21 {skill} Aura When Equipped (varies)', 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT s.id FROM skills s WHERE s.name = 'Thorns'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b3fdb2b5-8a24-494c-b843-72160528d009', '+50% Faster Hit Recovery', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d91202cb-cc72-4290-affa-711af439aa36', '+25-50% To Poison Skill Damage (varies)', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1af31e69-6cae-435c-8abb-872049cc46dd', '+300 Defense', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6dd00699-42f2-4e70-99df-dc2554d5f2b4', 'Increase Maximum Mana 5%', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1abe1794-754e-4924-a032-eb3c564791bc', 'Regenerate Mana 15%', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('74f3fce9-92e2-4190-888c-c61f9f541dfd', '+5% To Maximum Cold Resist', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('72b5b8a2-3505-4fbe-b7a5-6393229fc464', 'Fire Resist +30%', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e7a40bc8-c338-477f-848c-72f7f8a45b32', 'Poison Resist +100%', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9854f6bd-cade-4dae-ae73-2b5f02a11c85', '+ 13 Life After Each Kill', 'c827f9f3-15c3-4024-ab25-f9d84199e247', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3f1a2a38-6913-43ff-ac6d-39ef1c54057a', 'Level 13 {skill} (33 Charges)', 'c827f9f3-15c3-4024-ab25-f9d84199e247', (SELECT s.id FROM skills s WHERE s.name = 'Spirit Of Barbs'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', 'Brand', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c903aecd-62fe-4282-98d8-fef28fc970f0', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5b7b3363-eea3-4fd2-a32c-1f373e491028', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('da4ceb05-d08b-46e2-bf90-3aad13cdebf8', 0, 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('588b5c22-5cb9-4a1e-b478-1d697145c75f', 1, 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f449604d-538c-416b-92d5-6e0477ec0e0e', 2, 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('dcdf45b0-b5fb-4766-9394-73c499e22964', 3, 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('809406be-037d-41c4-9c19-48fb1df7b47b', '35% Chance To Cast Level 14 {skill} When Struck', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT s.id FROM skills s WHERE s.name = 'Amplify Damage'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('39431a9d-e33a-49f5-90ff-01cdda534032', '100% Chance To Cast Level 18 {skill} On Striking', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT s.id FROM skills s WHERE s.name = 'Bone Spear'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a4412dee-f04a-4265-ba52-874de3ee0129', 'Fires {skill} (15)', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', (SELECT s.id FROM skills s WHERE s.name = 'Exploding Arrow'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8d35630c-8131-4b6c-9f6d-0f3054f6cd5b', '+260-340% Enhanced Damage (varies)', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ee041c12-2686-47c0-953d-b76e1864a2e6', 'Ignore Target''s Defense', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('79b51780-880d-4601-a916-39ea5338e352', '20% Bonus to Attack Rating', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('79b74541-e6af-43ae-9c6d-d7547996fdd8', '+280-330% Damage To Demons (varies)', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4b36c3eb-8c10-4927-a799-7019aeee7994', '20% Deadly Strike', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('19fb2c5e-3df2-4166-9e33-a3cd44b443e1', 'Prevent Monster Heal', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6d88a143-ecd6-4a16-a864-355ae121b7e3', 'Knockback', 'c68d7f25-dfcf-40d1-aa36-a6b577a7dd6e', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('a1984ca3-8e7f-4283-9fc4-5def4145c62d', 'Breath of the Dying', '', 69, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1f96c7a0-785b-4d0f-8f9f-ee9904b86368', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('042a3c1a-6fae-4744-b5cc-64e3d53ac1c7', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0542dfd7-5529-4415-8cbf-a885f55c2b2a', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ecad186d-a980-4c79-b2fa-bc6a8ec0f923', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7f452736-421c-4780-bf92-a1a33af07229', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ffdf7c2a-6e07-45ac-a3e5-0efa0d5dffc0', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f2f24d69-3bcf-47e1-a24f-bb86aa934eb1', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('13f808bb-baf3-4bda-a467-2209b1e898aa', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('45adf5e9-6ff8-46db-8e75-acf5953e40ea', 0, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6a70f944-c148-448c-ba0b-b65698e0d4ba', 1, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7ee642cc-3b78-469e-8324-ffceac2e469e', 2, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9e0bde80-2bfb-4f4c-ba46-701e3d527fdb', 3, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f671d455-a1f9-49d5-b016-8362f805202f', 4, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('8e1e5a81-5466-4ed8-84c2-a3ff2934033b', 5, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Zod'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('cb82a096-d1bd-4e49-8d2d-a702101bfbfe', 6, 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('426b48b8-b376-4c9c-ab16-30f2b6f59fc8', '50% Chance To Cast Level 20 {skill} When You Kill An Enemy', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', (SELECT s.id FROM skills s WHERE s.name = 'Poison Nova'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cf190b27-1d39-4e42-814d-7ba765776f4b', 'Indestructible', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7591c4fd-6541-47ef-8fa7-48e4d46b5c4a', '+60% Increased Attack Speed', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c665b490-89d3-4aab-aed1-38d40732f81c', '+350-400% Enhanced Damage (varies)', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('32899f67-a9c0-4da5-87f4-cbed7d6ed214', '+200% Damage To Undead', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('39acf86a-8b82-4cd4-a54b-0144b4595648', '-25% Target Defense', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('983963b8-126f-4d10-b9a2-d59991b1ff2c', '+50 To Attack Rating', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dd262c22-aea9-4466-8b76-baa1bec1e369', '+50 To Attack Rating Against Undead', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('def763dc-0456-4f9f-a28b-2bde48666551', '7% Mana Stolen Per Hit', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ab43e3e2-b446-4cf5-81f9-3bcdaef754b4', '12-15% Life Stolen Per Hit', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4bf156b3-a55f-414b-a34b-514e6f0bb8d5', 'Prevent Monster Heal', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f490b5de-5581-4842-90b9-2a8e222aa2dd', '+30 To All Attributes', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8347bf17-21e6-46fc-bf83-918bc8cc21ce', '+1 To Light Radius', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b8e45335-ee4e-49c4-a775-a6bc4bc4ede9', 'Requirements -20%', 'a1984ca3-8e7f-4283-9fc4-5def4145c62d', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('35537cb6-21e0-4391-bea6-5b39dc2b7a8b', 'Call to Arm', 'Barbarian', 57, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ac0c2624-30d2-4e0a-9b8e-b94e973da85e', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4d2ca710-8c79-470f-8c4e-c80041c64f29', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d15aa08d-d2d1-4a2e-b4f4-7d8891e3132d', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b3ae627b-7c9d-487e-8203-baca5e3b43fa', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('26421f42-2b8e-437a-a257-2038881e1301', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4470f6d5-b248-4fa7-acfe-b1fdfb5d5cd6', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c2871a42-ab6d-465f-b8d2-96987789ff5e', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ae4cd2f4-ad8f-423c-a4aa-03f08fcc2539', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('85eee19c-2d4c-4cab-aeec-6b3928935b83', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('22bd8f77-6226-4e4d-ba57-280b73dc1ae1', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d6d58dbc-fdf4-48b3-bc3c-78a8ae76fc1b', 0, '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e8fd277d-d07e-4907-84e9-0de440a7d7e1', 1, '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('05cdda1a-02af-4fef-bc89-286922b46d1f', 2, '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('fe592a47-dd39-48b4-8538-c1085c8aa521', 3, '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('bd94bd09-9fdf-4df9-9feb-855399052685', 4, '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ac70f2a7-9a01-487e-ad64-0338884bbf22', '+1 To All Skills', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('26a185ac-692f-47de-aa05-d48e83daa96d', '+40% Increased Attack Speed', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('99e20994-53eb-4fdd-a9f2-74d02d1f9579', '+240-290% Enhanced Damage (varies)', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('62d4b96d-c396-411b-9521-b5dc93d28559', 'Adds 5-30 Fire Damage', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('33cf0030-4f7b-4c59-bc0e-715aa4131648', '7% Life Stolen Per Hit', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4b1824d7-cda8-4f37-a7ba-fb4b8bbfc3d3', '+2-6 To {skill} (varies)', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT s.id FROM skills s WHERE s.name = 'Battle Command'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1a28d447-0dba-4bbd-aab0-26999d36f54a', '+1-6 To {skill} (varies)', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT s.id FROM skills s WHERE s.name = 'Battle Orders'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('87a1af14-5dea-4f92-b437-db54936c7f7d', '+1-4 To {skill} (varies)', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', (SELECT s.id FROM skills s WHERE s.name = 'Battle Cry'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('74ab4767-c564-48c4-af9f-3ea44a163350', 'Prevent Monster Heal', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('52ee6888-adc5-4f87-acfe-961d58bbae4b', 'Replenish Life +12', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d7a23388-de1b-4c07-81df-7717ba5275eb', '30% Better Chance of Getting Magic Items', '35537cb6-21e0-4391-bea6-5b39dc2b7a8b', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('8fc7c9a4-21be-4952-a6b9-97e5732c33f4', 'Chains of Honor', '', 63, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('dcef25be-e58e-4303-94f9-3d9e48d9fb97', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('309f0d38-f323-42b2-a7cd-d1c0befbe5e3', 0, '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7139906e-4721-4d6a-b841-79ced4763006', 1, '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('14b491ff-9d1c-4fcc-9692-7ca0bec14aad', 2, '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c3c523a6-338e-40ce-ae61-1b58202f5485', 3, '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e7056d80-46bb-4c05-9ffa-fafc18c92d1d', '+2 To All Skills', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f6d1bec7-9a8a-40cb-a538-ef07cba1d320', '+200% Damage To Demons', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('728e6b3c-b73b-4031-8953-3a6eaf3c80ee', '+100% Damage To Undead', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('71c82b3b-7708-4773-aba8-bb9b193686de', '8% Life Stolen Per Hit', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ca0bc151-7831-4b5e-8dad-b37f32d058f5', '+70% Enhanced Defense', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('331f94df-702c-4011-8614-c0e9cb7b2cf9', '+20 To Strength', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('97a3192e-2529-4b21-b9fa-1dd8bd4887f8', 'Replenish Life +7', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('50ba823a-b596-4fef-9b7b-113908dd245f', 'Prevent Monster Heal', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('12a72e95-70ec-4fb7-b9d4-1e390c03a92c', 'All Resistances +65', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('54fd2993-4173-4f75-bf5e-43db4978d1a2', 'Damage Reduced By 8%', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('068007e0-2dac-433d-bdd8-23bf13fd11da', '25% Better Chance of Getting Magic Items', '8fc7c9a4-21be-4952-a6b9-97e5732c33f4', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('0b711917-3bb2-494b-86ef-b63dbac84946', 'Chaos', 'Assassin', 57, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2d4568e2-97ae-4528-8066-56c7223cd380', '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT it.id FROM item_types it WHERE it.name = 'Katar'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c8f6a9c1-36d2-430d-8c81-8049564e7ee7', 0, '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('267234c7-4cd8-4b5b-ac72-64014f113a03', 1, '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c6312db9-90ef-4ba7-95d0-addceb383c41', 2, '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4076b46b-b14f-45d5-a8d1-4dde7c7dd76a', '9% Chance To Cast Level 11 {skill} On Striking', '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT s.id FROM skills s WHERE s.name = 'Forzen Orb'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('99af34ad-8f59-4a77-86f6-9eb7d1003683', '911% Chance To Cast Level 9 {skill} On Striking', '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT s.id FROM skills s WHERE s.name = 'Charged Bolt'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f4c79ef2-f10c-4b73-812f-72ba2c8e5e1b', '+35% Increased Attacked Speed', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f1994ea4-e9fa-4b83-bd54-658638d762aa', '+240-290% Enhanced Damage (varies)', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3fc75dd9-3e69-4da0-9777-6c05386823c7', 'Adds 216-471 Magic Damage', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('173d7f23-ffa2-426c-97cf-c25d74a5ab14', '25% Chance of Open Wounds', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f209fa91-1fb8-4c35-b14f-228bf62a2032', '+1 To {skill}', '0b711917-3bb2-494b-86ef-b63dbac84946', (SELECT s.id FROM skills s WHERE s.name = 'Whirlwind'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cd7388fe-4ca9-4882-a4fc-c70344db070c', '+10 To Strength', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bd1940c5-0dba-412d-a58e-78dbc0569d48', '+15 Life After Each Demon Kill', '0b711917-3bb2-494b-86ef-b63dbac84946', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('590b30ee-0fde-4ff0-a638-d89569a97a45', 'Crescent Moon', '', 47, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a6ceabe8-0fe9-4bec-99ee-9372a2cad6a7', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('03d9270d-68e4-4681-8978-2c8d9ea34b06', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ba5b1353-bb32-4ed7-b39d-83f05ff3971b', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('43116eb1-c588-454b-a505-74cb3527c170', 0, '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2d24682d-b100-4c92-9ea8-c321e7f56d10', 1, '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0c6248ee-7471-4367-bbdd-00758be8d119', 2, '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2bfa5177-3241-41e5-975b-f9ce37966aa2', '10% Chance To Cast Level 17 {skill} On Striking', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT s.id FROM skills s WHERE s.name = 'Chain Lightning'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('714b3dd0-9ea4-4433-b9f8-15156e334a84', '7% Chance To Cast Level 13 {skill} On Striking', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT s.id FROM skills s WHERE s.name = 'Static Field'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2c52986a-e3ad-4f22-ab9d-d2f6b192b48a', '+20% Increased Attacked Speed', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('399b8dd9-aea6-480e-aef5-2885d2f84265', '+180-220% Enhanced Damage (varies)', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e9ffa53a-dde5-496a-bbdd-e77291fb635b', 'Ignore Target''s Defense', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('aacd7cc2-2bae-4fa4-bca3-3c9d0819d1d6', '-35% To Enemy Lightning Resistance', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e8c40207-6911-4d18-9c0e-6b85ee1757d9', '25% Chance of Open Wounds', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8e078676-36f2-4ca2-9cd3-42f4319548c8', '+9-11 Magic Absorb (varies)', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a4cfe57d-4386-4164-b044-9327cb6deaf6', '+2 To Mana After Each Kill', '590b30ee-0fde-4ff0-a638-d89569a97a45', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('74638f68-9f6d-487e-ba4a-62664c72520c', 'Level 18 {skill}', '590b30ee-0fde-4ff0-a638-d89569a97a45', (SELECT s.id FROM skills s WHERE s.name = 'Summon Spirit Wolf'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('3b3a60ab-e6e3-4b4a-83c6-7c714797e475', 'Death', '', 55, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('66140d20-36be-4a70-a4c6-c1be0b3e1d7d', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0bb6e63f-1bea-4d58-9291-fdd25c4d3852', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('87fe97ea-cc88-4599-8c99-56c9c7368a3f', 0, '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3a12d8be-3292-443e-bb1e-a4116f93e171', 1, '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('333567b9-3171-4b8a-aa2b-b851eeee99d2', 2, '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('370b43e0-080f-4cba-9e01-763d4daeee22', 3, '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a3701e16-4dfb-4883-9d71-3684f126727d', 4, '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f1bd1976-8be3-40bd-abe1-535d462a2d4f', 'Indestructible', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d08c78e8-9fd2-411e-befb-211009b71e48', '100% Chance To Cast Level 44 {skill} When You Die', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT s.id FROM skills s WHERE s.name = 'Chain Lightning'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5efcb621-fe5c-4991-8a4b-a7614d1b0aaf', '25% Chance To Cast Level 18 {skill} On Attack', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT s.id FROM skills s WHERE s.name = 'Glacial Spike'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1f6c55cf-da82-4e79-bf5f-7bf416479cec', '+300-385% Enhanced Damage (varies)', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c5c1024c-5525-4dc7-80b2-50e0d351bccf', '20% Bonus To Attack Rating', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a2ec9a37-f13b-4eae-a050-39324ed982ca', '+50 To Attack Rating', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('adaf70fc-5082-447a-a20a-2310e66aedb7', 'Adds 1-50 Lightning Damage', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f589567f-6f88-465a-a28d-ad8348e70c56', '7% Mana Stolen Per Hit', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('54a4b655-22d6-421b-a4cc-843ee847c15f', '50% Chance of Crushing Blow', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('19b83c93-a5af-4da9-908e-29dff35af18c', '(0.5*Clvl)% Deadly Strike (Based on Character Level)', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('19d1ac8f-c146-4576-b7e6-23183e2f5826', '+1 To Light Radius', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('97c47c47-fdb4-4c79-b155-b6a118bf7389', 'Level 22 {skill} (15 Charges)', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', (SELECT s.id FROM skills s WHERE s.name = 'Blood Golem'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('554273ee-1e6d-49b5-9a5f-dd70bc13f938', 'Requirements -20% ', '3b3a60ab-e6e3-4b4a-83c6-7c714797e475', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('787afbc7-95de-4e3a-a2eb-ee7390786b36', 'Delirium', '', 51, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('26615fc1-dc3d-4e9a-9db8-fe1c3afc3e7b', '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT it.id FROM item_types it WHERE it.name = 'Helmet'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('aade7924-779b-4ce5-a8bf-9b69c840194b', 0, '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b163333b-9d7c-4f6e-bbe2-44b0b31bc8a6', 1, '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3caf4795-53b2-4b0e-afac-69fad56f783a', 2, '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cd1ad27b-577e-4552-99ef-3e3a9ffa5ee2', '1% Chance To Cast lvl 50 Delirium When Struck', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d9d94783-1cfb-4e89-b704-ddc284add432', '6% Chance To Cast lvl 14 {skill} When Struck', '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT s.id FROM skills s WHERE s.name = 'Mind Blast'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6964f008-43aa-4aad-b9a3-5c9c979b3693', '14% Chance To Cast lvl 13 {skill} When Struck', '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT s.id FROM skills s WHERE s.name = 'Terror'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3a00a233-9c13-43d0-8deb-14a094eafbeb', '11% Chance To Cast lvl 18 {skill} On Striking', '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT s.id FROM skills s WHERE s.name = 'Confuse'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('94886ba7-20d3-4ed2-a0bc-b07c77c2b074', '+2 To All Skills', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c704cf58-360d-4277-81ba-a15476577c76', '+261 Defense', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dea4c632-a284-460a-a7d0-14445044b3c7', '+10 To Vitality', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('761333f1-1e73-4efd-80e9-da27ec3ce232', '50% Extra Gold From Monsters', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9f1e5246-7277-4496-be28-d7c200826dec', '25% Better Chance of Getting Magic Items', '787afbc7-95de-4e3a-a2eb-ee7390786b36', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('037656ec-e884-4825-b115-e381ae73706d', 'Level 17 {skill} (60 Charges)', '787afbc7-95de-4e3a-a2eb-ee7390786b36', (SELECT s.id FROM skills s WHERE s.name = 'Attract'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('438d4c03-c6a4-4017-aef9-9687e04238d1', 'Destruction', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a4bdd55a-47bb-4e14-b1aa-06014159b612', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1669c2bc-4580-4f7a-931a-b7a2ddd41325', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d3599ba4-8d77-4051-9234-7449de660c07', 0, '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d9a1ec04-00a7-44ea-b45e-359ee8003b66', 1, '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9580509d-4d3e-462a-bb3e-0daed2b5f777', 2, '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('09d75648-5838-4cd1-9f40-bdd3ff898a5d', 3, '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('41be6357-cbe4-4134-8020-ba582029aee4', 4, '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2d7f3b2c-e0aa-4402-af40-8d8cfe049c3b', '23% Chance To Cast Level 12 {skill} On Striking', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT s.id FROM skills s WHERE s.name = 'Volcano'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ea041e1f-3258-4b2f-8372-2e82bb7c34b1', '5% Chance To Cast Level 23 {skill} On Striking', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT s.id FROM skills s WHERE s.name = 'Molten Boulder'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5ac11466-f99c-47e3-9c35-cbc493148898', '100% Chance To Cast level 45 {skill} When You Die', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT s.id FROM skills s WHERE s.name = 'Meteor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5f809e88-4381-4665-80a4-75b5d2197a8d', '15% Chance To Cast Level 22 {skill} On Attack', '438d4c03-c6a4-4017-aef9-9687e04238d1', (SELECT s.id FROM skills s WHERE s.name = 'Nova'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b6b801a7-36f7-4091-8c21-a9deba132d13', '1% Chance To Cast lvl 50 Delirium When Struck', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d15190b4-c281-4300-b257-d42c3c6d7aea', '+350% Enhanced Damage', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('36556495-06cc-4511-bd39-be6dc69db668', 'Ignore Target''s Defense', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bcd8682e-d038-45ef-b0de-b4b2ddc1581a', 'Adds 100-180 Magic Damage', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4d50c566-73b6-431b-9dd7-09510a18ebcc', '7% Mana Stolen Per Hit', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('aab76e49-33d5-4bd6-b181-40dc3397d463', '20% Chance Of Crushing Blow', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ab74c836-aa69-4f81-9c1e-432e26c9c59f', '20% Deadly Strike', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c4ac2bb6-5857-4cfe-9a8b-ac93c70846f2', 'Prevent Monster Heal', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('57ce3d8e-4fa0-4093-beca-2b3cb32a0561', '+10 To Dexterity ', '438d4c03-c6a4-4017-aef9-9687e04238d1', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('d5f97d46-c6db-4fe8-a5f9-07199facbb14', 'Dragon', '', 61, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a9ad7a2b-e125-4a8c-a77c-a3312fda95bf', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('6c53211c-5f15-422e-b951-a55b64797161', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3072cc18-b7ac-493f-bd05-5445e4cc9c40', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('79e5357e-c8b9-4ebb-998f-b0bc7d4a887d', 0, 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e0c3487e-56d1-437b-bcc7-8580cac8638f', 1, 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ea748d84-85cf-4cea-a01d-630d13f06ea2', 2, 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1d0b7094-4cef-40c4-98d2-28d3e6b0d0f5', '20% Chance to Cast Level 18 {skill} When Struck', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT s.id FROM skills s WHERE s.name = 'Venom'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0b5c43ac-05e9-4a72-9f43-9a52db38d4f6', '12% Chance To Cast Level 15 {skill} On Striking', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT s.id FROM skills s WHERE s.name = 'Hydra'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3493164f-9c76-4330-a03a-d753001782dd', 'Level 14 {skill} Aura When Equipped', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', (SELECT s.id FROM skills s WHERE s.name = 'Holy Fire'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fa15ca10-53f2-46c3-98a5-40c0966ca572', '+360 Defense', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('41289acc-8210-402e-bcde-fa27af928f3b', '+230 Defense Vs. Missile', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('59002c71-b4e8-496f-8b33-635da5c3dfdf', '+3-5 To All Attributes (varies)', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e05a80ac-f4af-47ca-87ef-1bb857b222f8', '+(0.375*Clvl) To Strength (Based on Character Level)', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5bac18d7-1e19-48c2-8c1e-1ccd7d076507', '+5% To Maximum Lightning Resist', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0e7c6b8c-3447-429d-8292-ba9c535ef048', 'Damage Reduced by 7', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3d95fbbc-43ae-4944-8913-3d93ed730ca3', 'Armor: Increase Maximum Mana 5%', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7be79317-d8f4-4560-8cc4-cb77076323fd', 'Shields: +50 To Mana ', 'd5f97d46-c6db-4fe8-a5f9-07199facbb14', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('5032604f-9d90-4d6a-bd74-5c2e99c9f162', 'Dream', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b12549aa-6636-4eab-9484-dd37caab8bf8', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT it.id FROM item_types it WHERE it.name = 'Helmet'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('41cda291-ab44-4bb0-9ff5-3d0feba6f048', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0c87a738-44e5-4d8b-991a-4dba5f14d8b7', 0, '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6d0b7c95-0a0f-4df4-8e25-6c8db2d6d288', 1, '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9a66a982-c067-4a4c-b076-019bf3584985', 2, '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1f295fdc-c333-47ab-a40b-8f1f3b0387d5', '10% Chance To Cast Level 15 {skill} When Struck', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT s.id FROM skills s WHERE s.name = 'Confuse'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d06b730c-3064-4b5c-8e00-08568e0ce065', 'Level 15 {skill} Aura When Equipped', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', (SELECT s.id FROM skills s WHERE s.name = 'Holy Shock'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('24ca5787-d107-41ac-9ae8-dfa6ceeda179', '+20-30% Faster Hit Recovery (varies)', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2bff189e-4e8d-43de-8cb9-24a64637b7ff', '+30% Enhanced Defense', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('edc794de-7510-48ea-9bf9-e2d21225fa6e', '+150-220 Defense (varies)', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('904dd763-40f6-4664-b46b-5cf2bd6dcd6f', '+10 To Vitality', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b4a73b5b-b210-43e5-b636-d15a4cc108f4', '+(0.625*Clvl) To Mana (Based On Character Level)', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('838b451c-0bbe-485a-a9f1-1217da230b7a', 'All Resistances +5-20 (varies)', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d764b31d-6500-4359-91f4-7e103ee85594', '12-25% Better Chance of Getting Magic Items (varies)', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('62e7d10c-6ed8-4bf8-98ff-83948e9db3a2', 'Headgear: Increase Maximum Life 5%', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('44077084-aeb4-49fd-80d1-63362380983c', 'Shields: +50 To Life ', '5032604f-9d90-4d6a-bd74-5c2e99c9f162', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('6eee710a-0195-490b-b720-215874d283ec', 'Duress', '', 47, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('814a1af8-0678-4341-995b-df9db88443ed', '6eee710a-0195-490b-b720-215874d283ec', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('bcd9cca7-95dd-4e18-b308-02b5f7de6ce4', 0, '6eee710a-0195-490b-b720-215874d283ec', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a14a3594-0c4f-4100-b6fb-0a0f3c895ff9', 1, '6eee710a-0195-490b-b720-215874d283ec', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6cc302e5-cb5d-4963-a531-75447095f7c4', 2, '6eee710a-0195-490b-b720-215874d283ec', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('682d9456-8448-49dc-9c6a-eceb17b62ea1', '40% faster hit Recovery', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a3ae873b-fccb-465b-b70a-286210a939a7', '+10-20% Enhanced Damage (varies)', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('456baa11-53d7-49ad-859f-0d2513c3f42b', 'Adds 37-133 Cold Damage', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('58eeeeba-5674-4bb2-a4e8-572a2380b2b3', '15% Crushing Blow', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1a7ea359-654e-4a78-89b2-89c8f0cf4058', '33% Open Wounds', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3a1a8ca3-f8c2-440b-a80e-403546f26f1f', '+150-200% Enhanced Defense (varies)', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f8f909fe-78e4-4fdf-bc60-5d879ba70d81', '-20% Slower Stamina Drain', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('38db862a-05a7-4653-9a50-6e6965ebc62d', 'Cold Resist +45%', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('46103d88-f481-47c3-be37-9135ee93eef5', 'Lightning Resist +15%', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1af298b6-8ffa-4cf2-b46c-730c9d1c07a3', 'Fire Resist +15%', '6eee710a-0195-490b-b720-215874d283ec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a0b17667-0044-4aaa-bfd2-98ff1e22e601', 'Poison Resist +15% ', '6eee710a-0195-490b-b720-215874d283ec', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('2c6fe415-4262-44e7-9926-1b7a16ff5645', 'Edge', '', 25, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('cc81722c-4bc1-4a86-b3b5-5d5e99547646', '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1065c20a-ed15-44e3-9535-f18608e94b1c', '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b8f56769-cbf4-40e5-8c79-83dc829b62b9', 0, '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('73b5bd81-62f1-4963-89c1-bcd1f7f04d2e', 1, '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2d07bfdc-841b-4fe4-a494-d7b8864f8335', 2, '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fa57b523-d409-48cb-9699-cd35fb564707', 'Level 15 {skill} Aura When Equipped', '2c6fe415-4262-44e7-9926-1b7a16ff5645', (SELECT s.id FROM skills s WHERE s.name = 'Thorns'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3baf74a8-aab7-4c54-9792-53a77d2dc746', '+35% Increased Attack Speed', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b1dcdd6f-1215-42f3-9376-d8748fc98fec', '+320-380% Damage To Demons (varies)', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ce31525f-6408-4d69-9881-cc43e5b80a99', '+280% Damage To Undead', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e1fc7796-0c81-479b-a778-9c9abf1d3e26', '+75 Poison Damage Over 5 Seconds', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a97f2e4a-0074-4577-9e9a-29e7cd96dc7e', '7% Life Stolen Per Hit', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d57a85fc-fc60-4f09-9601-af2b3bb33743', 'Prevent Monster Heal', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7e7067c6-e9f1-457b-abeb-e8b3680fcc79', '+5-10 To All Attributes (varies)', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9007559f-138c-4d82-8ab3-841b9e452eb3', '+2 To Mana After Each Kill', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1635054b-8367-4d7f-b8e5-c15a3a4c7151', 'Reduces All Vendor Prices 15%', '2c6fe415-4262-44e7-9926-1b7a16ff5645', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('771721ea-e14e-40a4-aa2a-845fc0988061', 'Enigma', '', 65, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('62a1fb11-6c92-4b7d-9804-a823cb220715', '771721ea-e14e-40a4-aa2a-845fc0988061', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('64ca5af9-fb61-41f9-910d-dbd2b492d8e8', 0, '771721ea-e14e-40a4-aa2a-845fc0988061', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5a03c068-931d-4668-b096-fc2e04e6fc9a', 1, '771721ea-e14e-40a4-aa2a-845fc0988061', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b500b645-5ab7-4eb4-92a9-d8775c3f1fde', 2, '771721ea-e14e-40a4-aa2a-845fc0988061', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a3b42420-515b-48a4-9471-b0a5a96efc26', '+2 To All Skills', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('79f656f7-01b1-4e5e-a53a-04bf8149c99f', '+45% Faster Run/Walk', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('feb433d1-af3d-45da-a99e-fc7da2cf4776', '+1 To {skill}', '771721ea-e14e-40a4-aa2a-845fc0988061', (SELECT s.id FROM skills s WHERE s.name = 'Teleport'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2a2c044d-be4d-4cdf-b69f-d31563a7d007', '+750-775 Defense (Varies)', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f4ead68b-7bb2-4ec0-944a-19a9e2b90f49', '+(0.75*Clvl) To Strength (Based On Character Level)', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9b0bbee6-5f53-4133-a8ea-277195c6fcaa', 'Increase Maximum Life 5%', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e8333194-6c5c-4297-94a0-46e41d39b5fc', 'Damage Reduced By 8%', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8d76539b-6cec-42b6-a4ff-dab7dd305242', '14 Life After Each Kill', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3627b96e-4352-4f6f-bb75-bedfbf15074b', '15% Damage Taken Goes To Mana', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c8425e15-713a-4f50-b564-ec6f80981b07', '(1*Clvl)% Better Chance of Getting Magic Items (Based On Character Level)', '771721ea-e14e-40a4-aa2a-845fc0988061', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', 'Enlightenment', 'Sorceress', 45, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b156e92d-766e-4b12-901c-89d8de65488a', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1456633d-11ea-4b7e-9cd4-7f0c300c893d', 0, '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('8d61a6bf-ea5a-4526-bffa-3722bf5135e1', 1, '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ab50a76a-8dbd-4ba3-b859-04a254fbed13', 2, '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5b7c702b-dc46-46d4-a33b-dd8feced250d', '5% Chance To Cast Level 15 {skill} When Struck', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT s.id FROM skills s WHERE s.name = 'Blaze'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a27d18db-0722-48a6-9d91-4cffe0cf608d', '5% Chance To Cast level 15 {skill} On Striking', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT s.id FROM skills s WHERE s.name = 'Fire Ball'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7b4175f6-0ca8-48a0-8266-e3c32089359b', '+2 To Sorceress Skills', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('61159b56-a501-4031-baca-ab62a931b7ab', '+1 To {skill}', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', (SELECT s.id FROM skills s WHERE s.name = 'Warmth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('05899f5f-dbab-4a8a-a59e-941961137703', '+30% Enhanced Defense', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e91c5aac-f95d-40d6-a2a7-a521335c428c', 'Fire Resist +30%', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('465631eb-d2c4-476f-ac85-3b65695a3b4a', 'Damage Reduced By 7', '36b5ba2b-0f9a-4bf9-aa2f-4252d79afe8d', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c000632e-8c51-4d04-bc6b-fe907563cbbb', 'Eternity', '', 63, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('087e0ef1-0374-46fd-995a-a68c318b3ddc', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('78c553d6-748a-4b6e-97af-a668ac64d6e2', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c77c07b6-e412-451e-85e8-76676118be8b', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b61e41c4-687c-42ff-b4df-6d8521f7c25b', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1cfb4318-1035-4b03-9cd2-4e282ff200dd', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('00e67ead-35b0-4d7c-bebb-e96a5c947a30', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('09a12627-a916-4f8e-9b65-3bd9f72d8937', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1700410a-be62-4fd8-8ec3-5bc0ccd10d40', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f77da2e0-4521-4a54-8580-07ac9ebce48e', 0, 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('48777961-0158-43b3-949d-fdec0e22e6d0', 1, 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b3e0c11b-e3a7-4acf-bd01-51c52ddb530e', 2, 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ff513bdd-af61-46a9-a091-d49616ec161f', 3, 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2df6d416-5646-4063-9772-d86410f64148', 4, 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2b2ae87e-4886-452f-be3c-729ecf6a5c5a', 'Indestructible', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('16d80a3e-b7c1-4162-a779-fc2c81a22b37', '+260-310% Enhanced Damage (varies)', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ae4f8ef6-7261-4892-9ccb-d6ea42044650', '+9 To Minimum Damage', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('111df258-412f-4c41-b68a-9683a07744ba', '7% Life Stolen Per Hit', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('36f66ada-7b6e-422f-b374-8a10e6b0f54f', '20% Chance of Crushing Blow', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fdba040c-f83e-4b2c-8559-d89c4d47c551', 'Hit Blinds Target', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9729c700-4d4d-45ff-9558-382118bbf8cc', 'Slows Target By 33%', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('97dd2331-a86b-46b3-9de0-e637111d91aa', 'Replenish Mana 16%', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3bd29529-c2a0-4589-b732-6785fd7432fd', 'Cannot Be Frozen', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2103536b-747e-479e-b1e7-77a9dea56fdb', '30% Better Chance Of Getting Magic Items', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bfe3db1d-a382-40ea-a5a3-584b93373362', 'Level 8 {skill} (88 Charges)', 'c000632e-8c51-4d04-bc6b-fe907563cbbb', (SELECT s.id FROM skills s WHERE s.name = 'Revive'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', 'Exile', '', 57, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c7d846ee-1195-4973-8915-8ecca3bca810', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d0ba152c-28b2-4445-8c67-3c08ed7288a9', 0, '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('33e59b8b-a1c1-4454-9d02-642e0eb013c3', 1, '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0c791fd0-085c-4ce1-b611-b1c742ae4f5e', 2, '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1409b0fd-c35e-4b7a-be4a-70e2e954c03d', 3, '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('485688a5-51a2-4135-ac2f-6c9fd7f0c709', '15% Chance To Cast Level 5 {skill} On Striking', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT s.id FROM skills s WHERE s.name = 'Life Tap'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('32532090-8727-40d9-949a-daf444d7bc3b', 'Level 13-16 {skill} Aura When Equipped (varies', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', (SELECT s.id FROM skills s WHERE s.name = 'Defiance'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e8a20ea1-9501-4a19-9bfc-fa889ca662b7', '+2 To Offensive Auras (Paladin Only)', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c1d76337-245a-4404-a498-4c9833e5e2bd', '+30% Faster Block Rate', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c4d586f2-4d62-418b-b675-44dbd4167048', 'Freezes Target', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('72917562-81fa-4d9f-bb91-ddc900be9159', '+220-260% Enhanced Defense (varies)', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9d8840d0-d7dd-4d06-a8e4-ec497da21aee', 'Replenish Life +7', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('233f1c2d-da9e-4f51-95b9-ed3a8b0704ab', '+5% To Maximum Cold Resist', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eab24c14-284f-4eed-8566-bc83d7946691', '+5% To Maximum Fire Resist', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ef6c403-44e8-41b8-95b5-94d135c17229', '25% Better Chance Of Getting Magic Items', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ef21dbb-6da4-4c80-bd5b-bfb01a348252', 'Repairs 1 Durability every 4 seconds', '4dc7422e-ea6b-43ee-94c6-fc7cc2410bbf', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('e6fa551d-7227-4603-a6ea-94d11589247e', 'Faith', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2f490ae5-3cbe-40c7-8e5b-1e2f303f6a88', 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('76d66871-83d5-4de6-98de-cb20ff5ce0bd', 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c760fc8a-0d70-4b2c-84cd-847ac120d850', 0, 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('aa366946-ad54-413f-bdb7-e7866cbd1682', 1, 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5489dadb-c1c4-42c5-9ab0-ad89d8735971', 2, 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('236faf02-f0a4-4442-8938-daf0d8345f8e', 3, 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('43fb3bc5-2a91-4b1e-82df-43911808bd9a', 'Level 12-15 {skill} Aura When Equipped (varies)', 'e6fa551d-7227-4603-a6ea-94d11589247e', (SELECT s.id FROM skills s WHERE s.name = 'Fanaticism'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6d9e3b89-9c4e-44fc-bf96-50cd357f0c89', '+1-2 To All Skills (varies)', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5268c731-278a-4ff8-8eac-60f05b3bedcb', '+330% Enhanced Damage', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f8953387-8a07-4fbb-863a-6d9e079b5fc8', 'Ignore Target''s Defense', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f49c7138-6cec-4385-96a9-90a1397bca4f', '300% Bonus To Attack Rating', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d1c9c455-95ed-4e07-a552-f586c336b3a6', '+75% Damage To Undead', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('823ba781-38a3-4a66-a848-cc416150c909', '+50 To Attack Rating Against Undead', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8f514c11-37e3-40be-a450-a73f781b90f8', '+120 Fire Damage', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c49575f3-d517-4b31-9e2b-c6b58a0fdc4d', 'All Resistances +15', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dbbeb326-0490-4747-a670-7a84098a0c55', '10% Reanimate As: Returned', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fd2fb3bc-a464-4ce0-aaaa-c594e46d1549', '75% Extra Gold From Monsters', 'e6fa551d-7227-4603-a6ea-94d11589247e', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('4bbf5ded-80e3-49a1-b4f8-c51041d98a16', 'Famine', '', 65, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e17d2b5e-8446-4023-b1dc-5a7e6e439be8', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9423fd43-6e36-443e-8f14-57ed53ec6fd6', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ec300bb9-e934-4f4f-80a3-4f3228c165f1', 0, '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0bae0487-46c1-4517-9f61-f21a8311f768', 1, '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT r.id FROM runes r WHERE r.name = 'Ohm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('24d282ce-6378-4c56-853b-e8c4dcef8e40', 2, '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b25b273e-c534-464f-b1a1-8a57a68fcce3', 3, '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8a6b49b2-8ec6-4257-a5ea-d2d85b901ee8', '+30% Increased Attack Speed', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7723b7a0-1395-448d-907c-aea5527ac6ee', '+320-370% Enhanced Damage (varies)', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b1d3c81d-9a61-4e12-a95d-2e37c4575398', 'Ignore Target''s Defense', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e2b3d604-cc01-4e89-8bd2-66c23bd20e78', 'Adds 180-200 Magic Damage', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8b6aa322-9cb9-4947-b71b-6bb31cd8c49c', 'Adds 50-200 Fire Damage', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('083c4cf5-c003-429b-843d-059f671c89cf', 'Adds 51-250 Lightning Damage', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5f787357-e1d5-407f-946b-340f4931dd71', 'Adds 50-200 Cold Damage', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8dcd90a4-1fd6-4f41-b6ee-f86425ab5a1a', '12% Life Stolen Per Hit', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5b8036dc-2303-423c-a405-a4a7564b7c34', 'Prevent Monster Heal', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('950d86d2-62ed-4292-a7c1-150a769ea6d7', '+10 To Strength', '4bbf5ded-80e3-49a1-b4f8-c51041d98a16', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('31f090af-a31b-4c68-8267-11bf4703b719', 'Fortitude', '', 59, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9e369b3e-622e-48e4-b693-c2f4400ff1bd', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5ba5ced1-f0dc-4c7f-97f7-ebc310298096', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('92d12c64-7154-481d-bc4f-0e55ace68e5a', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d29c3f00-d208-4dee-92f4-26bf2ab4990a', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d4000d1e-d945-4a49-bdd2-f848a9f23539', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b1280e8f-dee1-44a5-ba0e-1c449aa89529', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c5b035a9-abae-473a-a5c9-e9cfd2021a2c', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b56a2d1c-7a35-4c47-8667-b842f5eada5a', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e4ed4dfe-5deb-4766-b75c-2e5e8ddeba38', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9084a356-0496-4c8d-8a51-40028b1220ea', 0, '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('fc0fa547-0532-4402-9e6b-9dce22d3e820', 1, '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c7eada27-817d-4203-b81d-a5e6b14cfa4e', 2, '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('34fcb3a8-856c-4abf-9d0a-aa7cd62e8d79', 3, '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dc565277-9f2b-42da-a1a8-f39cda69ba11', '20% Chance To Cast Level 15 {skill} when', '31f090af-a31b-4c68-8267-11bf4703b719', (SELECT s.id FROM skills s WHERE s.name = 'Chilling Armor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('66880422-2378-419d-a20d-1698714ecb93', 'Struck', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('092c00d6-d69f-456e-a423-89f8c3c49556', '+25% Faster Cast Rate', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c8c5d948-7c2b-45c7-b030-80af99f20c67', '+300% Enhanced Damage', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b5429890-8485-4f8a-9d2b-db9266645527', '+200% Enhanced Defense', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c66fde12-72fa-4d73-82cf-e13a4530bcd1', '+((8-12)*0.125*Clvl) To Life (Based on Character Level) (varies)', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('febd5f41-aa56-497a-b8c1-872a789b6961', 'All Resistances +25-30 (varies)', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1ccf13d4-7204-442b-9cab-30a25df80815', '12% Damage Taken Goes To Mana', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5f68e1aa-f168-4093-915c-97fe4b717ea0', '+1 To Light Radius', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('edc9273c-89f3-4ad5-9f69-88726f7a00ce', 'Weapons: +9 To Minimum Damage', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ba6143bc-b234-45d2-9402-d614b2573e85', 'Weapons: +50 To Attack Rating', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('90567866-deed-4f27-91d1-3303b9c9124a', 'Weapons: 20% Deadly Strike', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4213ee78-724b-4acc-bfc3-d34762df8878', 'Weapons: Hit Causes Monster To Flee 25%', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1cd29a09-fc63-4085-ab8d-c97abe1f5c23', 'Armor: +15 Defense', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('27a5d254-5c80-4626-ad7d-19cd063d1891', 'Armor: Replenish Life +7', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5a92e55c-f456-4566-b985-90c3978a9ea7', 'Armor: +5% To Maximum Lightning Resist', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('529f862b-d277-4123-a47f-a9c0edf3aae5', 'Armor: Damage Reduced By 7', '31f090af-a31b-4c68-8267-11bf4703b719', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('60f5f113-4564-4424-a4e5-dc885f2ca93e', 'Fury', '', 65, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a29f1ee6-c13a-461e-b8f1-6ed4538b72ca', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('62a7628a-59e7-46bc-8fc9-22db5c036193', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Dagger'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d3f81bde-62fd-404d-ad84-28ff76c8f5f4', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fe82cfdb-d2e0-4d94-88f7-08eb18d611bb', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('bb71ebee-dc21-4baa-99b2-b7e5d15f01e0', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c9ffb4a1-5b42-41f1-8ed2-afa54fbcd470', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5acccf12-99d8-4fd9-9c26-aeaecc69ea7c', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('448d410a-e4aa-4616-8cb3-a1d048b13628', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2a8a828a-f55e-47ef-8986-4b77f814f4c0', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('8abababa-5bee-4d24-aae6-8a8b59cb7e08', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('20bc971d-9ae1-4657-b56e-4dc3419ecc67', 0, '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4371ad1a-dace-4cb8-a9f0-b781383d32c7', 1, '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('12f081df-86e9-417c-af96-2f8c88a9fe26', 2, '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a787dad8-1e70-43f9-85b9-2a039ca35338', '40% Increased Attack Speed', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a3907d5e-045c-44b9-acb8-6434ada8d964', '+209% Enhanced Damage', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c9e6dac8-1bbc-4444-b486-6925861aac5d', 'Ignores Target Defense', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('79f7959a-bba9-47c9-a9b0-dc4ac80b80d1', '-25% Target Defense', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('500fd123-b286-4819-9ecf-a14e0927bcc1', '20% Bonus to Attack Rating', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('32a44307-4fe1-41e3-866b-1cf8ca998c82', '6% Life Stolen Per Hit', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c24833d0-e856-456c-8999-186b84a6437c', '33% Chance Of Deadly Strike', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ed117436-a081-4447-8e2f-a2c5c05cef41', '66% Chance Of Open Wounds', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('85eb2bc9-63ae-4bff-8604-21e5852f87da', '+5 To {skill} (Barbarian Only)', '60f5f113-4564-4424-a4e5-dc885f2ca93e', (SELECT s.id FROM skills s WHERE s.name = 'Frenzy'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c5f2da60-181f-45c5-81db-04dbada521e6', 'Prevent Monster Heal', '60f5f113-4564-4424-a4e5-dc885f2ca93e', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('37214307-6e72-4b81-b647-cc860915a52f', 'Gloom', '', 47, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('31869414-0794-413c-9db9-20c33e2dd2fa', '37214307-6e72-4b81-b647-cc860915a52f', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('dec10ef6-27eb-4073-aaa5-ff35196d1220', 0, '37214307-6e72-4b81-b647-cc860915a52f', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1c4869ec-d4ce-409d-9e8f-dedce047fe33', 1, '37214307-6e72-4b81-b647-cc860915a52f', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4b07e747-b4d9-4201-892b-99e5b2857e63', 2, '37214307-6e72-4b81-b647-cc860915a52f', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('efffaa47-0550-4c48-a9e5-5983db0c1abd', '15% Chance To Cast Level 3 {skill} When Struck', '37214307-6e72-4b81-b647-cc860915a52f', (SELECT s.id FROM skills s WHERE s.name = 'Dim Vision'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9ff1b956-9721-4cc9-99e6-abb2b8cc32cd', '+10% Faster Hit Recovery', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('83ce4141-2234-43b7-b308-cb6ffcce7aa1', '+200-260% Enhanced Defense (varies)', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e0b4e3aa-0161-47ca-ae15-ce006d62d45b', '+10 To Strength', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('838fb4e8-589b-48fb-829c-e6c764e344ec', 'All Resistances +45', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('90b8461e-af54-427b-9305-77b43ea05104', 'Half Freeze Duration', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c12ac910-381c-42cf-9689-2e26c4a46a4c', '5% Damage Taken Goes To Mana', '37214307-6e72-4b81-b647-cc860915a52f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6fb9b140-c9cf-4823-9fde-955461d39bd3', '-3 To Light Radius', '37214307-6e72-4b81-b647-cc860915a52f', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('d5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', 'Grief', '', 59, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4eb9a22e-c447-4db6-b38b-ec0ee3a40ace', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4c7794e5-0f87-4b88-865a-0af3b4b094f7', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3b136954-7568-4a13-a7f0-8d790826198b', 0, 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('90ac6949-f2a1-43c9-bba9-4ad32af97550', 1, 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('89dda689-620b-4584-a69e-7b67d9026c51', 2, 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('546589f3-91a4-4395-b24a-b8d0aae84d8e', '35% Chance To Cast Level 15 {skill} On Striking', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', (SELECT s.id FROM skills s WHERE s.name = 'Venom'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7c92a029-0430-48b4-965f-ce366239c675', '+30-40% Increased Attack Speed (varies)', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5bfec982-3cfb-4855-95e7-0662c6aba621', 'Damage +340-400 (varies)', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ecf899e6-20b8-4882-9a82-434ac213381d', 'Ignore Target''s Defense', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e4355bcf-8c73-4c73-b9e8-e2b717115e6b', '-25% Target Defense', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e29cf9c8-cbde-407a-bc74-6b436b3ab79b', '+(1.875*Clvl)% Damage To Demons (Based on Character Level)', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d301823a-33e3-40b6-92db-fd97d9a2e9de', 'Adds 5-30 Fire Damage', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('050012b3-ea1f-450f-b2e4-d7ca82916004', '-20-25% To Enemy Poison Resistance (varies)', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e0a2a12c-fcbc-427c-ac32-c617f56d36c6', '20% Deadly Strike', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0761e2e5-f70b-44dd-8db9-b118b367e20f', 'Prevent Monster Heal', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dc1646a1-33ac-4b9f-ac34-5eb8506b0de2', '+2 To Mana After Each Kill', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7cd06905-6fe1-4c78-9c39-7c5809a8a777', '+10-15 Life After Each Kill (varies)', 'd5ba9ad5-ec9e-4ab9-9ab4-f46b7457f915', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', 'Hand of Justice', '', 67, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0301d2f8-c71c-4ef0-9139-4aedd2d57c1b', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0e71c407-bea9-4544-a399-a0c63c3f8519', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4f908217-4142-49e7-8d3a-b95c9f2a0998', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fb6d1319-db3c-4bb5-86ed-81a84234d6f1', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('69f26a2a-03bd-4278-ba6f-15aa347476a1', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('407fb993-cec1-44d6-9753-139b8d48634e', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d9b5c3cd-4655-4a0f-b44e-07835ae13799', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('95a2cf9d-d4ff-41c3-8129-495caf8b48de', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c54e646f-6309-4509-bc72-87201fc18226', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b8337457-0518-43b8-a2bc-2c5a508ebafc', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d51a881e-55bd-4b0a-9966-9ebb183459b7', 0, '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7b26396f-746e-4032-a742-77dba261248b', 1, '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT r.id FROM runes r WHERE r.name = 'Cham'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('241031dc-c6d1-4573-abfd-fff772456545', 2, '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('04f44c31-664f-4d1f-989e-fa802fbec307', 3, '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6d9150d1-557e-46fd-8a3c-f04806e9b010', '100% Chance To Cast Level 36 {skill} When You Level-Up', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT s.id FROM skills s WHERE s.name = 'Blaze'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2396e339-4c62-422f-9c23-8bb3f157d87a', '100% Chance To Cast Level 48 {skill} When You Die', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT s.id FROM skills s WHERE s.name = 'Meteor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('96d2c3f3-1340-4ce0-8073-fc9672c43a1c', 'Level 16 {skill} Aura When Equipped', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', (SELECT s.id FROM skills s WHERE s.name = 'Holy Fire'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('99208258-0dc2-4200-bb3c-b434980e83c0', '+33 % Increased Attack Speed', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a6c75902-08a5-4e27-8224-373f371e1fe5', '+280-330% Enhanced Damage (varies)', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('02e47e80-4404-428b-8853-d5ed5750044f', 'Ignore Target''s Defense', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c7347092-5088-4ec4-a528-46d780d0e3ad', '-20% To Enemy Fire Resistance', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4b25b2c4-c7ba-419a-b54e-57c9beaebe26', '7% Life Stolen Per Hit', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('89a2d563-202e-406b-a4c1-426c7875cb65', '20% Deadly Strike', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3458ae44-9828-4570-af97-25feed668589', 'Hit Blinds Target', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b4e84ea5-5c31-4650-921a-8a27989fa1c6', 'Freezes Target +3', '4bf00acd-c0f6-43e7-ab44-22b022cc5cbe', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('9e00dd23-4569-4937-886d-8b96787a6469', 'Harmony', '', 39, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('8cc8256e-0aff-4303-a0e1-40f1e86da350', '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0604bca7-b243-499a-8820-0d154ed3444f', '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ccc2dab3-45fb-48fb-8e69-bdd499e1cfec', 0, '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9eee7b17-6a9c-421e-88b0-3c12ae46378b', 1, '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('02caf8d9-91a7-4b9f-9ceb-13820aeef321', 2, '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4688d280-31c8-4655-b135-4a13bf36b05b', 3, '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3f234862-91cb-4945-8b5f-f51d60cdb6e9', 'Level 10 {skill} Aura When Equipped', '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT s.id FROM skills s WHERE s.name = 'Vigor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('13010201-777e-442b-84ed-99cf91ce1ece', '+200-275% Enhanced Damage (varies)', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b3e00ade-0a62-4e2e-b195-69e3923ef8f0', '+9 To Minimum Damage', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8d6da55a-726a-4c98-83f7-98ede97b56a9', '+9 To Maximum Damage', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c50a8735-32ca-429e-9041-2c77467133ad', 'Adds 55-160 Fire Damage', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a2062d44-76ae-4e21-9e93-c001cdfa7874', 'Adds 55-160 Lightning Damage', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1afb3ad9-a25f-479e-a020-0523e992ad3a', 'Adds 55-160 Cold Damage', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('029ac269-55c6-483a-9bae-932570b000a6', '+2-6 To {skill} (varies)', '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT s.id FROM skills s WHERE s.name = 'Valkyrie'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c0896f06-701a-41b7-8466-447e0b7474ce', '+10 To Dexterity', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0fe6d586-dd71-498d-bad8-9d1a38aa4d3b', 'Regenerate Mana 20%', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('aa33055e-0bd1-4f8e-b5d2-5effb05fcb54', '+2 To Mana After Each Kill', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6d9615d5-4621-4d83-b627-af3978626573', '+2 To Light Radius', '9e00dd23-4569-4937-886d-8b96787a6469', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9c0da399-ad03-4011-8f30-43e80ab1ac72', 'Level 16 {skill} Aura When Equipped', '9e00dd23-4569-4937-886d-8b96787a6469', (SELECT s.id FROM skills s WHERE s.name = 'Revive'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', 'Heart of the Oak', '', 55, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('377853aa-95c3-42d2-8044-76395b09d7d6', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fff3c045-ad94-4f09-8a9a-06062bd6dc6e', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6633d1a8-5ea0-405a-ad17-940729bc35b6', 0, '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d591540f-8f62-4cec-9678-bfca2e5683d9', 1, '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3e5fe5d5-9933-4427-a1e4-6ef07a986e07', 2, '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('23d9da72-5f1a-4c9b-b29b-75a9d3e71d28', 3, '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('32835190-b4d3-41a7-996b-39110aa37ab5', '+3 To All Skills', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4cc24f45-2bfb-41b3-b281-c2cc5a60af66', '+40% Faster Cast Rate', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('832a52c4-4598-4070-91bf-51bc4a83057a', '+75% Damage To Demons', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e9d53855-9d84-488b-a9db-ffa2feec5476', '+100 To Attack Rating Against Demons', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('296332c4-8d1e-426b-a890-6fddfaf7fda7', 'Adds 3-14 Cold Damage', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c343dc6f-c7fc-42a1-b08b-36cba6787365', '7% Mana Stolen Per Hit', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d44d9b14-078c-4f9d-900f-3121311196ba', '+10 To Dexterity', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bd69489c-bccf-4c5c-9cca-3519f49c77be', 'Replenish Life +20', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('abc781d4-4a2a-4e36-954d-0619301d5dc2', 'Increase Maximum Mana 15%', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c645632e-380d-4c87-8143-4ecee1f02497', 'All Resistances +30-40 (varies)', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cbc3efa6-43ea-426e-acf6-8afeba383971', 'Level 4 {skill} (25 Charges)', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT s.id FROM skills s WHERE s.name = 'Oak Sage'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0712fb2e-dd40-47d0-baa9-b2a00324e93f', 'Level 14 {skill} (60 Charges)', '8aaefb7d-c3de-4e91-b47a-4c5e24a39f01', (SELECT s.id FROM skills s WHERE s.name = 'Raven'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('d4d8983d-4d89-4e01-b58e-9f14916382d6', 'Holy Thunder', '', 23, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5576980f-d601-4710-bcf3-55da7c47d659', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2e41c3ac-046d-4854-88b0-7d25757487b8', 0, 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('fe896513-0ee7-4747-b871-921bbd4a9c0d', 1, 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('94b0c143-4a76-4a30-89fe-2d9a092f4ea7', 2, 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('eb42a28d-6dbc-4328-8406-ea910be86a2b', 3, 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d92adf02-8f0b-4721-8b8b-6f943578d7ce', '+60% Enhanced Damage', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('10932f0c-f022-4459-be35-049b8ad1eb8a', '+10 to Maximum Damage', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b9ae2d69-7622-4d34-885a-29f90e7c90d2', '-25% Target Defense', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('49566bfd-b2b7-44c8-8631-3e5810fc12ca', 'Adds 5-30 Fire Damage', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bbe8ba06-44af-45b7-a683-f85dd82fb0b7', 'Adds 21-110 Lightning Damage', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9c95a98f-af21-4e60-98c1-7ed644262f8c', '+75 Poison Damage over 5 secs', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b19ddcca-c6b0-408b-8799-04822cdf3661', '+3 to {skill} (Paladin Only)', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT s.id FROM skills s WHERE s.name = 'Holy Shock'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('abbc5a73-7abf-4850-bd25-15bb090e4451', '+5% to Maximum Lightning Resist', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('46b515c4-83e8-4f28-bfd6-dc38b4c1dfee', 'Lightning Resist +60%', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9b7c0e80-6262-480e-8d4f-f46c338e6eba', 'Level 7 {skill} (60 charges)', 'd4d8983d-4d89-4e01-b58e-9f14916382d6', (SELECT s.id FROM skills s WHERE s.name = 'Chain Lightning'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('cd06c5da-4f84-445d-9a20-976825025afd', 'Honor', '', 27, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2e45a6d7-f823-4062-be33-7aaa54277251', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('73600f7f-c8f2-4d13-90d0-d86a15851b24', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('153a3d3e-717e-4c1e-a81b-bc870176c426', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e4a0b424-790c-4354-8081-edf8b608372a', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2f7a79c9-519f-49a1-a0dd-7837990bd679', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('02e19a72-1013-482f-835c-e7f2ce2665ed', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d2a15eee-4b6a-48b9-9530-1f74c640f051', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f7679444-5306-4cdd-ab70-1a1e28cdaa1c', 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2df1b4aa-1cb6-4c4b-9e03-75d87bc554c3', 0, 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('535d7c5e-795d-4653-973e-08f4a9bb275e', 1, 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c18edb34-f121-4158-90b6-3a1e150cb55d', 2, 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7c145681-aa8c-4c05-9b57-21926a9d17f4', 3, 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3414477e-9f57-4367-9b19-feb53ed4acf3', 4, 'cd06c5da-4f84-445d-9a20-976825025afd', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a7fd4f17-683a-451f-84be-fefa9351e67e', '+1 to all skills', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('33483168-0f4a-442c-8274-95e3956998c8', '+160% Enhanced Damage', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('697bb602-0ca6-4ed5-8ddf-5ae278142c82', '+9 to Minimum Damage', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1841e16e-78c2-44e8-96d8-07a93223ff53', '+9 to Maximum Damage', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2fd8ca0d-3ad7-4369-b196-f3d2f2010ca5', '+250 Attack Rating', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('579f9f4e-cef3-45c2-bb2c-11a1440c7ada', '7% Life Stolen per Hit', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8e9785a4-fcc2-4bbf-8489-bd3bc2ad44b0', '25% Deadly Strike', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c2130c1e-90ec-4290-b289-e715fd8db535', '+10 to Strength', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('97b617db-dc19-4120-870a-8b2298ff70ea', 'Replenish life +10', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1ea768c6-ad75-4df8-b035-07c717114e80', '+2 to Mana after each Kill', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0d9f6575-fa30-4457-b22e-4ee7bff79bd4', '+1 to Light Radius ', 'cd06c5da-4f84-445d-9a20-976825025afd', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('4418e43d-140d-4b3e-904c-934d075cb976', 'Ice', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('175a56fc-7898-48ac-8a5d-3e299c8d7bb2', '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('713867d3-2fec-49c3-a1d2-e6618e344cb8', '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b8ffefba-3112-459c-a20a-ab43197e393b', 0, '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5d280d5d-e6b7-4627-b3ae-aacd6f67ea7c', 1, '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('83871a49-8b78-4cb9-aca8-3344b6856193', 2, '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('68bf628e-00cd-4fe0-82f7-2bb6a55e38d3', 3, '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1df313d1-01b2-4c03-8178-d966133b4d8f', '100% Chance To Cast Level 40 {skill} When You Level-up', '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT s.id FROM skills s WHERE s.name = 'Blizzard'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2b66343c-3c2c-452f-9bd3-9648fa3206a8', '25% Chance To Cast Level 22 {skill} On Striking', '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT s.id FROM skills s WHERE s.name = 'FrostNova'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b1111530-a7fa-461f-abdc-a95f4de9a940', 'Level 18 {skill} Aura When Equipped', '4418e43d-140d-4b3e-904c-934d075cb976', (SELECT s.id FROM skills s WHERE s.name = 'Holy Freeze'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('054694e3-dfe4-44d3-8b48-ed1b476dec54', '+20% Increased Attack Speed', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('91f8ede2-4583-4fc5-98b6-50247e6af040', '+140-210% Enhanced Damage (varies)', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ba4bb875-4d4c-4fb0-893e-3f12033506dd', 'Ignore Target''s Defense', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f9e02cad-8a7f-46eb-9a0a-95faf9125d9a', '+25-30% To Cold Skill Damage (varies)', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ab0dedd4-cf65-4bd9-9dcb-50015a0207c5', '7% Life Stolen per Hit', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3aba6dad-20f5-426f-ae36-c1bd8ffd52d3', '-20% To Enemy Cold Resistance', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('605f445c-9713-42a6-b2c3-df6c7ded0bd9', '20% Deadly Strike', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7c5e9c28-7c94-4663-8e3f-25418face847', '(3.125*Clvl)% Extra Gold From Monsters (Based on Character Level) ', '4418e43d-140d-4b3e-904c-934d075cb976', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', 'Infinity', '', 63, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('869d6e1b-0d43-481d-990a-05bec852da7d', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a68818f2-40e6-4b1b-9bbb-cc2517e01503', 0, '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6972f2fd-3f48-4975-9e6b-f729a5ff6031', 1, '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5c8382f9-a195-4008-8d69-d8f258aaf09b', 2, '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c87a6849-930f-4a1d-bb53-c89756859d09', 3, '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('007a4867-3ec6-447b-9970-eda2b54d6cdc', '50% Chance To Cast Level 20 {skill} When You Kill An Enemy', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT s.id FROM skills s WHERE s.name = 'Chain Lightning'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f2143b7b-55a5-4399-a8ad-8ae674d103c4', 'Level 12 {skill} Aura When Equipped', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT s.id FROM skills s WHERE s.name = 'Conviction'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('438fc12d-7eef-4785-b2e2-fd98caf6c68a', '+35% Faster Run/Walk', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c218ee39-8291-43e8-a147-c0c67fdbefbc', '+255-325% Enhanced Damage (varies)', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eb34ef3c-dc79-435a-8d9a-752261d4d560', '-(45-55)% To Enemy Lightning Resistance (varies)', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dc4ac1e7-14fd-45d0-8c08-5735a1887bfb', '40% Chance of Crushing Blow', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a318c29d-3f87-4c3b-859c-ccc5d4ab4699', 'Prevent Monster Heal', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('204a4642-d983-47ab-b7f9-0d5147d52640', '+(0.5*Clvl) To Vitality (Based on Character Level)', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('210d1ac9-85ff-4c60-9819-1e58214acb53', '30% Better Chance of Getting Magic Items', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('35b24081-9467-4685-9531-ac4d81bdad3d', 'Level 21 {skill} (30 Charges)', '25202c2a-f2ba-4cd3-a4ef-3285d6dcba22', (SELECT s.id FROM skills s WHERE s.name = 'CycloneArmor'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('5336355a-8aed-4356-a014-e66e9a53d704', 'Insight', '', 27, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('971fab7d-39e6-46e3-827c-3bd2ec55b2e3', '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('78a58bf3-4fc5-44d2-9028-2f9c3c368be6', '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6155856d-b936-4882-94ea-034de18a122b', 0, '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1c65dc7f-dbbd-4bf0-858a-42c9e43faf4d', 1, '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('cc501a59-46da-4391-bb11-72ef5798651c', 2, '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('32c08440-25a6-49e7-8d3b-f2bde9044ddc', 3, '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8d37de83-5e23-4993-a82f-8f57a83f76fe', 'Level 12-17 {skill} Aura When Equipped (varies)', '5336355a-8aed-4356-a014-e66e9a53d704', (SELECT s.id FROM skills s WHERE s.name = 'Meditation'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('158264b3-a5c5-4af2-b3e3-b9374821f74d', '+35% Faster Cast Rate', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('77eeb52b-beb1-403f-b8f5-cb9e3e7eb353', '+200-260% Enhanced Damage (varies)', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('823d840c-8604-4525-bc41-ab449204a731', '+9 To Minimum Damage', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7660f903-90ba-4e71-afff-8e61f40831a0', '180-250% Bonus to Attack Rating (varies)', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('68fdffce-fd61-4b85-9f7e-35aa5c6fb4f3', 'Adds 5-30 Fire Damage', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c0647688-be12-48a8-9009-9303460ff1d4', '+75 Poison Damage Over 5 Seconds', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eaedb783-936f-49ea-b329-50c754343e3a', '+1-6 To Critical Strike (varies)', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0cfb51e6-e766-414a-a66d-e19afee1c503', '+5 To All Attributes', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e80d5569-2647-4f26-933f-8eeb9919f2c0', '+2 To Mana After Each Kill', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('43eb2895-195b-4783-9f58-e0984b6dccbc', '23% Better Chance of Getting Magic Items', '5336355a-8aed-4356-a014-e66e9a53d704', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', 'King''s Grace', '', 25, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3eb4183c-4e85-4493-b3bf-a4284cacc482', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('dc0639b8-7896-4a55-ac83-ab24fcf38c92', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ad821643-804f-4860-89b2-a8d9ca5790f6', 0, '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('137120a6-a5a1-4e94-830a-c468ce3b97a8', 1, '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('721fdab5-f4ac-4673-96a5-6b69030f17c4', 2, '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('59023946-2219-4fa9-9a99-f1d9609be36a', '+100% Enhanced Damage', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b23e2d14-35d2-4e62-94d7-2405b459bbc0', '+150 to Attack Rating', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('88f4cbda-7de8-4e72-806d-8e3662edac4b', '+100% Damage to Demons', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0aa27faf-4a07-41b0-8de9-0d23899ca70f', '+100 to Attack Rating against Demons', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('45c90132-9f89-4f5d-a257-8c561784b737', '+50% Damage to Undead', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ab8ece50-213d-452b-bbf1-20395ed535d5', '+100 to Attack Rating against Undead', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4b9542e6-f61b-47de-843a-be4a7f4dc0c8', 'Adds 5-30 Fire Damage', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('68fd4678-1964-446d-af70-523705365380', 'Adds 3-14 Cold damage', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('036ab58f-26fe-41e9-8536-34a7ccfdf9a7', '7% Life stolen per hit', '6e23f84c-c30e-44b5-a4bd-075fd6ceae5d', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('703ef941-44b5-46a6-a6e0-27f60bc97272', 'Kingslayer', '', 53, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('534135ec-d7c4-4e87-b725-0802ee388f41', '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a7b5f429-35fe-4dba-a22f-e33ef973b3aa', '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0644b1fd-54d1-4fa2-bbd1-e49cec7e4074', 0, '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f8d54090-4f4d-4650-b927-a8136688729a', 1, '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ab91ab4e-1045-4c84-9bde-d4e2b9350cc0', 2, '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('574bd54a-65fe-4458-8148-4e59ba26c561', 3, '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bce0f035-dfeb-48a1-aeb2-9dbbbfbe1431', '+30% Increased Attack Speed', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6dbb49f2-4a42-49b5-b599-9e41273f2d31', '+230-270% Enhanced Damage (varies)', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('45db67db-27b9-44e4-a300-c6bc4eef2b64', '-25% Target Defense', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bf5e4664-5ca0-4502-add8-b75450c3f3d1', '20% Bonus To Attack Rating', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b9b5fc05-cba3-49ec-8840-db41227e0ac7', '33% Chance of Crushing Blow', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('439a08ef-55ee-4d1b-ab6c-540013915ab8', '50% Chance of Open Wounds', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b17e2a3-9c1c-45f6-9c00-c6ffa31c8786', '+1 To {skill}', '703ef941-44b5-46a6-a6e0-27f60bc97272', (SELECT s.id FROM skills s WHERE s.name = 'Vengeance'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b0700d09-7c4a-49c8-8b02-7ab1415c5320', 'Prevent Monster Heal', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0f3827ce-8ccc-4bd6-b198-7707ba438f69', '+10 To Strength', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8386eab9-3df4-46ba-9884-87cd1ee4a78c', '40% Extra Gold From Monsters', '703ef941-44b5-46a6-a6e0-27f60bc97272', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('402edf6e-8f3d-4d3a-9d4f-7170e43d427f', 'Last Wish', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('19d2464b-c0c1-48ba-a4d4-0d32c4f6cefa', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('77f8f133-bcc9-450e-95c3-6775e913ab73', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ef3042a5-e61c-45cd-9085-60e2a2d7bcf6', 0, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('df57d1f2-46a0-4a7d-8b1f-f089bc606aab', 1, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('65d02d71-06cf-44ce-bd4a-4108bc929a0d', 2, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('afa017fa-98b5-4683-ae44-66e58b5c81cf', 3, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4c8aca09-ec50-4f06-acfc-888d76d67651', 4, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1ac1adaa-d92f-486b-9cd2-f16116aa7337', 5, '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fed1ecb3-2e81-4c90-a33c-ddc4e8da69ae', '6% Chance To Cast Level 11 {skill} When Struck', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT s.id FROM skills s WHERE s.name = 'Fade'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c88eaead-d568-4a66-a7de-2bd01ec46fa8', '10% Chance To Cast Level 18 {skill} On Striking', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT s.id FROM skills s WHERE s.name = 'Life Tap'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1ed3825c-4524-4588-8b4c-8b16990b0fad', '20% Chance To Cast Level 20 {skill} On Attack', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT s.id FROM skills s WHERE s.name = 'Charged Bolt'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('20547105-5a7b-45c1-a95f-752781dabfe1', 'Level 17 {skill} Aura When Equipped', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', (SELECT s.id FROM skills s WHERE s.name = 'Might'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4d1f0605-d531-4057-a744-64ab984d2371', '+330-375% Enhanced Damage (varies)', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1ee80143-4f8e-4a7d-b8e5-6e5096062426', 'Ignore Target''s Defense', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2b0cc7ee-1909-470e-92cc-d0384ed737ae', '60-70% Chance of Crushing Blow (varies)', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5f977c6c-09a4-46d3-87af-dc7f67e7b930', 'Prevent Monster Heal', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3f6b8e57-2a76-41f7-9e88-35ca0ab7d4fb', 'Hit Blinds Target', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ff29f17-4c64-40a9-8a33-75f67763ff03', '(0.5*Clvl)% Chance of Getting Magic Items (Based on Character Level)', '402edf6e-8f3d-4d3a-9d4f-7170e43d427f', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('e2e687c1-c5c6-4c69-954e-db2d519c6dfe', 'Lawbringer', '', 43, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('90915e77-6749-4547-896e-21f83b1ca566', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('37ea6ee3-44fa-4faa-ba86-434e440b2e84', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('028152c0-2ff9-43ca-942c-f83f36753a67', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2ca22d0b-b874-4317-b6b1-ae0b5d694743', 0, 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5ba5e906-b5f4-4b56-b694-eb8186fe85d7', 1, 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3b443e04-220f-4bac-81a8-cc42df868d3a', 2, 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7fecf280-bc5e-4f20-b7d5-cbc563b1f64c', '20% Chance To Cast Level 15 {skill} On Striking', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT s.id FROM skills s WHERE s.name = 'Decrepify'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7bc45d35-5bba-400b-a24f-fe1df65c7742', 'Level 16-18 {skill} Aura When Equipped (varies)', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', (SELECT s.id FROM skills s WHERE s.name = 'Sanctuary'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dbc67739-8d60-414b-a22e-fac8af63bcd4', '-50% Target Defense', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cf1bf344-098e-4028-884b-31e1d83b9144', 'Adds 150-210 Fire Damage', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f2a2afe8-459b-4003-8b98-603c9184b855', 'Adds 130-180 Cold Damage', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6414a0f1-281e-4ce8-b69d-41b166fe2ee9', '7% Life Stolen Per Hit', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('41b191ae-0dc7-4df0-af11-22658e8f296e', 'Slain Monsters Rest In Peace', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6a6e32cd-6974-4c64-87be-b3eab6d65d99', '+200-250 Defense Vs. Missile (varies)', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('90476c4d-b769-48c1-b003-76a61b4bc98b', '+10 To Dexterity', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9ef0751a-5789-4f07-b798-181aed0dd1cd', '75% Extra Gold From Monsters', 'e2e687c1-c5c6-4c69-954e-db2d519c6dfe', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', 'Leaf', '', 19, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1798c0fd-a6b4-40c1-a676-4818197495c4', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('bcb6119d-fcc6-41ed-9eb1-e1356f13bed9', 0, '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('451460f7-2e6d-4adf-b50b-2e446059743f', 1, '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e76667f0-650d-487a-b918-a4294a652674', '+3 to Fire Skills', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('94431214-27c9-46bc-bfcd-9d752052cc45', 'Adds 5-30 Fire Damage', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('020b05ca-1886-480c-8494-1e15e6374c9f', '+3 to {skill} (Sorceress Only)', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT s.id FROM skills s WHERE s.name = 'Inferno'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eca09ae8-f113-4501-8efc-1b8f5c954b30', '+3 to {skill} (Sorceress Only)', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT s.id FROM skills s WHERE s.name = 'Warmth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6bb8d6e5-ae04-4d84-9c71-19f7380fcdb4', '+3 to {skill} (Sorceress Only)', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', (SELECT s.id FROM skills s WHERE s.name = 'Fire Bolt'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dec03133-7b98-473f-8702-37c5f0fd7ef2', '+(2*Clvl) Defence (Based on Character Level)', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7be3237a-d273-4620-bf51-dd780447f6d1', 'Cold Resist +33%', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fe6a399a-86b2-4fdf-b4b6-5735761f3810', '+2 to Mana after each Kill', '9025d7a6-6e4e-4508-b7a2-6a4db138d9ef', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('486f94e1-4986-4ee3-8140-45c55c115d5b', 'Lionheart', '', 41, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b718f545-118f-411e-95fd-9ce5ca16578a', '486f94e1-4986-4ee3-8140-45c55c115d5b', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('98a1919d-dc23-489e-b047-cec1d144506f', 0, '486f94e1-4986-4ee3-8140-45c55c115d5b', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('236a702c-c5a3-423c-be57-9e8ffb70e1c0', 1, '486f94e1-4986-4ee3-8140-45c55c115d5b', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('cbfa9c2c-6278-4e0a-ae2c-4b4ddd182fd1', 2, '486f94e1-4986-4ee3-8140-45c55c115d5b', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e37bc21a-6277-4618-83e7-0d98ae716f35', '+20% Enhanced Damage', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7c75fd1d-f2bf-4f46-85a3-0c6eb7a4b302', '+25 To Strength', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cbb6652e-5442-46f2-8197-cf830d886911', '+15 To Dexterity', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('28626c0d-caf2-4605-9785-3f0d8f94dc78', '+20 To Vitality', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7bb838e4-742b-4029-9186-ef3a5bf21411', '+10 To Energy', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5632987a-a50f-4a3b-892c-053b8347bbff', '+50 To Life', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('00a3f80e-259e-4b8f-98ee-c23c142736f3', 'All Resistances +30', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('693e4e71-1058-4ef1-989c-9e26c4e8b52e', 'Requirements -15% ', '486f94e1-4986-4ee3-8140-45c55c115d5b', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('578a8896-5335-462f-9885-df3df0d7dfbe', 'Lore', '', 27, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('6665a570-bf4b-40a1-8e44-e9c39d991ed8', '578a8896-5335-462f-9885-df3df0d7dfbe', (SELECT it.id FROM item_types it WHERE it.name = 'Helmet'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4084c765-5d32-482a-800c-930e703cdd7a', 0, '578a8896-5335-462f-9885-df3df0d7dfbe', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0f195253-9591-4751-abe9-d5f3375829a4', 1, '578a8896-5335-462f-9885-df3df0d7dfbe', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('598d9e4d-744c-4fa2-a4e0-492052575c70', '+1 to All Skills', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('65dfe5d1-7d40-4659-9e47-8f67abba9fc9', '+10 To Energy', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4c25993a-9dd8-4a1e-a0a9-53f3106e0fc6', 'Lightning Resist +30%', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4b2b32cd-91d6-47e4-9cea-02f0197c1e17', 'Damage Reduced by 7', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8663343c-0635-4888-858c-9bd79ded2479', '+2 to Mana after each Kill', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('10d3c69a-82f0-4170-9535-a899094844f5', '+2 to Light Radius ', '578a8896-5335-462f-9885-df3df0d7dfbe', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('86599009-ca1a-4a84-87ab-c947bd0f9d25', 'Malice', '', 15, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('463efbe9-c646-470e-ae58-2ebef7b3fea5', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('302642f8-9353-458e-ac3b-bbd95979fab3', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Dagger'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fc2ec5e0-cb44-48dc-9b8a-ca62689c789c', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2ea8a04f-dafd-4714-9992-c5e6fd0c9221', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('45774f39-57ab-43f2-b228-72b4fe584b19', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('689895e3-a1bd-410e-89db-eacbdca8f6d7', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1debaf38-69cc-46f5-b507-fb115870a768', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4cc20543-f21f-4416-98dd-2c2e47a45f16', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f7ac3a9c-3704-44c4-86dd-5c634dcbd01c', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d9f8a33c-c056-40fa-9a6b-18e50ebde4a1', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('07e02c8f-ab43-409d-a4c2-b8a49b1e37ad', '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT it.id FROM item_types it WHERE it.name = 'Katar'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f804d34e-39f0-4fb0-a4d7-a3e86248f054', 0, '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c1a00af8-3d59-45b5-b912-0659bac9108b', 1, '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7fa78b15-7b19-40c9-af31-90aea647bde8', 2, '86599009-ca1a-4a84-87ab-c947bd0f9d25', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('45752826-10f5-4b86-8fe3-ad47512220cf', '+33% Enhanced Damage', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c6093cd9-f82f-4a67-9d8f-573dbfbc579b', '+9 to Maximum Damage', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0ae3d650-b15b-4726-8032-da0125f72c8b', '-25% Target Defense', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3321f332-d8a9-4bba-b338-7f78d1f36b06', '+50 to Attack Rating', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('560734ea-ac33-4eb9-b00f-25eb1d181bbc', 'Prevent Monster Heal', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('170fa169-54d9-42cf-91e4-f51fb84206d3', '-100 to Monster Defense Per Hit', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('163d85e8-2274-4937-a8cb-790315532649', 'Drain Life -5 (-1 hp about every 2 seconds)', '86599009-ca1a-4a84-87ab-c947bd0f9d25', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('6a6f5d3a-4876-420a-b753-36732f945075', 'Melody', '', 39, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ac0d5c06-a8ba-4bcb-9b65-481db6b12355', '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3ec876e7-695a-482c-9a71-7cc4c13072e8', '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b8102c32-8138-4f9c-b9ba-c7f397bd4dd0', 0, '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6cec2524-21dc-4b5f-b8ce-29d1fe8cd34f', 1, '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4a3f0eef-5c58-444f-9f3f-85e4f5a038f2', 2, '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ad741b8-ec60-4d9b-9b91-b27835f57b59', '+3 To Bow and Crossbow Skills (Amazon Only)', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b76ead8-7071-4017-84b5-67e8da74228f', '+20 % Increased Attack Speed', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('65315a6f-9516-43df-8941-28a1d19613c4', '+50% Enhanced Damage', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a52905ee-d27f-4711-8006-4e8268ff16e8', '+300 % Damage To Undead', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7cfdfeed-beb5-4de5-8bea-02e028bb11f9', '+3 To {skill} (Amazon Only)', '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT s.id FROM skills s WHERE s.name = 'Slow Missiles'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5f6151fc-19e6-427c-995e-f76cdfb96836', '+3 To {skill} (Amazon Only)', '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT s.id FROM skills s WHERE s.name = 'Dodge'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f4997df5-7a1e-41c7-a7d6-14f79bd3ab64', '++3 To {skill} (Amazon Only)', '6a6f5d3a-4876-420a-b753-36732f945075', (SELECT s.id FROM skills s WHERE s.name = 'Critical Strike'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('496d5c39-8388-4534-b8a9-d88e1d8a8138', 'Knockback', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('06e088c3-19a4-4a26-9451-0a32c83eb2e8', '+10 To Dexterity', '6a6f5d3a-4876-420a-b753-36732f945075', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('e0c88f06-e58f-4290-995e-7d4ec1c713ed', 'Memory', '', 37, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9c126f0f-ff1e-4fc6-b5d6-b03fa72e011d', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('76cd7680-32e8-4051-9ae5-0a5a7b95fcab', 0, 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('77370a9f-dd1b-4a54-8354-2a37376127e1', 1, 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b76c5b80-b996-4aa6-a8d7-12d8755fe9ed', 2, 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3e780202-0b60-46f1-9ddc-da3d0faaa341', 3, 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ca826a75-6852-4b3c-9f3b-e726b1b5244b', '+3 To Sorceress Skill Levels', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('145ccab4-9079-4849-9c59-786f3ea14fc8', '+33% Faster Cast Rate', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ed5ae0e9-22cf-4475-bccf-f7837ef77bef', '+9 To Minimum Damage', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1092d5d2-6afd-4032-86b0-99247eca7cdf', '-25% Target Defence', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('20478ca4-a914-49a7-ae07-aeb5dbdc41b5', '+3 To {skill} (Sorceress Only)', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT s.id FROM skills s WHERE s.name = 'Energy Shield'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2e7bf543-7d11-40dc-9ce7-6319e281f387', '+2 To {skill} (Sorceress Only)', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', (SELECT s.id FROM skills s WHERE s.name = 'Static Field'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3a750e6e-05ad-4be3-8690-37b08e2d57e3', '+50% Enhanced Defense', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8bf5eeca-5944-4bce-9b63-c53b45011df6', '+10 Vitality', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4c21d487-d96c-42a2-a85c-b2efcd48c994', '+10 Energy', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bb778e3b-0929-4c72-b118-1d3633923f1b', 'Increase Maximum Mana 20%', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('89f723a0-12ef-4c0d-9623-4557694f2714', 'Magic Damage Reduced By 7', 'e0c88f06-e58f-4290-995e-7d4ec1c713ed', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('636a8829-2c92-4755-8d41-c57174857338', 'Myth', 'Barbarian', 25, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9c26309b-3e9b-4100-bb93-47a562718089', '636a8829-2c92-4755-8d41-c57174857338', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('58aa2b0e-5296-4be7-b66f-afe81ecca6e4', 0, '636a8829-2c92-4755-8d41-c57174857338', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('0c62baf9-f78b-4dca-b760-d685dba47f4c', 1, '636a8829-2c92-4755-8d41-c57174857338', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('45ad32ec-8c70-4f67-a0a8-3d43e83bd0cc', 2, '636a8829-2c92-4755-8d41-c57174857338', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('93c35a18-a2ec-4908-bb06-cf0ad3f7f31b', '3% Chance To Cast Level 1 {skill} When Struck', '636a8829-2c92-4755-8d41-c57174857338', (SELECT s.id FROM skills s WHERE s.name = 'Howl'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ab208822-f4a6-4dea-bac1-34c448a59fd2', '10% Chance To Cast Level 1 {skill} On Striking', '636a8829-2c92-4755-8d41-c57174857338', (SELECT s.id FROM skills s WHERE s.name = 'Taunt'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('782ee3aa-87f7-487c-a418-0f32748477f1', '+2 To Barbarian Skill Levels', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('da310bfa-92d9-496c-9ccd-2b6dd26db6e5', '+30 Defense Vs. Missile', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a7db6523-334b-44cb-93b7-fba0e667d6b2', 'Replenish Life +10', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('88f44379-e063-4d0a-addd-7a7d74238f59', 'Attacker Takes Damage of 14', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a39caf34-bb95-44d2-9a09-54683256eaf9', 'Requirements -15% ', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('999a92da-abd7-4ac7-8b47-ed6f12696520', '+10 Vitality', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('420d6268-80f5-4cd5-a93e-1e39797ec1ac', '+10 Energy', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d0f40c02-bc9d-4565-bc4d-85869baaa29d', 'Increase Maximum Mana 20%', '636a8829-2c92-4755-8d41-c57174857338', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9c56dc18-2a72-409a-a6e4-aec23851e892', 'Magic Damage Reduced By 7', '636a8829-2c92-4755-8d41-c57174857338', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('752bf81d-5661-4973-985b-dceb41518861', 'Nadir', '', 13, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0e2a80a1-04fe-456b-9b07-be6b639dd98c', '752bf81d-5661-4973-985b-dceb41518861', (SELECT it.id FROM item_types it WHERE it.name = 'Helmet'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1f429e75-81e9-499e-85fa-9f158285dfd7', 0, '752bf81d-5661-4973-985b-dceb41518861', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e99a1b6d-9cc6-4024-8ec2-1e962622fca9', 1, '752bf81d-5661-4973-985b-dceb41518861', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2030154c-ce28-45c8-849a-8b6331944866', '+50% Enhanced Defense', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1add99ac-8f5c-4ca1-a8e2-470d8d632171', '+10 Defense', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b7a3cdf0-67d7-4292-8139-e4208c915c42', '+30 Defense Vs. Missile', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c5629a25-dde3-49af-9b81-6f18f3fe36df', '+5 Strength', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b4846a87-25ea-425b-a93e-38b8a7c1bc26', '+2 to Mana after each Kill', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e6aab4af-9834-4a37-bae1-c650b22e71e0', '-33% Extra Gold from Monsters', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('96144327-b475-43af-9a2e-ebc3fad22359', '-3 to Light Radius', '752bf81d-5661-4973-985b-dceb41518861', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('987a13c6-396f-4fa6-b50b-c0047a002e50', 'Level 13 {skill} (9 charges)', '752bf81d-5661-4973-985b-dceb41518861', (SELECT s.id FROM skills s WHERE s.name = 'Clock of Shadows'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('8034c626-15d4-4178-8af1-f3a01d151272', 'Oath', '', 59, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4e19dd21-4edb-420c-9559-c05ae0f3a9ce', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('dc14ecd5-862d-4e70-be6a-ac2906bf068c', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('4940d101-8e26-4482-884e-2d96f25d4ec2', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('06ee8afa-577b-40af-98e7-035b1aca2ed0', 0, '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ab4d3e41-a916-44de-b703-503c44e0ee13', 1, '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f43e3bd0-1fd6-4724-887d-26f4a4304b66', 2, '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('57cec08e-94b7-4a61-86c6-7ecc1373446f', 3, '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('39f1e90d-c810-43b1-a0b5-8f61544993d4', 'Indestructible', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('95caef89-ae4a-491e-82d6-939158751d52', '30% Chance To Cast Level 20 {skill} On Striking', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT s.id FROM skills s WHERE s.name = 'Bone Spirit'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6845152f-3dc8-4cf7-9bd8-31e4da303abe', '+50% Increased Attack Speed', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ac5aa3d2-6b1e-4b4b-a935-f11e3242430a', '+210-340% Enhanced Damage (varies)', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2faedf7e-a6db-4b52-b8bf-169c3ccab768', '+75% Damage To Demons', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('16d18039-d1d3-45a6-8086-4aa93dbfb65c', '+100 To Attack Rating Against Demons', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d3ac43fb-9a39-4251-81e4-05b6b00502ba', 'Prevent Monster Heal', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('40725659-3287-4558-b241-c9727bb99852', '+10 To Energy', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9af80357-dc8e-41dd-b579-446cdd98c85f', '+10-15 Magic Absorb (varies)', '8034c626-15d4-4178-8af1-f3a01d151272', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b08b9061-7fa7-4d79-be7d-eef4ec8fb765', 'Level 16 {skill} (20 Charges)', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT s.id FROM skills s WHERE s.name = 'Heart of Wolverine'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5d6a6552-1373-499b-a733-95653bbc96fb', 'Level 17 {skill} (14 Charges)', '8034c626-15d4-4178-8af1-f3a01d151272', (SELECT s.id FROM skills s WHERE s.name = 'Iron Golem'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('907bb747-526f-46e8-94c1-8ef5e283fb9a', 'Obedience', '', 41, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('60e0717a-31f0-4524-84fd-1fb58a513c13', '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b6d151dd-7853-4a45-93a8-b4001818de0f', 0, '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('37f65b2f-bb3f-4cb5-b694-105a87453528', 1, '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2008ecda-9268-44eb-9d4f-3ceaa04ae187', 2, '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2cf64ed9-f34d-4c96-a2c8-88c661a7f124', 3, '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d4ce7acd-97ce-4c78-a4d1-3fa706552718', 4, '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT r.id FROM runes r WHERE r.name = 'Fal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cbde18bd-2a74-4fef-871c-340b59f9f016', '30% Chance To Cast Level 21 {skill} When You Kill An Enemy', '907bb747-526f-46e8-94c1-8ef5e283fb9a', (SELECT s.id FROM skills s WHERE s.name = 'Enchant'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2e7d00b6-a61a-45da-8019-a567486f8bc6', '+40% Faster Hit Recovery', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('07ba54d8-b747-4507-aa8e-a326c628b9fc', '+370% Enhanced Damage', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5ffbf845-4947-45b3-ad5d-246957f9303a', '25% Target Defense', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e3403098-5ea2-4e89-bcaf-2d9a93212790', 'Adds 3-14 Cold Damage (3 Seconds Duration,Normal)', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('377c9fe6-875e-4307-8ae2-c418a70249d7', '-25% To Enemy Fire Resistance', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d542b905-a19d-47d7-baf0-581f4c7be0fd', '40% Chance of Crushing Blow', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b2a6dabd-d8c5-4dab-98c9-519ad74a335d', '+200-300 Defense (varies)', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5904af84-dc27-4ae1-b41a-8fcdb4866c6a', '+10 To Strength', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('23ea2436-dbb3-431c-830e-94a3ff98e532', '+10 To Dexterity', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('22c4a2f2-c5e2-4e6a-9e35-38cef830e923', 'All Resistances +20-30 (varies)', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('75fef617-d684-4b3b-a667-d4fa2beb93d2', 'Requirements -20%', '907bb747-526f-46e8-94c1-8ef5e283fb9a', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', 'Passion', '', 43, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('8e5edd59-aaff-49b5-b267-1a6804613af5', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('811e39f5-1b33-4e6b-a288-503e641caf97', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('61bc4dc5-d91b-43b5-9e98-7a1741b252f6', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2461ab4d-f7d2-4bb9-8626-c308fb747871', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7e7645a1-a05b-48ec-8dce-1d98cc257f3e', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d70261da-3a5c-49ff-b201-c87aa0991d4e', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c1518fa2-8607-4aca-902f-7a1cd1bcff51', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('59c58af5-f88d-4cd9-b09e-f3887aae47dd', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5d8dcc4c-ee2e-4d15-8fb1-ee876ec9ec5f', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b7593c26-88a8-4a33-9e90-edd3b2f34382', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('66b8e8e6-11ac-47df-ae57-13015a0236fc', 0, '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e0c2a97a-95a0-490b-b15a-a5d2e78f1c47', 1, '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('093a2116-96b6-4cbf-8d0e-c67c34a034dc', 2, '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b56ece36-995a-4463-b776-04ea2723b370', 3, '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9bcbd01e-2b1c-499e-968c-4182f4b1573f', '+25% Increased Attack Speed', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fe1804fa-21aa-4230-a186-137afc300a4b', '+160.210% Enhanced Damage (varies)', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8d3b73df-6778-404c-b396-f81e66b7d18e', '50-80% Bonus To Attack Rating (varies)', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('23971867-1b08-46ea-a8d8-0fffdb05c23c', '+75% Damage To Undead', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eba82d52-3d2e-4f31-ad87-8eb70436177a', '+50 To Attack Rating Against Undead', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3ef7aebe-7779-4fbc-92ac-4ab9e9f618f8', 'Adds 1-50 Lightning Damage', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ee4a0344-7294-423c-9c22-09cbbe924a24', '+1 {skill}', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT s.id FROM skills s WHERE s.name = 'Berserk'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ae4122a4-7912-4e62-b114-8dca655b4930', '+1 {skill}', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT s.id FROM skills s WHERE s.name = 'Zeal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7bc64e55-19d5-423f-9dbf-bb712954d321', 'Hit Blinds Target + 10', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e196d420-bdf9-4362-a39c-0c651d0f3215', 'Hit Causes Monster To Flee 25%', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('68f04dec-a7d5-4890-9ad3-076e27ae67df', '75% Extra Gold From Monsters', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('020598ea-3df4-497c-8e16-6c90f6129a52', 'Level 3 {skill}', '5fde6e8e-5fbd-4dc7-9ac8-74a701e18200', (SELECT s.id FROM skills s WHERE s.name = 'Heart of Wolverine'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', 'Peace', 'Amazon', 29, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f7a5620e-926e-44b4-a602-c629ab09e9a9', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4916b0cc-23ae-4c2c-b608-c96f681dcecd', 0, 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e20618a6-06c0-4cd5-b8d9-3adda2f0f9ed', 1, 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6c9667b6-4791-4b2e-861d-308df9f70d95', 2, 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('457ec03c-dea9-4d90-92bb-e4a1278bb6ec', '4% Chance To Cast Level 5 {skill} When Struck', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT s.id FROM skills s WHERE s.name = 'Slow Missiles'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4f7f02d7-d566-42f2-9495-c783b8d66bd4', '2% Chance To Cast level 15 {skill} On Striking', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', (SELECT s.id FROM skills s WHERE s.name = 'Valkyrie'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9d436758-b2f7-488c-8e4f-d49f1fd591c1', '+2 To Amazon Skill Levels', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('97f9acd1-184a-4f8c-bad8-e0ac48e7c0ae', '+20% Faster Hit Recovery', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('383088d7-5123-4805-9596-512fdb20842e', '+2 To Critical Strike', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e11b7a7b-3138-4136-b219-984693ef94f0', 'Cold Resist +30%', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5e395687-74fd-49aa-84b1-52e400411ca9', 'Attacker Takes Damage of 14', 'fee1c954-6fd4-4b02-bbc5-0b0eb8429c90', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c2c6cc26-6544-4d46-8421-3c8035bc5de2', 'Phoenix', '', 65, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('bd61f9ee-3e45-4f76-af1e-4dd8a3421a24', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a6e95c76-6336-4ed8-a8d0-37ca509dfecc', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('601d19bb-a92f-4591-b598-5986c07ea2b9', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('789e52bb-d7d9-4f0b-96aa-ef4a3d9ef6cb', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('69c987c7-d262-4532-a7de-742ec8f3ea58', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c6d82424-3a26-4171-aa95-a13ed9d219fd', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d5de8cef-c761-4512-a4d3-cf41bab51730', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('193b3067-f261-4242-b781-e334985bcad9', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('cd7ad5ec-d673-48ed-aaf0-4f0e2215dc42', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e0539e58-9e83-4618-b863-6f60cbf0167b', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0dfd1604-0b36-4831-a5fe-6a147edbf45d', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('98fb34ae-0263-4631-93c2-6266a06a5c21', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('94487e6b-290e-466b-90b5-cc51c2b5c6f9', 0, 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('261e2391-ba25-4578-a9d0-06c100f513c1', 1, 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('70e98cf9-b2e8-4908-908f-da924c8f3b1e', 2, 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4c28209a-fb73-4d8f-8bf9-f02eccfc0366', 3, 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT r.id FROM runes r WHERE r.name = 'Jah'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a9b050ef-386f-4caf-9b2b-cd6b432baa45', '100% Chance To Cast level 40 {skill} When You Level-up', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT s.id FROM skills s WHERE s.name = 'Blaze'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b02034f9-e7be-4c10-8206-c991c4215e71', '40% Chance To Cast Level 22 {skill} On Striking', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT s.id FROM skills s WHERE s.name = 'Firestorm'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('feb70ff9-3b4d-40c5-9897-94bce0887a57', 'Level 10-15 {skill} Aura When Equipped (varies)', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', (SELECT s.id FROM skills s WHERE s.name = 'Redemption'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b633a385-ba29-460d-89c2-2230573a5b07', '+350-400% Enhanced Damage (varies)', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c9ee122e-c5fd-45f5-a48f-ac54165446f3', '-28% To Enemy Fire Resistance', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cfa9a10c-35f2-481e-9637-f7fc122eae74', '+350-400 Defense Vs. Missile (varies)', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4743ef94-09c9-4c06-8a39-8f7462c696cf', '+15-21 Fire Absorb (varies)', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7bdae12b-4ca0-4856-b5aa-2a50736425de', 'Weapons: Ignores Target''s Defense', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('258078d2-7976-4928-bd44-24112b081c21', 'Weapons: 14% Mana Stolen Per Hit', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ea312bee-7465-4ff4-975a-27bed1993453', 'Weapons: 20% Deadly Strike', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('415d8a25-1d36-4021-8619-b5e06db47a30', 'Shields: +50 To Life', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6d5676c1-6741-4a8d-b54a-f61c23132417', 'Shields: +5% To Maximum Lightning Resist', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b02b320a-da7a-49ca-9586-d7f335eaef9c', 'Shields: +10% To Maximum Fire Resist', 'c2c6cc26-6544-4d46-8421-3c8035bc5de2', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('62232809-5887-430b-bc82-220fa3bd41b4', 'Pride', '', 67, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('47796231-7c8f-4fbb-92a2-840af0421fc0', '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6ab609df-7827-42a5-b706-517e03ca3695', 0, '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT r.id FROM runes r WHERE r.name = 'Cham'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('49fcab75-687a-42ed-9f61-fd3a521028ad', 1, '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT r.id FROM runes r WHERE r.name = 'Sur'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('04d0d5d3-0a22-455a-aead-f82eba30cde1', 2, '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('bc17a655-e641-40b5-9ca5-4b2d29e0a43b', 3, '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT r.id FROM runes r WHERE r.name = 'Lo'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f5db192a-d299-4a14-859b-217fcd869dec', '25% Chance To Cast Level 17 {skill} When Struck', '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT s.id FROM skills s WHERE s.name = 'Fire Wall'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('80981978-39ea-41aa-b1cd-e960231b34a7', 'Level 16-20 {skill} Aura When Equipped (varies)', '62232809-5887-430b-bc82-220fa3bd41b4', (SELECT s.id FROM skills s WHERE s.name = 'Concentration'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d0110e70-b1a9-4f73-a6f9-f4d11650aebb', '260-300% Bonus To Attack Rating (varies)', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b43b961-2e16-4ba9-8fbc-f1f1d8076580', '+(1*Clvl)% Damage To Demons (Based on Character Level)', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a6657959-666e-4cf8-bf68-5b0a6c13c96e', 'Adds 50-280 Lightning Damage', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e6ed8c1b-1a0d-4bde-afd6-af8a4e820cbb', '20% Deadly Strike', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('795d106c-0c42-4e3e-b607-73dbc1383924', 'Hit Blinds Target', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5ca016d9-b593-46bb-aa94-bb34d4dfb49d', 'Freezes Target +3', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d7f30bd6-0e30-4411-a90e-1e27640d1a05', '+10 To Vitality', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8fe9ec1e-08cd-4845-89c5-d3433b68a170', 'Replenish Life +8', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fbe67043-a82f-4f49-bae7-48f5bd3c1573', '(1.875*Clvl)% Extra Gold From Monsters (Based on Character Level)', '62232809-5887-430b-bc82-220fa3bd41b4', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('364f2f93-7003-487d-8900-4058f228e6e3', 'Principle', 'Paladin', 55, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7b205458-8beb-4e1a-a527-41daec8b972d', '364f2f93-7003-487d-8900-4058f228e6e3', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4185ddc7-60b2-43b8-8cfd-72c6e67866bf', 0, '364f2f93-7003-487d-8900-4058f228e6e3', (SELECT r.id FROM runes r WHERE r.name = 'Ral'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a61bfca2-70e3-4ee0-adf9-2eae2a05decd', 1, '364f2f93-7003-487d-8900-4058f228e6e3', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d80b45e9-277a-44da-95f0-ec9996d5d4fa', 2, '364f2f93-7003-487d-8900-4058f228e6e3', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cf70a94b-9994-46ec-9d02-d29630b85feb', '100% Chance To Cast Level 5 {skill} On Striking', '364f2f93-7003-487d-8900-4058f228e6e3', (SELECT s.id FROM skills s WHERE s.name = 'Holy Bolt'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('44d666cf-60e7-494d-915e-2bbbf42d4bfd', '+2 To Paladin Skill Levels', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a0e76557-a0db-47f4-8c35-e652a6edc84e', '+50% Damage to Undead', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4c57fa7b-7ea6-441a-bca0-6fa03dea23c0', '+100-150 to Life (varies)', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('700f30ab-39f2-4ef0-80b4-7af4ac1c1653', '15% Slower Stamina Drain', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3bfab1eb-f303-42a0-9ccc-769139ade023', '+5% To Maximum Poison Resist', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d6f0ce8f-bf69-4784-b71b-f166d347170f', 'Fire Resist +30%', '364f2f93-7003-487d-8900-4058f228e6e3', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('b89e9003-4685-4585-a2b7-b15e537bfa1c', 'Prudence', '', 49, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b52b02a3-af9a-45fa-a1fb-c6b72ecaad0d', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f29dd94f-a39d-4e68-99b1-da1ad9b6a462', 0, 'b89e9003-4685-4585-a2b7-b15e537bfa1c', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('138b47d4-bfff-43ae-a250-91a3cb47f92d', 1, 'b89e9003-4685-4585-a2b7-b15e537bfa1c', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e28633a2-d30f-4104-b462-dea414f12faa', '+25% Faster Hit Recovery', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('857bd8cb-b6ab-47a6-8852-018e2c5ffd5b', '+140-170% Enhanced Defense (varies)', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4dbae4f5-e68b-4ccf-ad0d-5a499981b694', 'All Resistances +25-35 (varies)', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7bcc8914-0352-4581-b8bc-7888b236b969', 'Damage Reduced by 3', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('236cbb03-2925-4438-87b2-e4a194551645', 'Magic Damage Reduced by 17', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7384b5b7-6782-4ea5-b58c-a6fa0f6b74b0', '+2 To Mana After Each Kill', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a0f6aef8-2d63-42bd-9089-352682352b51', '+1 To Light Radius', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7faaf5f7-4886-4fbc-b789-696fffbc0eef', 'Repairs Durability 1 In 4 Seconds', 'b89e9003-4685-4585-a2b7-b15e537bfa1c', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('fe8862f8-779d-44ea-88fb-85dc3eeafbec', 'Radiance', '', 27, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('349f56f4-b2b8-4b65-981b-2181735e8b3e', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', (SELECT it.id FROM item_types it WHERE it.name = 'Helmet'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('d3624a88-02c6-431a-bafe-169273400578', 0, 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('82a13157-1611-49b6-9646-8a099868ff39', 1, 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', (SELECT r.id FROM runes r WHERE r.name = 'Sol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6cc4fb42-67b8-4485-acef-8d9282ed3abd', 2, 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a8425ae5-122f-47ac-8269-ebca5124488e', '+75% Enhanced Defense', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a00ae9cb-59bb-439f-b3af-8cce40806703', '+30 Defense vs. Missiles', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1860ec00-517b-425e-9c1b-ebf10c65890f', '+10 to Vitality', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('10a27f86-ab23-4c19-b4eb-c831b6b622bc', '+10 to Energy', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('68af630e-8c66-4fa8-8592-601062674eb7', '+33 to Mana', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6b161ee6-3341-4665-8f7c-9f6e8ef4c7f2', 'Damage Reduced by 7', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cbc6b70d-675c-47d4-88fc-58f8b364acee', '+1 To Light Radius', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c96d7d7b-59ec-47ba-b87a-e5bf072874b5', 'Magic Damage Reduced by 3', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e0bca1b6-e3ac-4a42-b03e-8334c3c497fe', '15% Damage Taken Goes to Mana', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6612e7cf-49ce-44d0-8cec-581302f98e91', '+5 to Light Radius', 'fe8862f8-779d-44ea-88fb-85dc3eeafbec', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('0a54397c-129c-4bcc-85d8-7732b58f3236', 'Rain', 'Druid', 49, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5964c2e7-c7c9-420c-aa09-ddc0f3343841', '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b1852006-afc8-43e9-8ff2-faff0bfb0933', 0, '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('95758835-b10a-4539-93c7-2d37246cf55e', 1, '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('07ce8aae-0e50-49f8-a737-4c676bc07cb3', 2, '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT r.id FROM runes r WHERE r.name = 'Ith'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('98450ff4-69b6-475c-ae3f-7936d41d6442', '5% Chance To Cast Level 15 {skill} When Struck', '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT s.id FROM skills s WHERE s.name = 'CycloneArmor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f6e651f2-3718-46fe-94ab-8b169bdcb241', '5% Chance To Cast Level 15 {skill} On Striking', '0a54397c-129c-4bcc-85d8-7732b58f3236', (SELECT s.id FROM skills s WHERE s.name = 'Twister'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8de31063-7477-4ff8-aa8e-f0e9e6398b0f', '+2 To Druid Skills', '0a54397c-129c-4bcc-85d8-7732b58f3236', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6f84b9ab-57ef-4a9e-9a4c-21915fca62b2', '+100-150 To Mana (varies)', '0a54397c-129c-4bcc-85d8-7732b58f3236', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7fed3a66-86ca-4adc-9231-52c4165b7c09', 'Lightning Resist +30%', '0a54397c-129c-4bcc-85d8-7732b58f3236', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9059464e-bf79-4b6e-af42-0de4806f4fb6', 'Magic Damage Reduced By 7', '0a54397c-129c-4bcc-85d8-7732b58f3236', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8fb8c3d1-23d1-428e-8e91-0750bf2e16bc', '15% Damage Taken Goes to Mana', '0a54397c-129c-4bcc-85d8-7732b58f3236', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', 'Rhyme', '', 29, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('8f5055b2-3c2c-4f79-abf3-241c083f1efe', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7c18c6f9-cbf6-49cb-9a3a-25582e84e086', 0, '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('cefe3f27-6de6-4b9c-aa5a-31274c193b5e', 1, '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c8544faf-1a6b-488f-bc51-1fbb4c7d47cb', '+40% Faster Block Rate', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5d2d284f-4c2e-4112-9faa-585477138e44', '20% Increased Chance of Blocking', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0ae4c68c-744c-44e8-9ae2-73771812dadf', 'Regenerate Mana 15%', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('977e444e-08ca-4a51-b3cf-8216917fdb86', 'All Resistances +25', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2dc128c1-bdc2-4be5-a372-21d0c93a6940', 'Cannot be Frozen', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f6d71080-1d6b-4325-97b3-c040eb18152d', '50% Extra Gold from Monsters', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b6813ab6-fa66-400a-8986-27fe87dc6636', '25% Better Chance of Getting Magic Items', '0a6177d8-fdb5-4cb9-b8fc-9eaaa45161f1', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('17eb3948-0944-4722-afc4-1f3e761b8fdf', 'Rift', '', 53, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('76682f0b-3006-4995-94d7-1b68f946375e', '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('766c6bf3-a733-4032-ac2a-76dcbab15738', '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1d3173a0-1927-4eaa-9057-fe07aec4fd68', 0, '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('526876c3-40e2-4dc3-a096-aeac62802f64', 1, '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('1d6a2037-3cbb-4c85-accd-5c169c751aba', 2, '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2e1c4de3-a47b-470a-8771-7f2d459e3ccd', 3, '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT r.id FROM runes r WHERE r.name = 'Gul'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('43f07ff9-dbb1-4d6e-b270-3b7dec6dc2a1', '20% Chance To Cast Level 16 {skill} On Striking', '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT s.id FROM skills s WHERE s.name = 'Tornado'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9043f594-0972-4033-817c-97697f62cefa', '16% Chance To Cast Level 21 {skill} On Attack', '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT s.id FROM skills s WHERE s.name = 'Forzen Orb'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b2c4355-dce4-45da-9b40-5f808b548077', '20% Bonus To Attack Rating', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7281ce01-6b9d-4f4c-9374-9285b8bfbc64', 'Adds 160-250 Magic Damage', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9f62eaa5-a7e7-4566-af7a-102bc9d0efe4', 'Adds 60-180 Fire Damage', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f7cbbcc8-6370-41fa-a703-3b18b65291d6', '+5-10 To All Attributes (varies)', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('49e796b9-9027-4dab-8726-777a1881f084', '+10 To Dexterity', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a9509cd9-eaf9-4117-ae2d-0953edbfc829', '38% Damage Taken Goes To Mana', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5e865e90-3bf2-4919-b6fb-f5fe8ee650a4', '75% Extra Gold From Monsters', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fe63b515-f360-4168-a22d-42efcaa46e6d', 'Level 15 {skill} (40 Charges)', '17eb3948-0944-4722-afc4-1f3e761b8fdf', (SELECT s.id FROM skills s WHERE s.name = 'Iron Maiden'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('92d5ccc3-cc78-45be-a481-1a58235a4d9f', 'Requirements -20%', '17eb3948-0944-4722-afc4-1f3e761b8fdf', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', 'Sanctuary', '', 49, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9ac52cfa-9a79-41ce-8365-7e9fc199f0f7', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('845b8def-5c64-4fd7-b220-dc6d2fd710b7', 0, 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7fcb2614-45ea-4d5d-bdc1-559e90f6cef0', 1, 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a5094fb9-7961-4782-97b8-7ecd013d1711', 2, 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('789364f5-c480-4b2f-bcd8-d55fdbfa32d0', '+20% Faster Hit Recovery', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7076cbe4-73ca-4e67-a1e9-ca9f31463541', '+20% Faster Block Rate', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('69ae7aea-6cc3-4445-8afd-021e2617ef53', '20% Increased Chance of Blocking', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c2e3b47d-92ef-44d4-b5a2-74c0b4c9287d', '+130-160% Enhanced Defense (varies)', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b7de539b-cad4-4d38-a140-435e3c45a997', '+250 Defense vs. Missile', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('662c264f-fa6c-410d-a70c-f8b979be2b48', '+20 To Dexterity', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('269c99e7-7927-413f-938e-aa2ab0940153', 'All Resistances +50-70 (varies)', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f9db5cec-34a7-4ddd-b9d0-0b348856ebee', 'Magic Damage Reduced By 7', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('932702b3-b890-4740-a6e0-88b136a728e4', 'Level 12 {skill} (60 Charges) ', 'fa5e5fa9-5a51-45c7-87b2-d0e0b2762bac', (SELECT s.id FROM skills s WHERE s.name = 'Slow Missiles'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('8d00bd3c-9f0c-4132-856d-5c7019935065', 'Silence', '', 55, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('8c81253d-1441-4e75-824e-e7e49aaf25e2', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9cd2ad7e-577d-46ef-86fa-ea34b86b866f', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7c6d5527-0fdd-411a-9e68-1641b7cf4815', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9c727103-1309-4120-b353-37e364220320', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('2c754e4d-f46f-47c9-a7b1-2d91de279649', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('865cb000-70b2-418d-a659-1e11be5c6581', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('86e64801-236a-4768-94fd-a88a8c8b212d', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('aa94ed06-03a1-4a91-b6ca-6291827ddd26', '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('5c6c6574-6e7a-4907-931c-91833e9e47c8', 0, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a9b2428e-2260-40b7-b6fb-dcc94b3f6b4b', 1, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('71665354-6a2f-40a8-97e0-448c1b15214e', 2, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Hel'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9f05f768-68ee-4b1d-9ef7-8b441ac637f8', 3, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Ist'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('02b3ce07-69ad-475d-87d0-f0848b2f8f09', 4, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3a579769-6332-4f38-a7f3-5277610f322c', 5, '8d00bd3c-9f0c-4132-856d-5c7019935065', (SELECT r.id FROM runes r WHERE r.name = 'Vex'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b6fee8e4-b4c9-4949-9946-64357cf36418', '+2 to All Skills', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6cab5807-deec-4dd9-9bb0-24db61d59944', '+20% Increased Attack Speed', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('698578b4-21c2-4240-84d1-b8492525241b', '+20% Faster Hit Recovery', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c00ce587-f137-41c1-98ae-18e63d30ad7c', '+200% Enhanced Defense (varies)', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('48e810c2-e2f1-44d7-8cdc-a6936dfa8a7c', '+75% Damage To Undead', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('eafcdd8a-ef46-426b-b051-b7b507486298', '+50 to Attack Rating Against Undead', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('715d9623-c9c9-44ec-95b4-bc41614e7a6c', 'Hit Blinds Target +33', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('88f49272-d4e0-4abf-b069-f11c322da079', 'Hit Causes Monster to Flee 25%', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4031f1e5-aba4-44ac-8694-c0ce3e475a31', 'All Resistances +75', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7642edbe-ef3b-4033-9906-d6fb52e80a33', '+2 to Mana After Each Kill', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('99eb1a75-6fa4-40b0-8b37-4783c0f21d09', '30% Better Chance of Getting Magic Items', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('994f02ac-3072-4abe-8117-a61df5a3fa86', 'Requirements -20%', '8d00bd3c-9f0c-4132-856d-5c7019935065', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c0c91c68-7cfa-4e92-b871-69909e6d138f', 'Smoke', '', 37, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('05203aef-7aa5-4deb-94fa-bd680dc86404', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('18f2f1d9-e4b3-4df3-9fb8-a8750651b681', 0, 'c0c91c68-7cfa-4e92-b871-69909e6d138f', (SELECT r.id FROM runes r WHERE r.name = 'Nef'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e28d2bb8-65ac-4351-a78a-d5d388d7f268', 1, 'c0c91c68-7cfa-4e92-b871-69909e6d138f', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9a131dbb-4576-4f68-96a2-17c99473206b', '+20% Faster Hit Recovery', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fc94891a-172d-4ee6-bd18-3a79eea0ff8a', '+75% Enhanced Defense', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ba4d7a74-e8fc-4921-9cd3-5586cdea832d', '+280 Defense vs. Missiles', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ff740d63-9dc1-448b-913c-bef40a26f75d', '+10 to Energy', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('29052c94-40da-4eee-b208-f83bfa4f3415', 'All Resistances +50', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0741ecc5-9e3f-414e-a525-6b31e76b3878', '-1 to Light Radius', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('041605e8-f878-4582-ab3d-4e4b6db5132e', 'Level 6 {skill} (18 charges)', 'c0c91c68-7cfa-4e92-b871-69909e6d138f', (SELECT s.id FROM skills s WHERE s.name = 'Weaken'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('26f6bb98-c889-48cb-857f-fa90ed7adf8d', 'Spirit', '', 25, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fcbd4f80-12e4-4c48-844c-22969fee8851', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f3c08954-584a-45fe-871e-8b90fb7db6cd', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5f7db682-7881-42ba-be81-8cd074f09b35', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ce0e0cf5-4820-4e11-b9b6-8105ecc56fb3', 0, '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e2950d5b-21d5-4d04-8505-3c718c14965a', 1, '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('8d0752f5-66bb-436d-985f-ba23811c0639', 2, '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('82a24ea1-d1ee-405f-bdca-50b4cfd39af9', 3, '26f6bb98-c889-48cb-857f-fa90ed7adf8d', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7dfc48c0-aed5-4b8d-a672-e989b74d5c4c', '+2 To All Skills', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ccdab746-458b-4fe0-b650-034cdfc9de4d', '+25-35% Faster Cast Rate (varies)', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0b1357b1-783d-481b-a2ed-6551905be661', '+55% Faster Hit Recovery', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b25f6549-908c-4c54-a4d8-b57b2651ad7b', '+250 Defense Vs. Missile', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('75407628-332c-457b-8ea5-9db0c983c305', '+22 To Vitality', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('21064f06-e800-44ee-afea-8a907fc2d014', '+89-112 To Mana (varies)', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c56b4dd5-0306-4370-876c-0ef7f6e52efd', '+3-8 Magic Absorb (varies)', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('619e376a-bfa8-4acc-8cfb-084d635d17e8', 'Shields: Cold Resist +35%', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a2ab5e13-48ec-4420-88d9-6a9011cd4bb8', 'Shields: Lightning Resist +35%', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3ffe2aa4-f5f7-472c-a484-2d4873287df5', 'Shields: Poison Resist +35%', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('539e7b65-f036-4363-acad-095b06fc6bb7', 'Shields: Attacker Takes Damage of 14', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1872df3a-3baf-4d01-ba36-84006ce3cb50', 'Swords: Adds 1-50 Lightning Damage', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('75abe339-28b7-4e6d-8c15-d315801ca567', 'Swords: Adds 3-14 Cold Damage (3 Sec,Normal)', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fcce0356-dd8b-4021-be22-abf1d6c5d8b1', 'Swords: +75 Poison Damage Over 5 Seconds', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4af9189a-3e69-4ed2-bd4f-929def00d7e8', 'Swords: 7% Life Stolen Per Hit', '26f6bb98-c889-48cb-857f-fa90ed7adf8d', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('c71a5fdb-264f-4d65-ab56-1d6468bc62dc', 'Splendor', '', 37, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ba66727d-f278-4fb0-8458-4e03e77af017', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', (SELECT it.id FROM item_types it WHERE it.name = 'Shield'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c771d870-7ec4-4756-8196-093079de0460', 0, 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('51936347-1153-4a86-9510-2b85a6b2b287', 1, 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4bcf1133-4fd4-41c5-8cb0-a05853157751', '+1 To All Skills', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('561639d5-d1f4-4b7a-a50b-0d130436b24d', '+10% Faster Cast Rate', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('00a2fdde-f228-4f23-ae65-e2046a6faf9d', '+20% Faster Block Rate', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a8508c86-0373-4d62-a447-0dc87d7780bf', '+60-100% Enhanced Defense (varies)', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('69e1e5cc-d450-475d-af5c-2280f3e733cc', '+10 To Energy', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6df65bad-7cf3-4dd7-aa10-3cba98e72021', 'Regenerate Mana 15%', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('501d29f3-3b5b-486a-bde4-da9b5246ad00', '50% Extra Gold From Monsters', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fd304f74-4f9a-46f6-8ad3-bbbd80405d37', '20% Better Chance of Getting Magic Items', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3eeb6c96-6758-462c-a65b-2e2ba2384bee', '+3 To Light Radius', 'c71a5fdb-264f-4d65-ab56-1d6468bc62dc', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('85a73eec-3e26-43a1-ac13-a31c8dfad6a2', 'Stealth', '', 17, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('6c6a510f-9001-4ba8-b5d2-a8fb97244ea1', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6112e8ba-9db4-42c3-970f-abae16e30c8f', 0, '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ff8f2182-3fd2-41c3-ab74-e3f125bbfd19', 1, '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a1f03a3b-917d-4818-9855-b8e0cadcb322', '+25% Faster Run/Walk', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9faaa0fa-f43c-4f0f-9042-110f1cbce95d', '+25% Faster Cast Rate', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('89f19f94-f886-4b41-8e51-c1d71d28a74f', '+25% Faster Hit Recovery', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('78a52961-9815-45d3-88b1-d7871d09b428', '+6 to Dexterity', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fdcaabf5-307e-419c-89a0-10ebaf70719a', 'Regenerate Mana 15%', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('58f86490-d89e-4399-810d-2495a1276c64', 'Poison Resist +30%', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('37364026-87fe-4f2e-867f-d27943bee79e', 'Magic Damage Reduced by 3', '85a73eec-3e26-43a1-ac13-a31c8dfad6a2', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('96353add-eb7d-48b9-8d13-1e6dfc90c3ea', 'Steel', '', 13, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('335a0077-aee1-4d8c-aac4-d4a32f0c989b', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1282a7a5-43dd-4a1b-9adc-bace5bca7d81', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7cf28bf7-2beb-49fc-b460-66779cdfbaae', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('595d31ab-3a4a-4324-9f84-096f5cda6be4', 0, '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('999ef0cf-38ca-4f4f-b21f-4a00892e25f6', 1, '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5c7278ea-a784-42a1-8f07-0d011fd4fb37', '+25% Increased Attack Speed', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b45cbe40-3294-43bf-9d84-878408aed6d5', '+20% Enhanced Damage', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('623a715f-1222-4a9c-8aa6-c9379f5f5e90', '+3 to Minimum Damage', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0cf1997f-f519-48a7-99f7-e5129edb828e', '+3 to Maximum Damage', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('280bfa55-7084-4ec8-bcd6-a14e607ef05f', '+50 to Attack Rating', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('cbbef43a-cc7e-4cf7-805e-2510aa9eed1b', '50% Chance of Open Wounds', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d6bb2c33-5d13-4603-9733-dece2b0e32a6', '+2 to Mana after each Kill', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('28f4a751-8982-4564-87fd-7b0e7afa0f21', '+1 to Light Radius', '96353add-eb7d-48b9-8d13-1e6dfc90c3ea', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('dadbaa26-06ba-4a3d-b461-c82a9922be21', 'Stone', '', 47, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('bd45385a-62d4-4141-9129-87c44d257c97', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('14d1a9a5-f82c-42db-b9f1-80da7556fc6b', 0, 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('29dca3cc-1909-4803-8943-8ad6676fd8ea', 1, 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT r.id FROM runes r WHERE r.name = 'Um'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('72f6a7c8-466c-49fb-aa0f-1450faa863ca', 2, 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('046b7e9a-6245-4db8-8fdd-4bde15e3f426', 3, 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3abea569-a538-4cf6-8721-3332cc882d68', '+60% Faster Hit Recovery', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('febe0c56-ac13-4d43-9574-aee00eb7d66f', '+250-290% Enhanced Defense (varies)', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0f73d272-9ac9-4f84-9696-82b21f22307a', '+300 Defense Vs. Missile', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6030e5f3-37df-4c64-a007-08dbccc2bef1', '+16 To Strength', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('73ac18ff-2c21-487e-a5b9-b277c3fafbbe', '+16 To Vitality', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b6a2e6b8-7618-4173-b65b-5d6babd75b18', '+10 To Energy', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c3a9df86-6817-4a37-a9dc-d16a7daa0ce3', 'All Resistances +15', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6c4d3a16-01d1-4f73-952d-e9454f717d05', 'Level 16 {skill} (80 Charges)', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT s.id FROM skills s WHERE s.name = 'Molten Boulder'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7ed6e310-fb12-4b75-b45b-132985ffc13b', 'Level 16 {skill} (16 Charges) ', 'dadbaa26-06ba-4a3d-b461-c82a9922be21', (SELECT s.id FROM skills s WHERE s.name = 'Clay Golem'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', 'Strength', '', 25, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7a1cd845-b9f0-4ed2-ad0e-89f31cee1c0e', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ca446be2-1811-43e2-a884-3d4c198797e6', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Dagger'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7cdc1b73-0a88-4fe9-9d49-ca8cca6dfad9', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('90141536-17fd-42e5-ba57-eff3f6857f9c', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('9a6a26d4-bd70-4544-972b-dc9ae91bc072', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f5d9ca73-6c30-4240-9eab-f7c29d55646f', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e7bade74-7b00-4204-9544-c6a3bb3b2e5b', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('c5862cf1-7269-4171-aa7d-bf299e536918', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Wand'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f8ef529f-663b-40a8-982b-16c9f643e843', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('662818c7-1222-4edb-a6a8-518df7549e00', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('cdddf3ba-8c7e-41cb-a623-1a5bcd705ab2', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT it.id FROM item_types it WHERE it.name = 'Katar'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('60bc091b-dc43-45d1-8cc4-adaa759ad4cb', 0, 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT r.id FROM runes r WHERE r.name = 'Amn'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('e85d8953-0c15-4b83-bf1d-f7e0c6b177e3', 1, 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('51021955-7acf-4805-94f8-7f5684616ec4', '+35% Enhanced Damage', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ddbdb7cd-c235-459f-bd98-03df498ef125', '7% Life stolen per hit', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('dc571537-4c1e-40ad-8a2a-ac715f13f18c', '25% Chance of Crushing Blow', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('60bac66d-0f41-4385-b026-70d870f8129d', '+20 To Strength', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b0e1d2e2-e434-4114-b2f7-162a7d501b50', '+10 To Vitality', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c0b2cb1a-b24c-4406-aba0-6dedb4d3720e', '+2 to Mana after each Kill', 'e2d3ddde-0cc3-49f4-a26d-e2c80aa93acb', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', 'Treachery', 'Assassin', 43, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('1b4665d1-7762-4b2e-afce-f997a6f96a09', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('252fbd39-6dc4-424a-8a1d-24286f9eab20', 0, '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT r.id FROM runes r WHERE r.name = 'Shael'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9a167f5e-9f30-4c00-941f-3e061db30b0c', 1, '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT r.id FROM runes r WHERE r.name = 'Thul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ce64dd91-a3c6-4381-be0d-6780c1c07b57', 2, '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('504d22d7-b8d0-4cf3-9d21-7b2f6712e497', '5% Chance To Cast Level 15 {skill} When Struck', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT s.id FROM skills s WHERE s.name = 'Fade'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b9f8c808-1b20-4916-9381-cb327fb3d7fe', '25% Chance To Cast level 15 {skill} On Striking', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', (SELECT s.id FROM skills s WHERE s.name = 'Venom'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('61df2560-1142-4c93-a45d-279d694490ce', '+2 To Assassin Skills', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a3146d2e-27c3-46c0-9cab-5f08faa129d5', '+45% Increased Attack Speed', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('52a4b229-bc60-42b8-b490-5ec0e7713a7c', '+20% Faster Hit Recovery', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b78bf8f4-fd40-4966-9243-6d0e2ac46c7d', 'Cold Resist +30%', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('30374bdf-844e-4386-96fe-073d4024e57c', '50% Extra Gold From Monsters', '32d7f4a7-30f1-4d0c-a6ae-728a8d56f186', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', 'Venom', '', 49, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f796b7ef-7777-4af9-8889-211efed62bb0', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0cdbc60e-ecf1-478f-bb58-56c32aab1dc7', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Dagger'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7bc9889b-0262-4271-837f-8aad4eb65635', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7dc1581e-18c9-4d81-87f9-ce71d384d1a8', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e66257c1-fdc8-4498-8aa2-134371810127', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d0c14518-0339-442b-a637-1b610379ae7e', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ca896ded-bbfb-472f-963c-85576688df47', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('5448189a-b490-46e6-9c14-16a37ab5c514', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e306e602-a310-4146-8cda-0efa9e5fc50b', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('d105969e-106f-4faa-91ba-93564f77acae', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('6b39dea0-844e-44eb-98ee-2ef06b62427d', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0b33cffb-dafc-415d-aecd-c7940668d13d', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('ea0ddf91-a9ea-4923-af08-4467c1df8eda', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Katar'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('84f3cdca-2938-4355-9505-5b23ebe81e5f', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT it.id FROM item_types it WHERE it.name = 'Orb'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c3d33f80-4af1-47aa-b1f0-ec7c9f35c431', 0, 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT r.id FROM runes r WHERE r.name = 'Tal'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9b4b251a-ba06-4881-ba0d-774a21011a8f', 1, 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('44f43933-9228-46e8-ba24-86a899d2ebc6', 2, 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e0bec1dc-9b59-492b-a461-1ace213089a5', 'Ignore Target''s Defense', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4f668cfe-4eb3-410f-8c19-a72cc52dcf71', '+273 Poison Damage Over 6 Seconds', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e34db01b-71ec-44ac-8d7c-b571a172a4c5', '7% Mana Stolen Per Hit', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bfd5ae49-707f-4635-9745-b26208db41b9', 'Prevent Monster Heal', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('05da42d9-aa8d-4ae1-81ab-3c39e8d75bd9', 'Hit Causes Monster To Flee 25%', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('0bee51d5-75ea-4adc-a107-72f852fc53cd', 'Level 13 {skill} (11 Charges)', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT s.id FROM skills s WHERE s.name = 'Poison Nova'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a4795aeb-042f-4b4f-ae93-25899a282111', 'Level 15 {skill} (27 Charges)', 'a1c0157f-a6fa-4ed4-ba71-ca94469d8d2b', (SELECT s.id FROM skills s WHERE s.name = 'Poison Explosion'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('e84b737b-77fd-454e-a46d-76d68857d081', 'Voice of Reason', '', 43, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('e08f1821-0232-40d9-974d-4b7c96a83fc9', 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('efa52549-7061-4dcc-8832-a1725212bfc9', 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT it.id FROM item_types it WHERE it.name = 'Mace'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('6f3484ab-3240-4b92-9df0-3692d7486f10', 0, 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('03417089-7f57-4048-ba7a-f45a64b6b658', 1, 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('47b070a9-59db-4e08-ac2f-44ad7eb239b7', 2, 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT r.id FROM runes r WHERE r.name = 'El'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('7151ac9f-01bb-4334-876c-6c7734639847', 3, 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT r.id FROM runes r WHERE r.name = 'Eld'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('943fa069-dba2-42c7-9010-948e9aa874bc', '15% Chance To Cast Level 13 {skill} On Striking', 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT s.id FROM skills s WHERE s.name = 'Forzen Orb'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4ca39db2-d21d-452f-aca7-830fc0ded733', '18% Chance To Cast Level 20 {skill} On Striking', 'e84b737b-77fd-454e-a46d-76d68857d081', (SELECT s.id FROM skills s WHERE s.name = 'Ice Blast'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fd0fd11c-4617-42c6-98ba-d35567852e45', '+50 To Attack Rating', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('9601aa11-4796-439f-9a26-a0700586e358', '+220-350% Damage To Demons (varies)', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5a10af08-3998-4f99-8468-db17cf9aac9a', '+355-375% Damage To Undead (varies)', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('15d1cf35-57ca-4cbc-bf63-5f66915345ec', '+50 To Attack Rating Against Undead', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('46624f67-0c87-4bb5-971e-c666ea669b2c', 'Adds 100-220 Cold Damage', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7cb4d1ee-569d-4048-8ca7-b394cb2e4e9f', '-24% To Enemy Cold Resistance', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('80622ab5-4b2d-4517-a07a-a7e32fae4beb', '+10 To Dexterity', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4075bb5c-c3df-43b6-9089-8b4c5776850c', 'Cannot Be Frozen', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f030d43a-0683-4d37-8f05-84369cbb8450', '75% Extra Gold From Monsters', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('63b95199-80d1-4286-91f0-da9ab82e1ba4', '+1 To Light Radius', 'e84b737b-77fd-454e-a46d-76d68857d081', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('794baeed-eb8d-4991-a42b-733f81ddf69a', 'Wealth', '', 43, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('7672d55d-2d29-4909-9da6-bf106768e67b', '794baeed-eb8d-4991-a42b-733f81ddf69a', (SELECT it.id FROM item_types it WHERE it.name = 'Body armor'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('a3169e4a-1fed-42ca-b401-eeb04e170d15', 0, '794baeed-eb8d-4991-a42b-733f81ddf69a', (SELECT r.id FROM runes r WHERE r.name = 'Lem'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f35dccb4-bf2e-44c4-b035-e67eb57ac0c8', 1, '794baeed-eb8d-4991-a42b-733f81ddf69a', (SELECT r.id FROM runes r WHERE r.name = 'Ko'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('f073fafd-59c2-40d7-aa37-126f7d1e0aa0', 2, '794baeed-eb8d-4991-a42b-733f81ddf69a', (SELECT r.id FROM runes r WHERE r.name = 'Tir'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('fc067937-8c7e-490a-a44f-357d98f56ddb', '+10 to Dexterity', '794baeed-eb8d-4991-a42b-733f81ddf69a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c2b6499f-10fb-49b5-9e62-81ae8ce104d1', '+2 to Mana After Each Kill', '794baeed-eb8d-4991-a42b-733f81ddf69a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('c1c0213e-eda6-4375-85a1-7dc3b2c54f36', '300% Extra Gold From Monsters', '794baeed-eb8d-4991-a42b-733f81ddf69a', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d469848d-a1da-4eba-b04f-3e76e6e04946', '100% Better Chance of Getting Magic Items', '794baeed-eb8d-4991-a42b-733f81ddf69a', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('889249c0-4ff4-4d0b-bac5-64bc4aa34566', 'White', 'Necromancer', 35, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('f1488e12-af7e-414d-abfa-62e26473e75d', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT it.id FROM item_types it WHERE it.name = 'Wand'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('845d9fc0-4155-443b-8497-52b864e2e4be', 0, '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('4ec0c74c-399f-4642-aa67-91842ad81b25', 1, '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ae2a6108-10f2-4ab7-a620-ec9244cfa017', '+3 to Poison and Bone Skills (Necromancer Only)', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5150734a-8dfc-41e1-a7d2-465177ae124b', '+20% Faster Cast Rate', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('78476786-9846-4610-96bb-4afdbc1d55b2', '+2 to {skill} (Necromancer Only)', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT s.id FROM skills s WHERE s.name = 'Bone Spear'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('8ae20173-9a96-4c74-8aa0-3493b0f5fb66', '+4 to {skill} (Necromancer Only)', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT s.id FROM skills s WHERE s.name = 'Skeleton Mastery'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5768aeef-10dc-4394-8983-c6434145f999', '+3 to {skill} (Necromancer Only)', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', (SELECT s.id FROM skills s WHERE s.name = 'Bone Armor'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7a6b5409-a97e-48ac-9843-7c7da1b42f32', 'Hit causes monster to flee 25%', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('2c9d7701-6a06-4210-a947-5f8aad470279', '+10 to vitality', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('1d3e9fb3-a63d-439d-badb-82436ed0894d', '+13 to mana', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('77fe8cd1-59e6-4b72-bd6e-c4c795cb6919', 'Magic Damage Reduced by 4', '889249c0-4ff4-4d0b-bac5-64bc4aa34566', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('4b83a9d0-c909-4c3d-84ba-15226f91a006', 'Wind', '', 61, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fd5dd1c8-fbdd-49f5-8951-011526a3cc58', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Sword'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3e70685e-7891-48ac-9eb8-d7eb47e9f9d2', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Dagger'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3faa3fdb-9967-49bb-a248-313dc82d02be', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Axe'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('0dc42d68-bfc5-4f7c-b5e2-cb190117ad7c', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Club'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('b7be1355-78d5-47a1-9996-2289d6f0ea8a', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Hammer'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3fcd95b9-2b2e-444a-89ec-41a983a128e3', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Scepter'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fd630250-b625-4a89-8a53-79bd52f4f44c', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Staff'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('11de497d-14d9-4f82-a9d8-f18a2a159d79', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Wand'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('74640a84-80a6-4216-a40b-f65885c5baec', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Spear'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('6b3f3e7b-79d2-48e9-b85d-7f21796ce124', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Polearm'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('fa4116e1-6478-4327-8ea8-d3a8168a4406', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT it.id FROM item_types it WHERE it.name = 'Katar'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2c2e527b-3a86-417a-b956-481699cb02e5', 0, '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT r.id FROM runes r WHERE r.name = 'Dol'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('2c49fd66-c9a5-4dc0-8b34-00b901bf879d', 1, '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT r.id FROM runes r WHERE r.name = 'Io'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e54e028d-0e9f-44aa-8c3c-6052db48cf57', '10% Chance To Cast Level 9 {skill} On Striking', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT s.id FROM skills s WHERE s.name = 'Tornado'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('d2bc5cf2-7391-47ea-95ab-a9a82aca0ae1', '+20% Faster Run/Walk', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b5f96ab-9e07-445e-aff3-29ca03767fe4', '+40% Increased Attack Speed', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('45467180-71a8-4407-97da-5a68a4522c4f', '+15% Faster Hit Recovery', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7cba1e3b-30bb-462a-b8ac-feedbbf60dab', '+120-160% Enhanced Damage (varies)', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('3b031e42-e0c1-453c-8b48-07154b1c6087', '-50% Target Defense', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('22c4ccbc-d5b1-4e29-be00-1af34059cdcc', '+50 To Attack Rating', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('18d97474-2613-4108-804e-4581bfb1f1c6', 'Hit Blinds Target', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a8be0c31-277d-49b0-9648-767a9491f216', '+1 To Light Radius', '4b83a9d0-c909-4c3d-84ba-15226f91a006', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('f049b11d-97f1-4426-859c-b4d3bd301f96', 'Level 13 {skill} (127 Charges)', '4b83a9d0-c909-4c3d-84ba-15226f91a006', (SELECT s.id FROM skills s WHERE s.name = 'Twister'));
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('8e0d50df-86e4-49c5-8efc-20531585585b', 'Wrath', '', 63, True);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('3930905e-91c1-4679-9741-8ff0289f605d', '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('445ea5e9-3dd9-4327-a64b-f97fdc849091', '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('3a8af5d2-3b74-41a9-acce-00fc8e8c1b20', 0, '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT r.id FROM runes r WHERE r.name = 'Pul'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('b6f00c8d-1480-4aff-b5f6-06b230ea9de2', 1, '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT r.id FROM runes r WHERE r.name = 'Lum'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('c5eb2a24-ebc1-4f8b-9618-76332345715a', 2, '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT r.id FROM runes r WHERE r.name = 'Ber'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('43d2ddba-b892-4316-802c-51038e72617b', 3, '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT r.id FROM runes r WHERE r.name = 'Mal'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('68a791d2-4663-44d9-85de-13e8fc14cc1e', '30% Chance To Cast Level 1 {skill} On Striking', '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT s.id FROM skills s WHERE s.name = 'Decrepify'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('735e44b4-ab93-46a5-b087-ca0aabf5e159', '5% Chance To Cast Level 10 {skill} On Striking', '8e0d50df-86e4-49c5-8efc-20531585585b', (SELECT s.id FROM skills s WHERE s.name = 'Life Tap'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('91a078be-33fe-4fec-9790-d0f5d4d338f9', '+375% Damage To Demons', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('6859d8eb-f47c-434f-8df2-a8b8e2681550', '+100 To Attack Rating Against Demons', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5c7d41d3-177d-43af-bdaf-f76b812b1f5c', '+250-300% Damage To Undead (varies)', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('56d1ec56-edec-43fa-a62c-2d2650af7ea0', 'Adds 85-120 Magic Damage', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('ce21980c-4a46-45ea-b0c9-d86490bcb100', 'Adds 41-240 Lightning Damage', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('bb70f892-3729-4f7c-aa26-c75f440609ae', '20% Chance of Crushing Blow', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7ea57b16-12bc-4835-8a47-bcca307a7b08', 'Prevent Monster Heal', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('a703d341-5e5a-46cc-90c5-2a24c2cac299', '+10 To Energy', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('203cd592-a45e-4591-8cd4-41e127ca3c82', 'Cannot Be Frozen', '8e0d50df-86e4-49c5-8efc-20531585585b', null);
+
+
+INSERT INTO rune_words(id, name, class, level, is_ladder) VALUES('1f171f7e-f13c-4320-aaf4-89aa62b077e0', 'Zephyr', '', 21, False);
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('20896957-cfdd-4bc2-a07c-36cedcc14558', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', (SELECT it.id FROM item_types it WHERE it.name = 'Bow'));
+INSERT INTO rune_word_item_type_switch(id, rune_word_id, item_type_id) VALUES('a51e630d-eaf2-4237-bc22-445e86026a8f', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', (SELECT it.id FROM item_types it WHERE it.name = 'Crossbow'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('9ed23866-eebd-4bee-b0a8-d11315d28c78', 0, '1f171f7e-f13c-4320-aaf4-89aa62b077e0', (SELECT r.id FROM runes r WHERE r.name = 'Ort'));
+INSERT INTO rune_word_ingredients(id, ingredient_order, rune_word_id, rune_id) VALUES('ece878e6-906f-4c9d-8be0-b3b1409533b8', 1, '1f171f7e-f13c-4320-aaf4-89aa62b077e0', (SELECT r.id FROM runes r WHERE r.name = 'Eth'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('5b3c4b74-89a0-40a3-b202-acc8570d9309', '7% Chance to Cast Level 1 {skill} When Struck', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', (SELECT s.id FROM skills s WHERE s.name = 'Twister'));
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('e76aaee2-1a63-4d99-9360-4f93a445cad1', '+25% Faster Run/Walk', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('4a813b33-7b0e-4628-b80c-033f50bc0322', '+25% Increased Attack Speed', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('593479c6-4a68-4d0e-ab1a-d4f2af210ae1', '+33% Enhanced Damage', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7b73209f-45d0-4544-9d28-186035d20096', '-25% Target Defense', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('01a1d02e-9a20-4182-8e9c-c75c26e2038a', '+66 to Attack Rating', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('b226523e-76a2-44b3-b9ea-5b071d5b2ed8', 'Adds 1-50 lightning damage', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);
+INSERT INTO rune_word_properties(id, description, rune_word_id, skill_id) VALUES('7b7692d1-89f2-4800-9ce6-b21d440aec18', '+25 Defense', '1f171f7e-f13c-4320-aaf4-89aa62b077e0', null);

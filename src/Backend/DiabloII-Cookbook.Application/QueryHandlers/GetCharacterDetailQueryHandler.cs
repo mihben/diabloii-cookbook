@@ -12,10 +12,10 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 {
     public class GetCharacterDetailQueryHandler : IQueryHandler<GetCharacterDetailQuery, Character>
     {
-        private readonly CharacterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<GetCharacterDetailQueryHandler> _logger;
 
-        public GetCharacterDetailQueryHandler(CharacterContext context, ILogger<GetCharacterDetailQueryHandler> logger)
+        public GetCharacterDetailQueryHandler(DatabaseContext context, ILogger<GetCharacterDetailQueryHandler> logger)
         {
             _context = context;
             _logger = logger;

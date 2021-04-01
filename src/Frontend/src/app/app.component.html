@@ -2,7 +2,8 @@
   <div class="left-panel panel">
     <form [formGroup]="characterForm" style="display: flex; height: 100%; flex-flow: column;">
       <div class="character-panel">
-        <label style="margin-left: auto; margin-right: auto; margin-bottom: 8px;">{{characterIndex}}/{{characters.length}}</label>
+        <label
+          style="margin-left: auto; margin-right: auto; margin-bottom: 8px;">{{characterIndex}}/{{characters.length}}</label>
         <div class="character-selector">
           <button type="button" style="border: 0; background: transparent; height: max-content; align-self: center;"
             (click)="previous()">
@@ -22,32 +23,60 @@
         <label style="grid-column: item;">{{character.name}}</label>
 
         <label style="grid-column: header;">Level:</label>
-        <input style="grid-column: item;" type="text" formControlName="level"/>
+        <input style="grid-column: item;" type="text" formControlName="level" />
 
         <label style="grid-column: header;">Ladder:</label>
-        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isLadder"/>
+        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isLadder" />
 
         <label style="grid-column: header;">Expansion:</label>
-        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isExpansion"/>
+        <input style="grid-column: item; width: max-content;" type="checkbox" formControlName="isExpansion" />
       </div>
 
       <div class="rune-selector">
         <div *ngFor="let rune of runes">
-          <input style="grid-column: item; width: max-content; margin-right: 4px;" type="checkbox" formControlName="{{rune.id}}"/>
+          <input style="grid-column: item; width: max-content; margin-right: 4px;" type="checkbox"
+            formControlName="{{rune.id}}" />
           <app-rune [rune]="rune"></app-rune>
         </div>
       </div>
-       
+
       <div class="button-row">
         <button class="text-button" (click)="addCharacter()">Create</button>
         <button class="text-button" style="margin-left: auto;" (click)="deleteCharacter()">Delete</button>
       </div>
-    </form> 
+    </form>
   </div>
 
   <div class="right-panel">
     <div class="filter-panel panel">
-      <h1 style="color: white;">Filters</h1>
+      <div style="display: flex; flex-flow: row;">
+        <div
+          style="display: flex; flex-flow: column; margin-left: auto; margin-top: auto; margin-bottom: auto; margin-right: 4px;">
+          <div *ngFor="let itemtType of armors">
+            <input type="checkbox" />
+            <label>{{itemtType.name}}</label>
+          </div>
+        </div>
+        <div style="display: flex; flex-flow: column; margin-right: auto; margin-left: 4px;">
+          <div style="display: grid; grid-template-columns: repeat(4, auto);">
+            <div *ngFor="let itemtType of weapons" style="align-self: center;">
+              <input type="checkbox" />
+              <label>{{itemtType.name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex;">
+        <button class="text-button">Weapons</button>
+        <button class="text-button">Armors</button>
+        <button class="text-button">{{character.name}}</button>
+
+        <div style="margin-left: auto;">
+          <button class="text-button" style="margin-left: 4px;">Search</button>
+          <button class="text-button" style="margin-right: 4px;">All</button>
+        </div>
+      </div>
     </div>
 
     <div class="result-panel panel">

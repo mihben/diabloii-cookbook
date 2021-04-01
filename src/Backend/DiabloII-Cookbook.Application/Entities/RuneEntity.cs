@@ -14,5 +14,6 @@ namespace DiabloII_Cookbook.Application.Entities
         public string InArmor { get; set; }
         public string InShield { get; set; }
         public ICollection<CharacterRuneEntity> Characters { get; set; }
+        public ICollection<RuneWordIngredientEntity> RuneWords { get; set; }
     }
 }

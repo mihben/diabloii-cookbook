@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DiabloII_Cookbook.Api.Queries
 {
-    public class GetItemTypesQuery : Query<IEnumerable<ItemType>>
+    public class GetItemTypesQuery: Query<IEnumerable<ItemType>>
     {
     }
 }

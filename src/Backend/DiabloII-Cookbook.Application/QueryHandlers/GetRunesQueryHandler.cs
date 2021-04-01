@@ -14,10 +14,10 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 {
     public class GetRunesQueryHandler : IQueryHandler<GetRunesQuery, IEnumerable<Rune>>
     {
-        private readonly CharacterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<GetRunesQueryHandler> _logger;
 
-        public GetRunesQueryHandler(CharacterContext context, ILogger<GetRunesQueryHandler> logger)
+        public GetRunesQueryHandler(DatabaseContext context, ILogger<GetRunesQueryHandler> logger)
         {
             _context = context;
             _logger = logger;

@@ -5,7 +5,6 @@ using DiabloII_Cookbook.Application.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Handlers;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,10 +12,10 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 {
     public class UpdateCharacterCommandHandler : ICommandHandler<UpdateCharacterCommand>
     {
-        private readonly CharacterContext _context;
+        private readonly DatabaseContext _context;
         private readonly ILogger<UpdateCharacterCommandHandler> _logger;
 
-        public UpdateCharacterCommandHandler(CharacterContext context, ILogger<UpdateCharacterCommandHandler> logger)
+        public UpdateCharacterCommandHandler(DatabaseContext context, ILogger<UpdateCharacterCommandHandler> logger)
         {
             _context = context;
             _logger = logger;
