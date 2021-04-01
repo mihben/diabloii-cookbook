@@ -1,11 +1,11 @@
 <div style="display: inline;height: fit-content;" class="tool-tip">
     <div style="display: inline;height: fit-content;">
-        <img src={{imageSource}} style="vertical-align: middle;"/>
-        <label style="color: #CE8800;">{{rune?.name}}</label>
+        <img src={{imageSource}} style="vertical-align: middle; background-color: transparent;"/>
+        <label style="color: var(--rune)">{{rune?.name}}</label>
     </div>
 
     <div class="tool-tip-text panel">
-        <p style="color: #CE8800; font-family: Diablo Heavy; font-size: 16px; margin-top: 4px; margin-bottom: 8px;">{{rune?.name}}</p>
+        <p style="color: var(--rune); font-family: Diablo Heavy; font-size: 16px; margin-top: 4px; margin-bottom: 8px;">{{rune?.name}}</p>
         <p style="margin-top: 0px; margin-bottom: 0px;">
             <span style="margin: 4px; font-family: Diablo Heavy; white-space: nowrap;">In Weapon:</span>
             <span style="margin: 4px; font-family: Diablo Light; white-space: nowrap;">{{rune?.inWeapon}}</span>

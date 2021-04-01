@@ -17,13 +17,15 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { FilterService } from 'src/shared/services/filter.service';
+import { RuneWordComponent } from './components/rune-word/rune-word.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RuneComponent,
     CreateCharacterComponent,
-    DeleteConfirmationDialogComponent
+    DeleteConfirmationDialogComponent,
+    RuneWordComponent
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ItemType } from 'src/shared/models/itemType.model';
 import { FilterService } from 'src/shared/services/filter.service';
+import { RuneWord } from 'src/shared/models/runeWord.model';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,8 @@ export class AppComponent implements OnInit {
   characterForm: FormGroup;
 
   save: Subscription | undefined;
+
+  runeWords: RuneWord[] | undefined;
 
   constructor(private runeService: RuneService, private characterService: CharacterService, public dialog: MatDialog, private formBuidler: FormBuilder, private filterService: FilterService) {
     this.characterForm = this.formBuidler.group({
@@ -73,6 +76,8 @@ export class AppComponent implements OnInit {
           .subscribe();
         });
       });
+
+      this.getRuneWords();
   }
 
   setCharacter(character: Character)
@@ -145,6 +150,14 @@ export class AppComponent implements OnInit {
           .subscribe((character) => {
             this.setCharacter(character);
           })
+      });
+  }
+
+  public getRuneWords() : void {
+    this.runeWords = undefined;
+    this.filterService.getRuneWords()
+      .subscribe(runeWords => {
+        this.runeWords = runeWords
       });
   }
 }

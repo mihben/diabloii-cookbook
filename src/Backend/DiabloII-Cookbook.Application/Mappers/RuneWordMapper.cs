@@ -8,7 +8,7 @@ namespace DiabloII_Cookbook.Application.Mappers
     {
         public static RuneWord ToDto(this RuneWordEntity entity)
         {
-            return new RuneWord(entity.Id, entity.Name, entity.Ingredients.OrderBy(i => i.Order).Select(i => i.ToDto()), entity.Properties.Select(p => p.ToDto()), entity.ItemTypes.Select(it => it.ItemType.ToDto()));
+            return new RuneWord(entity.Id, entity.Name, entity.Level, entity.IsLadder, entity.Ingredients.OrderBy(i => i.Order).Select(i => i.ToDto()), entity.Properties.Select(p => p.ToDto()), entity.ItemTypes.Select(it => it.ItemType.ToDto()));
         }
 
         public static RuneWordIngredient ToDto(this RuneWordIngredientEntity entity)

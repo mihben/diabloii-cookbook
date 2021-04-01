@@ -27,7 +27,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
         {
             await _context.Database.EnsureCreatedAsync(cancellationToken);
 
-            return (await _context.RuneWords
+            var runeWords = await _context.RuneWords
                             .AsNoTracking()
                             .Include(rw => rw.Ingredients)
                                 .ThenInclude(rwi => rwi.Rune)
@@ -35,8 +35,10 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
                                 .ThenInclude(rwite => rwite.ItemType)
                             .Include(rw => rw.Properties)
                                 .ThenInclude(rwp => rwp.Skill)
-                            .ToListAsync(cancellationToken))
-                        .Select(rw => rw.ToDto());
+                             .OrderBy(rw => rw.Level)
+                            .ToListAsync(cancellationToken);
+
+            return runeWords.Select(rw => rw.ToDto());
         }
     }
 }

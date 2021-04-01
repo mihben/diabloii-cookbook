@@ -35,8 +35,8 @@ $diabloii-cookbook-theme: mat-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-image:url('assets/Background.gif'); background-repeat: no-repeat; background-size: 35%; background-position: center; background-color: black; font-size: 14px; }
+html, body { height: 100%; overflow-y: hidden; }
+body { padding-top: 12px; font-family: Roboto, "Helvetica Neue", sans-serif; background-image:url('assets/Background.gif'); background-repeat: no-repeat; background-size: 35%; background-position: center; background-color: black; font-size: 14px; }
 
 @font-face {
   font-family: Diablo Light;
@@ -46,6 +46,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 @font-face {
   font-family: Diablo Heavy;
   src: url('assets/fonts/DiabloHeavy.ttf') format('truetype');
+}
+
+:root {
+  --magic: #197917;
+  --rune: #5049b4;
+  --text: #7b7b7b;
+  --rune: #CE8800;
 }
 
 input[type=checkbox] {
@@ -62,15 +69,10 @@ input[type=checkbox]:checked {
 }
 
 label {
-  color: #7b7b7b;
+  color: var(--text);
   margin-left: 4px;
   font-family: Diablo Light;
 }
-
-// p {
-//   color: #7b7b7b;
-//   font-family: Diablo Light;
-// }
 
 div.main {
   width: auto;
@@ -126,8 +128,11 @@ div.weapon-panel {
 }
 
 div.result-panel {
-  margin-top: 4px;
   flex: 1;
+  display: grid;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 div.character-panel {  
@@ -181,7 +186,7 @@ input[type=text] {
   background-repeat: no-repeat;
   background-size: 100%;
   height: 25px;
-  color: #7b7b7b;
+  color: var(--text);
   padding-left: 8px;
   vertical-align: middle;
   font-family: Diablo Light;
@@ -229,7 +234,7 @@ div.tool-tip:hover .tool-tip-text {
   background-size: contain;
   background-repeat: no-repeat;
   height: 25px;
-  color: #7b7b7b !important;
+  color: var(--text) !important;
   padding-left: 8px;
   vertical-align: middle;
   font-family: Diablo Light;
@@ -245,12 +250,12 @@ div.tool-tip:hover .tool-tip-text {
 }
 
 .mat-option-text {
-  color: #7b7b7b !important;
+  color: var(--text) !important;
   font-family: Diablo Light;
 }
 
 .mat-select-value {
-  color: #7b7b7b !important;
+  color: var(--text) !important;
   font-family: Diablo Light;
 }
 
@@ -259,7 +264,19 @@ div.tool-tip:hover .tool-tip-text {
   margin-top: 4px;
 }
 
-p {
-  color: #7b7b7b;
+p, span {
+  color: var(--text);
   font-family: Diablo Light;
+}
+
+label.level {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 16px;
+  margin-bottom: 4px;
+}
+
+span.skill {
+  color: var(--magic);
+  font-family: Diablo Heavy;
 }

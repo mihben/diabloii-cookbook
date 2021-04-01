@@ -47,7 +47,7 @@
     </form>
   </div>
 
-  <div class="right-panel">
+  <div class="right-panel" style="flex-flow: column;">
     <div class="filter-panel panel">
       <div style="display: flex; flex-flow: row;">
         <div
@@ -74,13 +74,13 @@
 
         <div style="margin-left: auto;">
           <button class="text-button" style="margin-left: 4px;">Search</button>
-          <button class="text-button" style="margin-right: 4px;">All</button>
+          <button class="text-button" style="margin-right: 4px;" (click)="getRuneWords()">All</button>
         </div>
       </div>
     </div>
 
-    <div class="result-panel panel">
-      <h1 style="color: white;">Results</h1>
+    <div class="result-panel">
+      <app-rune-word style="margin-top: 4px;" *ngFor="let runeWord of runeWords" [runeWord]="runeWord" [targetLevel]="character.level"></app-rune-word>
     </div>
   </div>
 </div>
