@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   weapons: ItemType[] = [];
 
   characterForm: FormGroup;
+  filterForm: FormGroup;
 
   save: Subscription | undefined;
 
@@ -42,16 +43,13 @@ export class AppComponent implements OnInit {
       isLadder: [],
       isExpansion: []
     });
+
+    this.filterForm = this.formBuidler.group({
+    });
   }
 
   ngOnInit(): void {
     this.save?.unsubscribe();
-
-    this.filterService.getItemTypes()
-      .subscribe((itemTypes) => {
-        this.armors = itemTypes.filter(it => it.group === 'Armor');
-        this.weapons = itemTypes.filter(it => it.group === 'Weapon');
-      })
 
     this.runeService.getRunes()
       .subscribe((runes) => {
@@ -62,36 +60,43 @@ export class AppComponent implements OnInit {
         this.runes = runes;
 
         this.refreshCharacters();
-        
-        this.save = this.characterForm?.valueChanges
-        .pipe(debounceTime(1500), switchMap((value) => of(value)))
-        .subscribe(value => {
-          var selectedRunes: Rune[] = [];
-          this.runes.forEach(rune => {
-            if (this.characterForm.get(rune.id)?.value) {
-              selectedRunes.push(rune);
-            }
-          });
-          this.characterService.updateCharacter(this.character?.id, value.level, value.isLadder, value.isExpansion, selectedRunes)
-          .subscribe();
-        });
-      });
 
-      this.getRuneWords();
+        this.save = this.characterForm?.valueChanges
+          .pipe(debounceTime(1500), switchMap((value) => of(value)))
+          .subscribe(value => {
+            var selectedRunes: Rune[] = [];
+            this.runes.forEach(rune => {
+              if (this.characterForm.get(rune.id)?.value) {
+                selectedRunes.push(rune);
+              }
+            });
+            this.characterService.updateCharacter(this.character?.id, value.level, value.isLadder, value.isExpansion, selectedRunes)
+              .subscribe();
+          });
+      });
+          
+      this.filterService.getItemTypes()
+      .subscribe((itemTypes) => {
+        itemTypes.forEach(itemType => {
+          this.filterForm.addControl(itemType.id, new FormControl(false));
+        });
+
+        this.armors = itemTypes.filter(it => it.group === 'Armor');
+        this.weapons = itemTypes.filter(it => it.group === 'Weapon');
+      });
   }
 
-  setCharacter(character: Character)
-  {
-    this.character = character;    
+  setCharacter(character: Character) {
+    this.character = character;
     this.characterIndex = this.characters.indexOf(this.character.id) + 1;
 
     this.classImage = `../assets/classes/${this.character.class}.gif`;
 
-    this.characterForm.controls['level'].setValue(character.level, {onlySelf: true, emitEvent: false})
-    this.characterForm.controls['isLadder'].setValue(character.isLadder, {onlySelf: true, emitEvent: false})
-    this.characterForm.controls['isExpansion'].setValue(character.isExpansion, {onlySelf: true, emitEvent: false})
+    this.characterForm.controls['level'].setValue(character.level, { onlySelf: true, emitEvent: false })
+    this.characterForm.controls['isLadder'].setValue(character.isLadder, { onlySelf: true, emitEvent: false })
+    this.characterForm.controls['isExpansion'].setValue(character.isExpansion, { onlySelf: true, emitEvent: false })
     this.runes.forEach(rune => {
-      this.characterForm.controls[rune.id].setValue(character.runes.some(cr => cr.id === rune.id), {onlySelf: true, emitEvent: false});
+      this.characterForm.controls[rune.id].setValue(character.runes.some(cr => cr.id === rune.id), { onlySelf: true, emitEvent: false });
     });
   }
 
@@ -153,9 +158,31 @@ export class AppComponent implements OnInit {
       });
   }
 
-  public getRuneWords() : void {
+  public getAllRuneWords(): void {
     this.runeWords = undefined;
-    this.filterService.getRuneWords()
+    this.filterService.getAllRuneWords()
+      .subscribe(runeWords => {
+        this.runeWords = runeWords
+      });
+  }
+
+  public getRuneWords(): void {
+    this.runeWords = undefined;
+    var itemTypes: ItemType[] = [];
+    var runes: Rune[] = [];
+
+    this.armors.forEach(armor => {
+      if (this.filterForm.get(armor.id)?.value) itemTypes.push(armor);
+    })
+    this.weapons.forEach(weapon => {
+      if (this.filterForm.get(weapon.id)?.value) itemTypes.push(weapon);
+    })
+
+    this.runes.forEach(rune => {
+      if (this.characterForm.get(rune.id)?.value) runes.push(rune);
+    })
+
+    this.filterService.getRuneWords(itemTypes, runes)
       .subscribe(runeWords => {
         this.runeWords = runeWords
       });
