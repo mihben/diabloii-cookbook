@@ -9,5 +9,14 @@ namespace DiabloII_Cookbook.Application.Mappers
         {
             return new ItemType(entity.Id, entity.Group, entity.Name);
         }
+        public static ItemTypeEntity ToEntity(this ItemType dto)
+        {
+            return new ItemTypeEntity
+            {
+                Id = dto.Id,
+                Group = dto.Group,
+                Name = dto.Name
+            };
+        }
     }
 }

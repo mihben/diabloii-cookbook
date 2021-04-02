@@ -1,3 +1,4 @@
+using DiabloII_Cookbook.Api.Queries;
 using DiabloII_Cookbook.Application.QueryHandlers;
 using DiabloII_Cookbook.Application.Wireup;
 using LightInject.Microsoft.AspNetCore.Hosting;
@@ -27,14 +28,15 @@ namespace DiabloII_Cookbook.Web
                 })
                 .UseRequesting((builder) =>
                 {
-                    builder.RegistrateHandlers((register) => register.RegistrateHandlerFromAssemblyOf<GetRunesQueryHandler>());
+                    builder.RegistrateHandlers<GetRunesQueryHandler>();
+                    builder.RegistrateValidators<GetRunesQuery>();
 
                     builder.RegistrateCorrelation();
 
-                    builder.RegistrateRequestReceivers((builder) =>
+                    builder.RegistrateRequestReceivers((register) =>
                     {
-                        builder.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
-                        builder.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
+                        register.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
+                        register.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
                     });
                 })
                 .ConfigureServices((services) =>

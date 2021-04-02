@@ -1,4 +1,5 @@
 ﻿using DiabloII_Cookbook.Api.DataTransferObjects;
+using FluentValidation;
 using Netension.Request;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,17 @@ namespace DiabloII_Cookbook.Api.Commands
             Runes = runes;
             IsExpansion = isExpansion;
             IsLadder = isLadder;
+        }
+    }
+
+    public class UpdateCharacterCommandValidator : AbstractValidator<UpdateCharacterCommand>
+    {
+        public UpdateCharacterCommandValidator()
+        {
+            RuleFor(c => c.Id)
+                .NotEmpty();
+            RuleFor(c => c.Level)
+                .ExclusiveBetween(1, 99);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Netension.Request;
+﻿using FluentValidation;
+using Netension.Request;
 
 namespace DiabloII_Cookbook.Api.Commands
 {
@@ -17,6 +18,19 @@ namespace DiabloII_Cookbook.Api.Commands
             Level = level;
             IsLadder = isLadder;
             IsExpansion = isExpansion;
+        }
+    }
+
+    public class CreateCharacterCommandValidator : AbstractValidator<CreateCharacterCommand>
+    {
+        public CreateCharacterCommandValidator()
+        {
+            RuleFor(c => c.Class)
+                .NotEmpty();
+            RuleFor(c => c.Class)
+                .NotEmpty();
+            RuleFor(c => c.Level)
+                .ExclusiveBetween(1, 99);
         }
     }
 }
