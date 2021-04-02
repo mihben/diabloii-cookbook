@@ -187,4 +187,18 @@ export class AppComponent implements OnInit {
         this.runeWords = runeWords
       });
   }
+
+  public selectWeapons() {
+    var value = !this.weapons.every(weapon => this.filterForm.get(weapon.id)?.value);
+    this.weapons.forEach((weapon) => {
+      this.filterForm.get(weapon.id)?.setValue(value, { emitEvent: false })
+    })
+  }
+
+  public selectArmors() {
+    var value = !this.armors.every(armor => this.filterForm.get(armor.id)?.value);
+    this.armors.forEach((armor) => {
+      this.filterForm.get(armor.id)?.setValue(value, { emitEvent: false })
+    })
+  }
 }
