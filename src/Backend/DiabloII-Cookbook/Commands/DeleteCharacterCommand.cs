@@ -1,4 +1,5 @@
-﻿using Netension.Request;
+﻿using FluentValidation;
+using Netension.Request;
 using System;
 
 namespace DiabloII_Cookbook.Api.Commands
@@ -10,6 +11,15 @@ namespace DiabloII_Cookbook.Api.Commands
         public DeleteCharacterCommand(Guid id)
         {
             Id = id;
+        }
+    }
+
+    public class DeleteCharacterCommandValidator : AbstractValidator<DeleteCharacterCommand>
+    {
+        public DeleteCharacterCommandValidator()
+        {
+            RuleFor(c => c.Id)
+                .NotEmpty();
         }
     }
 }
