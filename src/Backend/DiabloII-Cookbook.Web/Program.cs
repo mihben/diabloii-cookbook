@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
 using Serilog;
 
@@ -42,7 +43,7 @@ namespace DiabloII_Cookbook.Web
                 .ConfigureServices((services) =>
                 {
                     services.AddControllers()
-                        .AddRequestReceiverController(); ;
+                        .AddRequestReceiverController();
 
                     services.AddDatabase();
 
@@ -52,6 +53,8 @@ namespace DiabloII_Cookbook.Web
                 {
                     webBuilder.Configure((app) =>
                     {
+                        app.UseErrorHandling();
+
                         app.UseCors((builder) =>
                         {
                             builder.AllowAnyOrigin();
