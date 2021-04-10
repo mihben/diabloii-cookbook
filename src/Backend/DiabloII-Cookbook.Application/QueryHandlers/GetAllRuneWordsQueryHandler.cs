@@ -1,6 +1,6 @@
 ﻿using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Contexts;
+using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

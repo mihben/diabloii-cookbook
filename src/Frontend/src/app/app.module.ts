@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';  
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';  
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,11 +13,32 @@ import { CharacterService } from 'src/shared/services/character.service';
 import { RuneComponent } from './components/rune/rune.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CreateCharacterComponent } from './components/create-character/create-character.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatSelectModule} from '@angular/material/select';
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { FilterService } from 'src/shared/services/filter.service';
 import { RuneWordComponent } from './components/rune-word/rune-word.component';
+import { AuthGuardService } from 'src/shared/services/auth-guard.service';
+import { AuthorizationInterceptor } from 'src/shared/interceptors/authorization.interceptor';
+import { AuthConfig, OAuthModule, OAuthModuleConfig, OAuthStorage } from 'angular-oauth2-oidc';
+import { DiabloiiComponent } from './components/diabloii/diabloii.component';
+
+export const authConfig: AuthConfig = {
+  issuer: "https://eu.battle.net/oauth",
+  tokenEndpoint: "https://eu.battle.net/oauth/token",
+  redirectUri: window.location.origin,
+  clientId: "e74e669060b7418aa8ca66ac7ba82395",
+  dummyClientSecret: "veq2ngqk3WhqFhq8iylHZm8FDFp0ZRh1",
+  useHttpBasicAuth: true,
+  responseType: 'code',
+  scope: 'openid',
+  oidc: true,
+  showDebugInformation: true
+}
+
+export function storageFactory() : OAuthStorage {
+  return localStorage
+}
 
 @NgModule({
   declarations: [
@@ -25,7 +46,8 @@ import { RuneWordComponent } from './components/rune-word/rune-word.component';
     RuneComponent,
     CreateCharacterComponent,
     DeleteConfirmationDialogComponent,
-    RuneWordComponent
+    RuneWordComponent,
+    DiabloiiComponent
   ],
   imports: [
     BrowserModule,
@@ -37,9 +59,14 @@ import { RuneWordComponent } from './components/rune-word/rune-word.component';
     MatDialogModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OAuthModule.forRoot()
   ],
-  providers: [RuneService, CharacterService, FormBuilder, FilterService],
+  providers: [RuneService, CharacterService, FormBuilder, FilterService, AuthGuardService,
+    { provide: AuthConfig, useValue: authConfig },
+    { provide: OAuthStorage, useFactory: storageFactory },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+  ],
   entryComponents: [CreateCharacterComponent],
   bootstrap: [AppComponent]
 })

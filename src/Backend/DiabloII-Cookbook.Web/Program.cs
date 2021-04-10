@@ -1,12 +1,15 @@
 using DiabloII_Cookbook.Api.Queries;
 using DiabloII_Cookbook.Application.QueryHandlers;
 using DiabloII_Cookbook.Application.Wireup;
+using DiabloII_Cookbook.Web.Middlewares;
 using LightInject.Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
 using Serilog;
@@ -40,7 +43,7 @@ namespace DiabloII_Cookbook.Web
                         register.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
                     });
                 })
-                .ConfigureServices((services) =>
+                .ConfigureServices((context, services) =>
                 {
                     services.AddControllers()
                         .AddRequestReceiverController();
@@ -48,6 +51,15 @@ namespace DiabloII_Cookbook.Web
                     services.AddDatabase();
 
                     services.AddCors();
+
+                    IdentityModelEventSource.ShowPII = true;
+
+                    services.AddAuthorization(options =>
+                    {
+                        options.AddPolicy("battle-tag", builder => builder.RequireClaim("battle_tag"));
+                    });
+                    services.AddAuthentication("blizzard")
+                        .AddJwtBearer("blizzard", options => context.Configuration.GetSection("Authentication:Blizzard").Bind(options));
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -64,10 +76,16 @@ namespace DiabloII_Cookbook.Web
 
                         app.UseRouting();
 
+                        app.UseAuthentication();
+                        app.UseAuthorization();
+
+                        app.UseMiddleware<AccountContextMiddleware>();
+
                         app.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();
-                            endpoints.MapRequestReceiver("/api");
+                            endpoints.MapRequestReceiver("/api")
+                                .RequireAuthorization("battle-tag");
                         });
                     });
                 });

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Api", "DiabloII-Cookbook\DiabloII-Cookbook.Api.csproj", "{9B24B6FB-682A-4790-9D3C-1724ADB43591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.Api", "DiabloII-Cookbook\DiabloII-Cookbook.Api.csproj", "{9B24B6FB-682A-4790-9D3C-1724ADB43591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Application", "DiabloII-Cookbook.Application\DiabloII-Cookbook.Application.csproj", "{B15AD36A-FF28-4933-B088-642CC0C1D010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.Application", "DiabloII-Cookbook.Application\DiabloII-Cookbook.Application.csproj", "{B15AD36A-FF28-4933-B088-642CC0C1D010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Web", "DiabloII-Cookbook.Web\DiabloII-Cookbook.Web.csproj", "{AF890994-8D08-4F6F-A7E5-024430FB6F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.Web", "DiabloII-Cookbook.Web\DiabloII-Cookbook.Web.csproj", "{AF890994-8D08-4F6F-A7E5-024430FB6F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.Test", "DiabloII-Cookbook.Test\DiabloII-Cookbook.Test.csproj", "{8155A4EF-C910-45D9-9105-FD37672A6DE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.Test", "DiabloII-Cookbook.Test\DiabloII-Cookbook.Test.csproj", "{8155A4EF-C910-45D9-9105-FD37672A6DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.ScriptGenerator", "DiabloII-Cookbook.ScriptGenerator\DiabloII-Cookbook.ScriptGenerator.csproj", "{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.ScriptGenerator", "DiabloII-Cookbook.ScriptGenerator\DiabloII-Cookbook.ScriptGenerator.csproj", "{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contexts\CharacterContext.cs" />
-    <Compile Remove="Contexts\FilterContext.cs" />
+    <Compile Remove="DatabaseContexts\CharacterContext.cs" />
+    <Compile Remove="DatabaseContexts\FilterContext.cs" />
   </ItemGroup>
 
   <ItemGroup>

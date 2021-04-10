@@ -1,10 +1,34 @@
 ﻿using DiabloII_Cookbook.Application.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
-namespace DiabloII_Cookbook.Application.Contexts
+namespace DiabloII_Cookbook.Application.DatabaseContexts
 {
     public static class ModelBuilderExtensions
     {
+        public static void BuildAccountEntity(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AccountEntity>()
+                   .ToTable("accounts")
+                   .HasKey(re => new { re.Id });
+
+            modelBuilder.Entity<AccountEntity>()
+                .Property(re => re.Id)
+                .HasColumnName("id")
+                .IsConcurrencyToken();
+            modelBuilder.Entity<AccountEntity>()
+                .Property(re => re.BattleTag)
+                .HasColumnName("battle_tag");
+            modelBuilder.Entity<AccountEntity>()
+                .HasMany(re => re.Characters)
+                .WithOne(ce => ce.Account)
+                .HasForeignKey(ce => ce.AccountId)
+                .IsRequired();
+        }
+
         public static void BuildRuneEntity(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RuneEntity>()
@@ -52,7 +76,8 @@ namespace DiabloII_Cookbook.Application.Contexts
 
             modelBuilder.Entity<CharacterEntity>()
                 .Property(ce => ce.Id)
-                .HasColumnName("id");
+                .HasColumnName("id")
+                .IsConcurrencyToken();
             modelBuilder.Entity<CharacterEntity>()
                 .Property(ce => ce.Class)
                 .HasColumnName("class")
@@ -64,7 +89,8 @@ namespace DiabloII_Cookbook.Application.Contexts
             modelBuilder.Entity<CharacterEntity>()
                 .Property(ce => ce.Level)
                 .HasColumnName("level")
-                .IsRequired();
+                .IsRequired()
+                .IsConcurrencyToken();
             modelBuilder.Entity<CharacterEntity>()
                 .Property(ce => ce.IsLadder)
                 .HasColumnName("is_ladder")
@@ -77,6 +103,16 @@ namespace DiabloII_Cookbook.Application.Contexts
                 .HasMany(ce => ce.Runes)
                 .WithOne((cre) => cre.Character)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CharacterEntity>()
+                .HasOne(ce => ce.Account)
+                .WithMany(ae => ae.Characters)
+                .HasForeignKey(ce => ce.AccountId)
+                .HasConstraintName("fk_character_account")
+                .IsRequired();
+            modelBuilder.Entity<CharacterEntity>()
+                .Property(ce => ce.AccountId)
+                .HasColumnName("account_id")
+                .IsRequired();
         }
 
         public static void BuildCharacterRuneEntity(this ModelBuilder modelBuilder)
@@ -264,6 +300,16 @@ namespace DiabloII_Cookbook.Application.Contexts
                 .WithMany(rwe => rwe.ItemTypes)
                 .HasForeignKey(rwite => rwite.RuneWordId)
                 .HasConstraintName("fk_rune_word_item_type_rune_word");
+        }
+    }
+
+    internal class LastModifiedValueGenerator : ValueGenerator
+    {
+        public override bool GeneratesTemporaryValues { get; }
+
+        protected override object NextValue([NotNull] EntityEntry entry)
+        {
+            return DateTime.UtcNow;
         }
     }
 }

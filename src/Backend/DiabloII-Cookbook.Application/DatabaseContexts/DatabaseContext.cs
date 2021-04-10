@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DiabloII_Cookbook.Application.Contexts
+namespace DiabloII_Cookbook.Application.DatabaseContexts
 {
     public class DatabaseContext : DbContext
     {
@@ -10,6 +10,7 @@ namespace DiabloII_Cookbook.Application.Contexts
         public DbSet<RuneWordEntity> RuneWords { get; set; }
         public DbSet<RuneEntity> Runes { get; set; }
         public DbSet<CharacterEntity> Characters { get; set; }
+        public DbSet<AccountEntity> Accounts { get; set; }
 
         public DatabaseContext([NotNull] DbContextOptions<DatabaseContext> options)
             : base(options)
@@ -19,6 +20,7 @@ namespace DiabloII_Cookbook.Application.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.BuildAccountEntity();
             modelBuilder.BuildRuneEntity();
             modelBuilder.BuildCharacterEntity();
             modelBuilder.BuildCharacterRuneEntity();

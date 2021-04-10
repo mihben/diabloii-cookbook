@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable } from 'rxjs';
 import { Character } from '../models/character.model';
 import { Rune } from '../models/rune.model';
@@ -9,13 +10,12 @@ import { Rune } from '../models/rune.model';
 })
 export class CharacterService {
 
-  constructor(private client: HttpClient) { }
+  constructor(private client: HttpClient, private authService: OAuthService) { }
 
   getCharacters(): Observable<string[]> {
     return this.client.post<string[]>("http://localhost:5000/api", {}, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Queries.GetCharactersQuery, DiabloII-Cookbook.Api',
-        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
         'Content-Type': "application/json"
       }
     });
@@ -25,7 +25,6 @@ export class CharacterService {
     return this.client.post<Character>("http://localhost:5000/api", { "Id": id }, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Queries.GetCharacterDetailQuery, DiabloII-Cookbook.Api',
-        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
         'Content-Type': "application/json"
       }
     });
@@ -35,7 +34,6 @@ export class CharacterService {
     return this.client.post<string[]>("http://localhost:5000/api", {}, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Queries.GetClassesQuery, DiabloII-Cookbook.Api',
-        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
         'Content-Type': "application/json"
       }
     });
@@ -45,7 +43,6 @@ export class CharacterService {
     return this.client.post("http://localhost:5000/api", character, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Commands.CreateCharacterCommand, DiabloII-Cookbook.Api',
-        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
         'Content-Type': "application/json"
       }
     });
@@ -55,7 +52,6 @@ export class CharacterService {
     return this.client.post("http://localhost:5000/api", { id: id }, {
       headers: {
         'Message-Type': 'DiabloII_Cookbook.Api.Commands.DeleteCharacterCommand, DiabloII-Cookbook.Api',
-        'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
         'Content-Type': "application/json"
       }
     });
@@ -65,7 +61,6 @@ export class CharacterService {
       return this.client.post("http://localhost:5000/api", { id: id, level: level, isLadder: isLadder, isExpansion: isExpansion, runes: runes }, {
         headers: {
           'Message-Type': 'DiabloII_Cookbook.Api.Commands.UpdateCharacterCommand, DiabloII-Cookbook.Api',
-          'Correlation-Id': '{6073C47F-CB0B-41B2-B8C8-925A283AC4BD}',
           'Content-Type': "application/json"
         }
       });
