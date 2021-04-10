@@ -1,5 +1,5 @@
-﻿using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Enumerations;
+﻿using DiabloII_Cookbook.Api.Enumerations;
+using DiabloII_Cookbook.Api.Queries;
 using Microsoft.Extensions.Logging;
 using Netension.Core;
 using Netension.Request.Abstraction.Handlers;

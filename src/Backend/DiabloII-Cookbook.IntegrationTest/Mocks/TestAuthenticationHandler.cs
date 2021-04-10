@@ -14,7 +14,7 @@ namespace DiabloII_Cookbook.IntegrationTest.Mocks
 
     public class TestAuthenticationHandler : AuthenticationHandler<MockAuthenticationSchemeOptions>
     {
-        public TestAuthenticationHandler(IOptionsMonitor<MockAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) 
+        public TestAuthenticationHandler(IOptionsMonitor<MockAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         {
         }

@@ -34,7 +34,8 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
             character.Runes.Clear();
             foreach (var rune in command.Runes)
             {
-                character.Runes.Add(new CharacterRuneEntity {
+                character.Runes.Add(new CharacterRuneEntity
+                {
                     Character = character,
                     CharacterId = character.Id,
                     Rune = rune.ToEntity(),

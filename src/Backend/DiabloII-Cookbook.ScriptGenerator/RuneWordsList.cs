@@ -1,5 +1,5 @@
-﻿using DiabloII_Cookbook.Application.Entities;
-using DiabloII_Cookbook.Application.Enumerations;
+﻿using DiabloII_Cookbook.Api.Enumerations;
+using DiabloII_Cookbook.Application.Entities;
 using Netension.Core;
 using System.Collections.Generic;
 
@@ -84,7 +84,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("All Resistances +30")
                             .AddProperty("Damage Reduced By 7"));
 
-            result.Add(new RuneWordEntity { Name = "Bramble", Level = 61,  }
+            result.Add(new RuneWordEntity { Name = "Bramble", Level = 61, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Ral")
@@ -124,7 +124,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Prevent Monster Heal")
                             .AddProperty("Knockback"));
 
-            result.Add(new RuneWordEntity { Name = "Breath of the Dying", Level = 69,  }
+            result.Add(new RuneWordEntity { Name = "Breath of the Dying", Level = 69, }
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
                             .AddItemType(ItemTypeEnumeration.Hammer.Name)
@@ -187,7 +187,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Replenish Life +12")
                             .AddProperty("30% Better Chance of Getting Magic Items"));
 
-            result.Add(new RuneWordEntity { Name = "Chains of Honor", Level = 63,  }
+            result.Add(new RuneWordEntity { Name = "Chains of Honor", Level = 63, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Dol")
@@ -224,7 +224,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+10 To Strength")
                             .AddProperty("+15 Life After Each Demon Kill"));
 
-            result.Add(new RuneWordEntity { Name = "Crescent Moon", Level = 47,  }
+            result.Add(new RuneWordEntity { Name = "Crescent Moon", Level = 47, }
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
                             .AddItemType(ItemTypeEnumeration.Polearm.Name)
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
@@ -268,7 +268,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Level 22 {skill} (15 Charges)", SkillEnumeration.BloodGolem.Name)
                             .AddProperty("Requirements -20% "));
 
-            result.Add(new RuneWordEntity { Name = "Delirium", Level = 51,  }
+            result.Add(new RuneWordEntity { Name = "Delirium", Level = 51, }
                             .AddItemType(ItemTypeEnumeration.Helmet.Name)
 
                             .AddIngredient("Lem")
@@ -389,7 +389,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+2 To Mana After Each Kill")
                             .AddProperty("Reduces All Vendor Prices 15%"));
 
-            result.Add(new RuneWordEntity { Name = "Enigma", Level = 65,  }
+            result.Add(new RuneWordEntity { Name = "Enigma", Level = 65, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Jah")
@@ -422,7 +422,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Fire Resist +30%")
                             .AddProperty("Damage Reduced By 7"));
 
-            result.Add(new RuneWordEntity { Name = "Eternity", Level = 63,  }
+            result.Add(new RuneWordEntity { Name = "Eternity", Level = 63, }
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
                             .AddItemType(ItemTypeEnumeration.Mace.Name)
@@ -450,7 +450,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("30% Better Chance Of Getting Magic Items")
                             .AddProperty("Level 8 {skill} (88 Charges)", SkillEnumeration.Revive.Name));
 
-            result.Add(new RuneWordEntity { Name = "Exile", Level = 57,  }
+            result.Add(new RuneWordEntity { Name = "Exile", Level = 57, }
                             .AddItemType(ItemTypeEnumeration.Shield.Name)
 
                             .AddIngredient("Vex")
@@ -491,7 +491,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("10% Reanimate As: Returned")
                             .AddProperty("75% Extra Gold From Monsters"));
 
-            result.Add(new RuneWordEntity { Name = "Famine", Level = 65,  }
+            result.Add(new RuneWordEntity { Name = "Famine", Level = 65, }
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
                             .AddItemType(ItemTypeEnumeration.Hammer.Name)
 
@@ -572,7 +572,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+5 To {skill} (Barbarian Only)", SkillEnumeration.Frenzy.Name)
                             .AddProperty("Prevent Monster Heal"));
 
-            result.Add(new RuneWordEntity { Name = "Gloom", Level = 47,  }
+            result.Add(new RuneWordEntity { Name = "Gloom", Level = 47, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Fal")
@@ -809,7 +809,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Adds 3-14 Cold damage")
                             .AddProperty("7% Life stolen per hit"));
 
-            result.Add(new RuneWordEntity { Name = "Kingslayer", Level = 53,  }
+            result.Add(new RuneWordEntity { Name = "Kingslayer", Level = 53, }
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
 
@@ -1056,7 +1056,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("All Resistances +20-30 (varies)")
                             .AddProperty("Requirements -20%"));
 
-            result.Add(new RuneWordEntity { Name = "Passion", Level = 43,  }
+            result.Add(new RuneWordEntity { Name = "Passion", Level = 43, }
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
                             .AddItemType(ItemTypeEnumeration.Axe.Name)
                             .AddItemType(ItemTypeEnumeration.Mace.Name)
@@ -1169,7 +1169,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+5% To Maximum Poison Resist")
                             .AddProperty("Fire Resist +30%"));
 
-            result.Add(new RuneWordEntity { Name = "Prudence", Level = 49,  }
+            result.Add(new RuneWordEntity { Name = "Prudence", Level = 49, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Mal")
@@ -1339,7 +1339,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("Swords: +75 Poison Damage Over 5 Seconds")
                             .AddProperty("Swords: 7% Life Stolen Per Hit"));
 
-            result.Add(new RuneWordEntity { Name = "Splendor", Level = 37,  }
+            result.Add(new RuneWordEntity { Name = "Splendor", Level = 37, }
                             .AddItemType(ItemTypeEnumeration.Shield.Name)
 
                             .AddIngredient("Eth")
@@ -1386,7 +1386,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+2 to Mana after each Kill")
                             .AddProperty("+1 to Light Radius"));
 
-            result.Add(new RuneWordEntity { Name = "Stone", Level = 47,  }
+            result.Add(new RuneWordEntity { Name = "Stone", Level = 47, }
                             .AddItemType(ItemTypeEnumeration.BodyArmor.Name)
 
                             .AddIngredient("Shael")
@@ -1520,7 +1520,7 @@ namespace DiabloII_Cookbook.ScriptGenerator
                             .AddProperty("+13 to mana")
                             .AddProperty("Magic Damage Reduced by 4"));
 
-            result.Add(new RuneWordEntity { Name = "Wind", Level = 61,  }
+            result.Add(new RuneWordEntity { Name = "Wind", Level = 61, }
                             .AddItemType(ItemTypeEnumeration.Sword.Name)
                             .AddItemType(ItemTypeEnumeration.Dagger.Name)
                             .AddItemType(ItemTypeEnumeration.Axe.Name)

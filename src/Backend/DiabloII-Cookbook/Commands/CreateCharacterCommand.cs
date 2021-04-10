@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using DiabloII_Cookbook.Api.Enumerations;
+using DiabloII_Cookbook.Api.Extensions;
+using FluentValidation;
+using Netension.Core;
 using Netension.Request;
 
 namespace DiabloII_Cookbook.Api.Commands
@@ -25,10 +28,9 @@ namespace DiabloII_Cookbook.Api.Commands
     {
         public CreateCharacterCommandValidator()
         {
-            RuleFor(c => c.Class)
-                .NotEmpty();
-            //RuleFor(c => c.Level)
-            //    .ExclusiveBetween(1, 99);
+            RuleFor(c => c.Class).NotEmpty().IsValueOf(Enumeration.GetAll<ClassEnumeration>());
+            RuleFor(c => c.Name).NotEmpty();
+            RuleFor(c => c.Level).InclusiveBetween(1, 99);
         }
     }
 }

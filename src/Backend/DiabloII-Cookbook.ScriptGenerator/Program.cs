@@ -4,9 +4,9 @@ using System.IO;
 
 namespace DiabloII_Cookbook.ScriptGenerator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var scripts = new List<string>();
             foreach (var runeWord in new RuneWordList().Values)

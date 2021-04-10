@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace DiabloII_Cookbook.Api.DataTransferObjects

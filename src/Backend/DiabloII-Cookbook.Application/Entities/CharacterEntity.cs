@@ -7,7 +7,7 @@ namespace DiabloII_Cookbook.Application.Entities
     {
         public Guid Id { get; set; }
         public AccountEntity Account { get; set; }
-        public Guid AccountId{ get; set; }
+        public Guid AccountId { get; set; }
         public string Class { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }

@@ -23,7 +23,7 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
         {
             _logger.LogDebug("Delete {id} character", command.Id);
 
-            var character = await _context.FindAsync<CharacterEntity>(new object[]{ command.Id }, cancellationToken);
+            var character = await _context.FindAsync<CharacterEntity>(new object[] { command.Id }, cancellationToken);
             _context.Remove(character);
 
             await _context.SaveChangesAsync(cancellationToken);

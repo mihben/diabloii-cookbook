@@ -1,5 +1,5 @@
-﻿using DiabloII_Cookbook.Application.Entities;
-using DiabloII_Cookbook.Application.Enumerations;
+﻿using DiabloII_Cookbook.Api.Enumerations;
+using DiabloII_Cookbook.Application.Entities;
 using Netension.Core;
 using System.Collections.Generic;
 
