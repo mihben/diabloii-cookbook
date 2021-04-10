@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DiabloII_Cookbook.Application.DatabaseContexts
 {
+
     public class DatabaseContext : DbContext
     {
         public DbSet<ItemTypeEntity> ItemTypes { get; set; }

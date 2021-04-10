@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.Test", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiabloII-Cookbook.ScriptGenerator", "DiabloII-Cookbook.ScriptGenerator\DiabloII-Cookbook.ScriptGenerator.csproj", "{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabloII-Cookbook.IntegrationTest", "DiabloII-Cookbook.IntegrationTest\DiabloII-Cookbook.IntegrationTest.csproj", "{025E59F9-D50C-44BA-B88F-B73E48A04BC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08DD3FDC-6F05-4A99-B2E9-27FE5244BACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{025E59F9-D50C-44BA-B88F-B73E48A04BC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{025E59F9-D50C-44BA-B88F-B73E48A04BC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{025E59F9-D50C-44BA-B88F-B73E48A04BC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{025E59F9-D50C-44BA-B88F-B73E48A04BC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

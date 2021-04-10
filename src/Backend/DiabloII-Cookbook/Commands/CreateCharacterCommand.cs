@@ -27,10 +27,8 @@ namespace DiabloII_Cookbook.Api.Commands
         {
             RuleFor(c => c.Class)
                 .NotEmpty();
-            RuleFor(c => c.Class)
-                .NotEmpty();
-            RuleFor(c => c.Level)
-                .ExclusiveBetween(1, 99);
+            //RuleFor(c => c.Level)
+            //    .ExclusiveBetween(1, 99);
         }
     }
 }

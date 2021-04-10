@@ -42,6 +42,11 @@ namespace DiabloII_Cookbook.Web
                         register.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
                         register.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
                     });
+
+                    builder.RegistrateRequestSenders(register =>
+                    {
+                        register.RegistrateLoopbackSender(builder => builder.UseCorrelation(), request => true);
+                    });
                 })
                 .ConfigureServices((context, services) =>
                 {
