@@ -6,8 +6,10 @@ using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,22 +27,24 @@ namespace DiabloII_Cookbook.IntegrationTest
             _factory = factory;
         }
 
-        [Fact(DisplayName = "[INT-CH001][401-Unathorized] - Create character without authentication")]
-        public async Task Character_CreateCharacterWithoutAuthentication()
+        [Fact(DisplayName = "[INT-CC001][401-Unathorized] - Create character without authentication")]
+        [Trait("Feature", "CC - Create character")]
+        public async Task CreateCharacterWithoutAuthentication()
         {
             // Arrange
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
 
             // Call /api/character POST endpoint without authentication
-            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId);
+            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 401 - Unathorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
-        [Fact(DisplayName = "[INT-CH002][202-Accepted] - Create account if not exists")]
-        public async Task Character_CreateAccount()
+        [Fact(DisplayName = "[INT-CC002][202-Accepted] - Create account if not exists")]
+        [Trait("Feature", "CC - Create character")]
+        public async Task CreateAccount()
         {
             // Arrange
             var correlationId = Guid.NewGuid();
@@ -49,7 +53,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId);
+            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
@@ -63,8 +67,9 @@ namespace DiabloII_Cookbook.IntegrationTest
             Assert.Equal("integration_test", entity.BattleTag);
         }
 
-        [Fact(DisplayName = "[INT-CH003][202-Accepted] - Create character")]
-        public async Task Character_CreateCharacter()
+        [Fact(DisplayName = "[INT-CC003][202-Accepted] - Create character")]
+        [Trait("Feature", "CC - Create character")]
+        public async Task CreateCharacter()
         {
             // Arrange
             var correlationId = Guid.NewGuid();
@@ -73,7 +78,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", command, correlationId);
+            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
@@ -90,6 +95,29 @@ namespace DiabloII_Cookbook.IntegrationTest
                                                     ce.IsExpansion == command.IsExpansion &&
                                                     ce.IsLadder == command.IsLadder &&
                                                     ce.Class == command.Class);
+        }
+
+        [Fact(DisplayName = "[INT-UC001][401-Unathorized] - Update character without authentication")]
+        [Trait("Feature", "UC - Update character")]
+        public async Task UpdateCharacterWithoutAuthentication()
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid();
+            var client = _factory.CreateClient();
+            var fixture = new Fixture();
+            var content = new
+            {
+                Level = fixture.Create<int>(),
+                IsExpansion = fixture.Create<bool>(),
+                IsLadder = fixture.Create<bool>(),
+                Runes = Enumerable.Empty<Rune>()
+            };
+
+            // Call /api/character/{id} PUT endpoint without authentication
+            var response = await client.PutAsync($"/api/character/{fixture.Create<Guid>()}", content, correlationId, TimeSpan.FromSeconds(5));
+
+            // Response with 403 - Unathorized
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }
 }

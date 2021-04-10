@@ -11,6 +11,14 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
 {
     public static class HttpClientExtensions
     {
+        public static async Task<HttpResponseMessage> PutAsync<TContent>(this HttpClient client, PathString path, TContent command, Guid correlationId, TimeSpan timeout)
+        {
+            var content = JsonContent.Create(command);
+            content.Headers.SetCorrelationId(correlationId);
+
+            return await client.PutAsync(path, content, new CancellationTokenSource(timeout).Token);
+        }
+
         public static async Task<HttpResponseMessage> PostAsync<TCommand>(this HttpClient client, PathString path, TCommand command, Guid correlationId)
             where TCommand : ICommand
         {
