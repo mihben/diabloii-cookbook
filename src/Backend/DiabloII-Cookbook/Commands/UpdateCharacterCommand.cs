@@ -10,17 +10,13 @@ namespace DiabloII_Cookbook.Api.Commands
     {
         public Guid Id { get; }
         public int Level { get; }
-        public bool IsLadder { get; }
-        public bool IsExpansion { get; }
         public IEnumerable<Rune> Runes { get; }
 
-        public UpdateCharacterCommand(Guid id, int level, bool isExpansion, bool isLadder, IEnumerable<Rune> runes)
+        public UpdateCharacterCommand(Guid id, int level, IEnumerable<Rune> runes)
         {
             Id = id;
             Level = level;
             Runes = runes;
-            IsExpansion = isExpansion;
-            IsLadder = isLadder;
         }
     }
 
@@ -28,10 +24,8 @@ namespace DiabloII_Cookbook.Api.Commands
     {
         public UpdateCharacterCommandValidator()
         {
-            RuleFor(c => c.Id)
-                .NotEmpty();
-            RuleFor(c => c.Level)
-                .ExclusiveBetween(1, 99);
+            RuleFor(c => c.Id).NotEmpty();
+            RuleFor(c => c.Level).InclusiveBetween(1, 99);
         }
     }
 }

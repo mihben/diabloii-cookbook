@@ -1,5 +1,6 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
 using DiabloII_Cookbook.Api.DataTransferObjects;
+using DiabloII_Cookbook.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,10 +35,10 @@ namespace DiabloII_Cookbook.Web.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, int level, bool isExpansion, bool isLadder, IEnumerable<Rune> runes, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdateCharacter parameter, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Create {id} character", id);
-            await _commandSender.SendAsync(new UpdateCharacterCommand(id, level, isExpansion, isLadder, runes), cancellationToken);
+            await _commandSender.SendAsync(new UpdateCharacterCommand(id, parameter.Level, parameter.Runes), cancellationToken);
             return Accepted();
         }
     }

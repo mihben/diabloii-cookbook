@@ -21,11 +21,11 @@ using Xunit.Abstractions;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {
-    public class Character_Test : IClassFixture<DiabloII_CookbookFactory>
+    public class CreateCharacter_Test : IClassFixture<DiabloII_CookbookFactory>
     {
         private readonly DiabloII_CookbookFactory _factory;
 
-        public Character_Test(DiabloII_CookbookFactory factory, ITestOutputHelper outputHelper)
+        public CreateCharacter_Test(DiabloII_CookbookFactory factory, ITestOutputHelper outputHelper)
         {
             factory.SetOutputHelper(outputHelper);
             _factory = factory;
@@ -176,58 +176,6 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             // Message - 'TestCharacter has been already created'
             Assert.Equal($"{name} has been already created", error.Message);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Fact(DisplayName = "[INT-UC001][401-Unathorized] - Update character without authentication")]
-        [Trait("Feature", "UC - Update character")]
-        public async Task UpdateCharacterWithoutAuthentication()
-        {
-            // Arrange
-            var correlationId = Guid.NewGuid();
-            var client = _factory.CreateClient();
-            var fixture = new Fixture();
-            var content = new
-            {
-                Level = fixture.Create<int>(),
-                IsExpansion = fixture.Create<bool>(),
-                IsLadder = fixture.Create<bool>(),
-                Runes = Enumerable.Empty<Rune>()
-            };
-
-            // Call /api/character/{id} PUT endpoint without authentication
-            var response = await client.PutAsync($"/api/character/{fixture.Create<Guid>()}", content, correlationId, TimeSpan.FromSeconds(5));
-
-            // Response with 403 - Unathorized
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }
 }

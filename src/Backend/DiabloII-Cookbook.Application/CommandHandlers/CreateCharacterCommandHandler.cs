@@ -38,25 +38,23 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
                 throw new VerificationException(402, $"{command.Name} has been already created");
             }
 
-            using (var transaction = await _context.Database.BeginTransactionAsync(cancellationToken))
+            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(_accountContext.BattleTag));
+            if (account == null)
             {
-                var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(_accountContext.BattleTag));
-                if (account == null)
+                account = new AccountEntity
                 {
-                    account = new AccountEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        BattleTag = _accountContext.BattleTag
-                    };
-                    await _context.Accounts.AddAsync(account, cancellationToken);
-                }
-
-                var character = new CharacterEntity { Id = id, Account = account, Class = command.Class, Name = command.Name, Level = command.Level, IsLadder = command.IsLadder, IsExpansion = command.IsExpansion };
-                await _context.Characters.AddAsync(character, cancellationToken);
-
-                await _context.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
+                    Id = Guid.NewGuid(),
+                    BattleTag = _accountContext.BattleTag
+                };
+                await _context.Accounts.AddAsync(account, cancellationToken);
             }
+
+            var character = new CharacterEntity { Id = id, Account = account, Class = command.Class, Name = command.Name, Level = command.Level, IsLadder = command.IsLadder, IsExpansion = command.IsExpansion };
+            await _context.Characters.AddAsync(character, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
         }
     }
 }
