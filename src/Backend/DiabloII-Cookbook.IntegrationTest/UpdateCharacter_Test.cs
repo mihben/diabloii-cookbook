@@ -1,30 +1,30 @@
 ﻿using AutoFixture;
+using DiabloII_Cookbook.Api.DataTransferObjects;
+using DiabloII_Cookbook.Application.DatabaseContexts;
+using DiabloII_Cookbook.Application.Entities;
+using DiabloII_Cookbook.Application.Mappers;
+using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Netension.Request.NetCore.Asp.ValueObjects;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System;
-using Xunit;
-using DiabloII_Cookbook.Api.DataTransferObjects;
-using DiabloII_Cookbook.IntegrationTest.Extensions;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading;
-using Netension.Request.NetCore.Asp.ValueObjects;
+using System.Threading.Tasks;
+using Xunit;
 using Xunit.Abstractions;
-using DiabloII_Cookbook.Application.Entities;
-using System.Xml.Linq;
-using DiabloII_Cookbook.Application.DatabaseContexts;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using DiabloII_Cookbook.Application.Mappers;
-using System.Collections.Generic;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {
-    public class UpdateCharacter_Test : IClassFixture<DiabloII_CookbookFactory>
+    public class UpdateCharacter_Test : IClassFixture<DiabloII_CookbookFactory>, IDisposable
     {
         private readonly DiabloII_CookbookFactory _factory;
+        private bool _disposedValue;
 
         public UpdateCharacter_Test(DiabloII_CookbookFactory factory, ITestOutputHelper outputHelper)
         {
@@ -215,6 +215,24 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             // Level update to 2
             Assert.Collection(entity.Runes, r => Assert.Equal(runeEntity.Id, r.Rune.Id));
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _factory.Reset();
+                }
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

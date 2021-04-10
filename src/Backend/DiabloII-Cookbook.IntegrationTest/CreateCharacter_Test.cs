@@ -9,11 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Netension.Request.NetCore.Asp.ValueObjects;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -21,9 +19,10 @@ using Xunit.Abstractions;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {
-    public class CreateCharacter_Test : IClassFixture<DiabloII_CookbookFactory>
+    public class CreateCharacter_Test : IClassFixture<DiabloII_CookbookFactory>, IDisposable
     {
         private readonly DiabloII_CookbookFactory _factory;
+        private bool _disposedValue;
 
         public CreateCharacter_Test(DiabloII_CookbookFactory factory, ITestOutputHelper outputHelper)
         {
@@ -176,6 +175,26 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             // Message - 'TestCharacter has been already created'
             Assert.Equal($"{name} has been already created", error.Message);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _factory.Reset();
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
