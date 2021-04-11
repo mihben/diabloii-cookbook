@@ -1,12 +1,10 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
-using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Netension.Request.Abstraction.Senders;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,8 +35,16 @@ namespace DiabloII_Cookbook.Web.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdateCharacter parameter, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Create {id} character", id);
+            _logger.LogDebug("Update {id} character", id);
             await _commandSender.SendAsync(new UpdateCharacterCommand(id, parameter.Level, parameter.Runes), cancellationToken);
+            return Accepted();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            _logger.LogDebug("Delete {id} character", id);
+            await _commandSender.SendAsync(new DeleteCharacterCommand(id), cancellationToken);
             return Accepted();
         }
     }

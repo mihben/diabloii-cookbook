@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Netension.Extensions.Correlation.Defaults;
 using Netension.Request.Abstraction.Requests;
 using System;
 using System.Net.Http;
@@ -11,6 +12,12 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
 {
     public static class HttpClientExtensions
     {
+        public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient client, PathString path, Guid correlationId, TimeSpan timeout)
+        {
+            client.DefaultRequestHeaders.Add(CorrelationDefaults.CorrelationId, correlationId.ToString());
+            return await client.DeleteAsync(path, new CancellationTokenSource(timeout).Token);
+        }
+
         public static async Task<HttpResponseMessage> PutAsync<TContent>(this HttpClient client, PathString path, TContent command, Guid correlationId, TimeSpan timeout)
         {
             var content = JsonContent.Create(command);
