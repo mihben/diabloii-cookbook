@@ -6,7 +6,7 @@ name: Continuous Integration
 # events but only for the develop branch
 on:
   push:
-    branches: [feature/dockerize-backend]
+    branches: [feature/dockerize-frontend]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
