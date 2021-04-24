@@ -35,8 +35,8 @@ $diabloii-cookbook-theme: mat-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; overflow-y: hidden; }
-body { padding-top: 12px; font-family: Roboto, "Helvetica Neue", sans-serif; background-image:url('assets/Background.gif'); background-repeat: no-repeat; background-size: 35%; background-position: center; background-color: black; font-size: 14px; }
+html, body { height: 100%; margin: 0; padding: 0; overflow-y: hidden; }
+body { font-family: Diablo Light, Diablo Heavy; background-image:url('assets/Background.gif'); background-repeat: no-repeat; background-size: 35%; background-position: center; background-color: black; font-size: 14px; }
 
 @font-face {
   font-family: Diablo Light;
@@ -50,7 +50,6 @@ body { padding-top: 12px; font-family: Roboto, "Helvetica Neue", sans-serif; bac
 
 :root {
   --magic: #197917;
-  --rune: #5049b4;
   --text: #7b7b7b;
   --rune: #CE8800;
 }
@@ -60,12 +59,12 @@ input[type=checkbox] {
   background-image: url('/assets/icons/Unchecked.png');
   padding: 9px;
   vertical-align: middle;
-  background-repeat: no-repeat;
+  background-repeat: round;
 }
 
 input[type=checkbox]:checked {
   background-image: url('/assets/icons/Checked.png');
-  background-repeat: no-repeat;
+  background-repeat: round;
 }
 
 label {
@@ -79,6 +78,7 @@ div.main {
   height: 100%;
   display: flex;
   flex-flow: row wrap;
+  padding-top: 4px;
 }
 
 div.panel {
@@ -171,7 +171,7 @@ div.button-row {
 
 button.text-button {
   background-image: url('assets/icons/Button.png');
-  background-size: 140px 25px;
+  background-repeat: round;
   height: 25px;
   width: 140px;
   border-width: 0px;
@@ -183,9 +183,7 @@ button.text-button {
 input[type=text] {
   background-image: url('/assets/icons/TextBox.png');
   border: hidden;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100%;
+  background-repeat: round;
   height: 25px;
   color: var(--text);
   padding-left: 8px;
@@ -232,8 +230,7 @@ div.tool-tip:hover .tool-tip-text {
 
 .select {  
   background-image: url('/assets/icons/ComboBox.png');
-  background-size: contain;
-  background-repeat: no-repeat;
+  background-repeat: round;
   height: 25px;
   color: var(--text) !important;
   padding-left: 8px;

@@ -15,13 +15,11 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
     public class CreateCharacterCommandHandler : ICommandHandler<CreateCharacterCommand>
     {
         private readonly DatabaseContext _context;
-        private readonly IAccountContext _accountContext;
         private readonly ILogger<CreateCharacterCommandHandler> _logger;
 
-        public CreateCharacterCommandHandler(DatabaseContext context, IAccountContext accountContext, ILogger<CreateCharacterCommandHandler> logger)
+        public CreateCharacterCommandHandler(DatabaseContext context, ILogger<CreateCharacterCommandHandler> logger)
         {
             _context = context;
-            _accountContext = accountContext;
             _logger = logger;
         }
 
@@ -32,20 +30,20 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
             var id = Guid.NewGuid();
             _logger.LogDebug("Insert {id} character", id);
 
-            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(_accountContext.BattleTag) && c.Name.ToLower().Equals(command.Name.ToLower())))
+            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(command.BattleTag) && c.Name.ToLower().Equals(command.Name.ToLower())))
             {
                 _logger.LogInformation("{name} has been already created", command.Name);
                 throw new VerificationException(402, $"{command.Name} has been already created");
             }
 
             using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(_accountContext.BattleTag));
+            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(command.BattleTag));
             if (account == null)
             {
                 account = new AccountEntity
                 {
                     Id = Guid.NewGuid(),
-                    BattleTag = _accountContext.BattleTag
+                    BattleTag = command.BattleTag
                 };
                 await _context.Accounts.AddAsync(account, cancellationToken);
             }

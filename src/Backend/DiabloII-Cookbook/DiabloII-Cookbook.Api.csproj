@@ -11,8 +11,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Netension.Core" Version="1.1.0" />
-    <PackageReference Include="Netension.Request" Version="0.0.1-beta.59" />
+    <PackageReference Include="Netension.Core" Version="1.1.1-beta.7" />
+    <PackageReference Include="Netension.Request" Version="0.0.1-beta.70" />
   </ItemGroup>
 
 </Project>

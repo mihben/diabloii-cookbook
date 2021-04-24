@@ -4,6 +4,7 @@ using DiabloII_Cookbook.Application.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 
@@ -18,10 +19,6 @@ namespace DiabloII_Cookbook.Application.Wireup
                 .ValidateDataAnnotations();
 
             services.AddDbContext<DatabaseContext>(ConfigureDataContext);
-
-            services.AddSingleton<AccountContext>();
-            services.AddSingleton<IAccountContext>(provider => provider.GetRequiredService<AccountContext>());
-            services.AddSingleton<IAccountContextMutator>(provider => provider.GetRequiredService<AccountContext>());
         }
 
         private static void ConfigureDataContext(IServiceProvider provider, DbContextOptionsBuilder builder)

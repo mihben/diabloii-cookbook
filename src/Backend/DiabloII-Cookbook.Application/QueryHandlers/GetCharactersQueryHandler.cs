@@ -1,5 +1,4 @@
 ﻿using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,13 +14,11 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
     public class GetCharactersQueryHandler : IQueryHandler<GetCharactersQuery, IEnumerable<Guid>>
     {
         private readonly DatabaseContext _databaseContext;
-        private readonly IAccountContext _accountContext;
         private readonly ILogger<GetCharactersQueryHandler> _logger;
 
-        public GetCharactersQueryHandler(DatabaseContext databaseContext, IAccountContext accountContext, ILogger<GetCharactersQueryHandler> logger)
+        public GetCharactersQueryHandler(DatabaseContext databaseContext, ILogger<GetCharactersQueryHandler> logger)
         {
             _databaseContext = databaseContext;
-            _accountContext = accountContext;
             _logger = logger;
         }
 
@@ -31,7 +28,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 
             var account = await _databaseContext.Accounts
                 .Include(ae => ae.Characters)
-                .FirstOrDefaultAsync(ae => ae.BattleTag.Equals(_accountContext.BattleTag), cancellationToken);
+                .FirstOrDefaultAsync(ae => ae.BattleTag.Equals(query.BattleTag), cancellationToken);
             return account.Characters.Select(c => c.Id).ToList();
         }
     }

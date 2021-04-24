@@ -1,8 +1,11 @@
 using DiabloII_Cookbook.Api.Queries;
+using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.QueryHandlers;
 using DiabloII_Cookbook.Application.Wireup;
 using DiabloII_Cookbook.Web.Middlewares;
+using LightInject;
 using LightInject.Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -26,6 +29,32 @@ namespace DiabloII_Cookbook.Web
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseLightInject()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.Configure((app) =>
+                    {
+                        app.UseErrorHandling();
+
+                        app.UseCors((builder) =>
+                        {
+                            builder.AllowAnyOrigin();
+                            builder.AllowAnyHeader();
+                            builder.AllowAnyMethod();
+                        });
+
+                        app.UseRouting();
+
+                        app.UseAuthentication();
+                        app.UseAuthorization();
+
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                            endpoints.MapRequestReceiver("/api")
+                                .RequireAuthorization("battle-tag");
+                        });
+                    });
+                })
                 .UseSerilog((context, configuration) =>
                 {
                     configuration.ReadFrom.Configuration(context.Configuration);
@@ -50,14 +79,15 @@ namespace DiabloII_Cookbook.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddMvc().AddControllersAsServices();
+
                     services.AddControllers()
+                        .AddApplicationPart(typeof(Program).Assembly)
                         .AddRequestReceiverController();
 
                     services.AddDatabase();
 
                     services.AddCors();
-
-                    IdentityModelEventSource.ShowPII = true;
 
                     services.AddAuthorization(options =>
                     {
@@ -66,33 +96,11 @@ namespace DiabloII_Cookbook.Web
                     services.AddAuthentication("blizzard")
                         .AddJwtBearer("blizzard", options => context.Configuration.GetSection("Authentication:Blizzard").Bind(options));
                 })
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureContainer<IServiceRegistry>(container =>
                 {
-                    webBuilder.Configure((app) =>
-                    {
-                        app.UseErrorHandling();
-
-                        app.UseCors((builder) =>
-                        {
-                            builder.AllowAnyOrigin();
-                            builder.AllowAnyHeader();
-                            builder.AllowAnyMethod();
-                        });
-
-                        app.UseRouting();
-
-                        app.UseAuthentication();
-                        app.UseAuthorization();
-
-                        app.UseMiddleware<AccountContextMiddleware>();
-
-                        app.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                            endpoints.MapRequestReceiver("/api")
-                                .RequireAuthorization("battle-tag");
-                        });
-                    });
+                    container.Register<AccountContext>(new PerRequestLifeTime());
+                    container.Register<IAccountContext>(factory => factory.GetInstance<AccountContext>(), new PerScopeLifetime());
+                    container.Register<IAccountContextMutator>(factory => factory.GetInstance<AccountContext>(), new PerScopeLifetime());
                 });
     }
 }
