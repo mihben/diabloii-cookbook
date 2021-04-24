@@ -81,13 +81,12 @@ jobs:
           
       - name: Install Angular
         run: npm install -g @angular/cli
-          
-      - name: List dir
-        run: ls -a
         
       - name: Resolve
         run: npm install
+        working-directory: ./src/Frontend
         
       - name: Build
         run: ng build --prod
+        working-directory: ./src/Frontend
           
