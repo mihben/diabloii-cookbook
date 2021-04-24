@@ -5,18 +5,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
-COPY "./src/Backend" .
+COPY "./src/Backend" "./src"
 
-RUN echo $pwd
 RUN ls -a
 
-RUN dotnet restore "./Backend/DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj"
+RUN dotnet restore "./src/DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj"
 COPY . .
-WORKDIR "/src/Backend"
-RUN dotnet build "./DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj" -c Release -o /app/build
+WORKDIR "/src"
+RUN dotnet build "./src/DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "./DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj" -c Release -o /app/publish
+RUN dotnet publish "./src/DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
