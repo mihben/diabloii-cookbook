@@ -22,13 +22,14 @@ import { AuthGuardService } from 'src/shared/services/auth-guard.service';
 import { AuthorizationInterceptor } from 'src/shared/interceptors/authorization.interceptor';
 import { AuthConfig, OAuthModule, OAuthModuleConfig, OAuthStorage } from 'angular-oauth2-oidc';
 import { DiabloiiComponent } from './components/diabloii/diabloii.component';
+import { environment } from 'src/environments/environment';
 
 export const authConfig: AuthConfig = {
-  issuer: "https://eu.battle.net/oauth",
-  tokenEndpoint: "https://eu.battle.net/oauth/token",
+  issuer: environment.settings.authorization.issuer,
+  tokenEndpoint: `${environment.settings.authorization.issuer}/token`,
   redirectUri: window.location.origin,
-  clientId: "e74e669060b7418aa8ca66ac7ba82395",
-  dummyClientSecret: "veq2ngqk3WhqFhq8iylHZm8FDFp0ZRh1",
+  clientId: environment.settings.authorization.clientId,
+  dummyClientSecret: environment.settings.authorization.clientSecret,
   useHttpBasicAuth: true,
   responseType: 'code',
   scope: 'openid',
