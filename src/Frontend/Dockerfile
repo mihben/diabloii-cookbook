@@ -4,7 +4,7 @@ COPY ./src/Frontend/package.json ./
 
 RUN npm i && mkdir /app && mv ./node_modules ./app
 WORKDIR /app
-COPY ./Frontend/ .
+COPY ./src/Frontend .
 RUN $(npm bin)/ng build --prod --output-path=dist
 
 FROM nginx:1.15.8-alpine
