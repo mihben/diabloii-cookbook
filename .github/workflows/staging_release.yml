@@ -16,7 +16,7 @@ env:
 jobs: 
   # This workflow contains a single job called "build"
 
-  build:
+  build-backend:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
@@ -52,3 +52,37 @@ jobs:
           dotnet build $(Resolve-Path -Path "src\Backend\*.sln") --configuration Release
           dotnet test $(Resolve-Path -Path "src\Backend\*.sln") --results-directory TestResults --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          
+      
+  build-frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.16.0]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis  
+          
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install Angular
+        run: npm install -g @angular/cli
+          
+      - name: Build
+        run: ng build --prod
+        working-directory: src\Frontend
+          
