@@ -16,7 +16,7 @@ namespace DiabloII_Cookbook.IntegrationTest.Builders
 
             var classes = Enumeration.GetAll<ClassEnumeration>().ToArray();
 
-            return new CreateCharacterCommand(classes[random.Next(0, 6)].Name, name, random.Next(1, 99), fixture.Create<bool>(), fixture.Create<bool>());
+            return new CreateCharacterCommand(fixture.Create<string>(), classes[random.Next(0, 6)].Name, name, random.Next(1, 99), fixture.Create<bool>(), fixture.Create<bool>());
         }
 
         public static CreateCharacterCommand Create()

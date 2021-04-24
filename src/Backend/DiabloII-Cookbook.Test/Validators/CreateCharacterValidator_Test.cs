@@ -27,7 +27,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new CreateCharacterCommand(@class, "TestName", 1, false, false), default);
+            var result = await sut.ValidateAsync(new CreateCharacterCommand("BattleTag", @class, "TestName", 1, false, false), default);
 
             // Assert
             Assert.True(result.IsValid);
@@ -44,7 +44,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new CreateCharacterCommand("Amazon", name, 1, false, false), default);
+            var result = await sut.ValidateAsync(new CreateCharacterCommand("BattleTag", "Amazon", name, 1, false, false), default);
 
             // Assert
             Assert.False(result.IsValid);
@@ -60,7 +60,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new CreateCharacterCommand("Amazon", "TestName", level, false, false), default);
+            var result = await sut.ValidateAsync(new CreateCharacterCommand("BattleTag", "Amazon", "TestName", level, false, false), default);
 
             // Assert
             Assert.False(result.IsValid);
@@ -78,7 +78,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new CreateCharacterCommand(@class, "TestName", 1, false, false), default);
+            var result = await sut.ValidateAsync(new CreateCharacterCommand("BattleTag", @class, "TestName", 1, false, false), default);
 
             // Assert
             Assert.False(result.IsValid);
