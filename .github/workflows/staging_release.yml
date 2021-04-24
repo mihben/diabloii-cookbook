@@ -111,7 +111,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          registry: https://docker-registry.mihben.net/
           file: ./src/Backend/DiabloII-Cookbook.Web/Dockerfile
           context: .
-          tags: diabloii-cookbook:staging
+          tags: docker-registry.mihben.net/diabloii-cookbook:staging
