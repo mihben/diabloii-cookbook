@@ -56,9 +56,6 @@ jobs:
       
   build-frontend:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.16.0]
     
     steps:
       - name: Checkout
@@ -74,10 +71,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
             
-      - name: Node ${{ matrix.node-version }}
+      - name: Node 14.16.0
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.16.0
           
       - name: Install Angular
         run: npm install -g @angular/cli
