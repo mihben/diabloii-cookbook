@@ -6,7 +6,7 @@ name: Continuous Integration
 # events but only for the develop branch
 on:
   push:
-    branches: [develop]
+    branches: [feature/dockerize-backend]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -56,9 +56,6 @@ jobs:
       
   build-frontend:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.16.0]
     
     steps:
       - name: Checkout
@@ -74,10 +71,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
             
-      - name: Node ${{ matrix.node-version }}
+      - name: Node 14.16.0
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.16.0
           
       - name: Install Angular
         run: npm install -g @angular/cli
@@ -92,6 +89,7 @@ jobs:
           
   publish-backend:
     runs-on: ubuntu-latest
+    #needs: [build-backend, build-frontend]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -105,6 +103,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
+          registry: https://docker-registry.mihben.net
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           
@@ -114,4 +113,4 @@ jobs:
           push: true
           file: ./src/Backend/DiabloII-Cookbook.Web/Dockerfile
           context: .
-          tags: https://docker-registry.mihben.net/diabloii-cookbook:staging
+          tags: docker-registry.mihben.net/diabloii-cookbook:staging
