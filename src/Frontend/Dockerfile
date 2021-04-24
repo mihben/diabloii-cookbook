@@ -8,7 +8,7 @@ COPY ./src/Frontend .
 RUN $(npm bin)/ng build --prod --output-path=dist
 
 FROM nginx:1.15.8-alpine
-COPY nginx.conf /etc/nginx/
+COPY ./src/Frontend/nginx.conf /etc/nginx/
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=builder /app/dist /usr/share/nginx/html
