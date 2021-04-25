@@ -123,7 +123,7 @@ jobs:
           
   publish-frontend:
     runs-on: ubuntu-latest
-    needs: [build-backend]
+    needs: [build-frontend]
     steps:
       - name: Calculate Version
         id: calculate_version
