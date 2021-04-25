@@ -12,6 +12,12 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
 {
     public static class HttpClientExtensions
     {
+        public static async Task<HttpResponseMessage> GetAsync(this HttpClient client, PathString path, Guid correlationId, TimeSpan timeout)
+        {
+            client.DefaultRequestHeaders.Add(CorrelationDefaults.CorrelationId, correlationId.ToString());
+            return await client.GetAsync(path, new CancellationTokenSource(timeout).Token);
+        }
+
         public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient client, PathString path, Guid correlationId, TimeSpan timeout)
         {
             client.DefaultRequestHeaders.Add(CorrelationDefaults.CorrelationId, correlationId.ToString());

@@ -29,6 +29,9 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
             var account = await _databaseContext.Accounts
                 .Include(ae => ae.Characters)
                 .FirstOrDefaultAsync(ae => ae.BattleTag.Equals(query.BattleTag), cancellationToken);
+
+            if (account is null || account.Characters.Count == 0) return null;
+
             return account.Characters.Select(c => c.Id).ToList();
         }
     }
