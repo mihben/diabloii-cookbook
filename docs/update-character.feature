@@ -43,17 +43,7 @@ Feature: UC - Update character
                 | Id                                     |
                 | {A540722D-B676-4534-AF17-055C40D8C912} |
 
-        Scenario Outline: [INT-UC003][400-BadRequest] - Update other account's character
-            Given Character exists with <Id> and <Account> account
-            When Call /api/character/<Id> PUT endpoint with <NewAccount>
-            Then Response with 400 - Bad Request
-            And Error code - 204
-            And Error message - 'Character does not exists'
-            Examples:
-                | Id                                     | Account     | NewAccount       |
-                | {A540722D-B676-4534-AF17-055C40D8C912} | TestAccount | integration_test |
-
-        Scenario Outline: [INT-UC004][202-Accepted] - Update character level
+        Scenario Outline: [INT-UC003][202-Accepted] - Update character level
             Given Character not exists with <Id> with <Level>
             When Call /api/character/<Id> PUT endpoint with <NewLevel>
             Then Response with 202 - Accepted
@@ -62,7 +52,7 @@ Feature: UC - Update character
                 | Id                                     | Level | NewLevel |
                 | {31BC0B16-D36B-4AA6-B317-2D36077775BF} | 1     | 2        |
 
-        Scenario Outline: [INT-UC005][202-Accepted] - Update character runes
+        Scenario Outline: [INT-UC004][202-Accepted] - Update character runes
             Given Character not exists with <Id> with <Runes>
             When Call /api/character/<Id> PUT endpoint with <NewRunes>
             Then Response with 202 - Accepted

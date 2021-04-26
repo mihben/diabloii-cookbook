@@ -31,7 +31,7 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 
             _logger.LogDebug("Update {id} character", command.Id);
 
-            var character = await _context.Characters.Include(ce => ce.Runes).SingleOrDefaultAsync(ce => ce.Account.BattleTag == _accountContext.BattleTag && ce.Id == command.Id, cancellationToken);
+            var character = await _context.Characters.Include(ce => ce.Runes).SingleOrDefaultAsync(ce => ce.Id == command.Id, cancellationToken);
 
             if (character is null)
             {

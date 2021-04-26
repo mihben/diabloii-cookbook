@@ -62,7 +62,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             // Arrange
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("integration_test");
 
             var content = new
             {
@@ -85,60 +85,14 @@ namespace DiabloII_Cookbook.IntegrationTest
             Assert.Equal("Character does not exist", error.Message);
         }
 
-        [Fact(DisplayName = "[INT-UC003][400-BadRequest] - Update other account's character")]
-        [Trait("Feature", "UC - Update character")]
-        public async Task UpdateOtherAccountsCharacter()
-        {
-            // Arrange
-            var correlationId = Guid.NewGuid();
-            var name = new Fixture().Create<string>();
-            var id = Guid.NewGuid();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Id, id)
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "TestAccount" })
-                                                .Create();
-
-            var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-
-            var client = _factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
-
-            var content = new
-            {
-                Level = new Random().Next(1, 99),
-                Runes = Enumerable.Empty<Rune>()
-            };
-
-            // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
-
-            // Response with 400 - Bad Request
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-
-            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-
-            // Error code - 204
-            Assert.Equal(204, error.Code);
-
-            // Error code - Character not exists
-            Assert.Equal("Character does not exist", error.Message);
-        }
-
-        [Fact(DisplayName = "[INT-UC004][202-Accepted] - Update character level")]
+        [Fact(DisplayName = "[INT-UC003][202-Accepted] - Update character level")]
         [Trait("Feature", "UC - Update character")]
         public async Task UpdateCharacterLevel()
         {
             // Arrange
             var correlationId = Guid.NewGuid();
             var name = new Fixture().Create<string>();
-            var id = Guid.NewGuid();
             var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Id, id)
                                                     .With(ce => ce.Level, 1)
                                                     .Without(ce => ce.Runes)
                                                     .With(ce => ce.Name, name)
@@ -147,11 +101,11 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 
             var client = _factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             var content = new
             {
@@ -160,19 +114,19 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{existingCharacter.Id}", content, correlationId, TimeSpan.FromSeconds(100));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             context.ChangeTracker.Clear();
-            var entity = await context.Characters.FindAsync(id);
+            var entity = await context.Characters.FindAsync(existingCharacter.Id);
 
             // Level update to 2
             Assert.Equal(2, entity.Level);
         }
 
-        [Fact(DisplayName = "[INT-UC005][202-Accepted] - Update character runes")]
+        [Fact(DisplayName = "[INT-UC004][202-Accepted] - Update character runes")]
         [Trait("Feature", "UC - Update character")]
         public async Task UpdateCharacterRunes()
         {
@@ -180,9 +134,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             var correlationId = Guid.NewGuid();
             var name = new Fixture().Create<string>();
             var runeEntity = new Fixture().Build<RuneEntity>().Without(re => re.Characters).Without(re => re.RuneWords).Create();
-            var id = Guid.NewGuid();
             var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Id, id)
                                                     .With(ce => ce.Level, 1)
                                                     .Without(ce => ce.Runes)
                                                     .With(ce => ce.Name, name)
@@ -196,7 +148,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 
             var client = _factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             var content = new
             {
@@ -205,13 +157,13 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{existingCharacter.Id}", content, correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             context.ChangeTracker.Clear();
-            var entity = await context.Characters.Include(ce => ce.Runes).ThenInclude(cre => cre.Rune).FirstAsync(ce => ce.Id == id);
+            var entity = await context.Characters.Include(ce => ce.Runes).ThenInclude(cre => cre.Rune).FirstAsync(ce => ce.Id == existingCharacter.Id);
 
             // Level update to 2
             Assert.Collection(entity.Runes, r => Assert.Equal(runeEntity.Id, r.Rune.Id));
