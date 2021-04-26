@@ -1,10 +1,16 @@
-﻿using DiabloII_Cookbook.IntegrationTest.Extensions;
+﻿using AutoFixture;
+using DiabloII_Cookbook.Application.DatabaseContexts;
+using DiabloII_Cookbook.Application.Entities;
+using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using System;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {
@@ -26,19 +32,60 @@ namespace DiabloII_Cookbook.IntegrationTest
             // Arrange
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
-            //var existingCharacter = new Fixture().Build<CharacterEntity>()
-            //                                        .Without(ce => ce.Runes)
-            //                                        .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-            //                                    .Create();
 
-            //var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            //await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-
-            // Call /api/character/{id} DELETE endpoint without authentication
+            // Act
             var response = await client.DeleteAsync($"/api/character/{Guid.NewGuid()}", correlationId, TimeSpan.FromSeconds(5));
 
-            // Response with 403 - Unathorized
+            // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact(DisplayName = "[INT-DC002][400-BadRequest] - Delete not existed character")]
+        [Trait("Feature", "DC - Delete character")]
+        public async Task DeleteNotExistedCharacter()
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid();
+            var client = _factory.CreateClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
+
+            // Act
+            var response = await client.DeleteAsync($"/api/character/{Guid.NewGuid()}", correlationId, TimeSpan.FromSeconds(100));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact(DisplayName = "[INT-DC003][202-Accepted] - Delete character")]
+        [Trait("Feature", "DC - Delete character")]
+        public async Task DeleteCharacter()
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid();
+            var existingCharacter = new Fixture().Build<CharacterEntity>()
+                                                    .With(ce => ce.Level, 1)
+                                                    .Without(ce => ce.Runes)
+                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
+                                                .Create();
+
+            var context = _factory.Services.GetService<DatabaseContext>();
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+
+            var client = _factory.CreateClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
+
+            // Act
+            var response = await client.DeleteAsync($"/api/character/{existingCharacter.Id}", correlationId, TimeSpan.FromSeconds(100));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
+
+            context.ChangeTracker.Clear();
+            Assert.Null(await context.FindAsync<CharacterEntity>(new object[] { existingCharacter.Id }, cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token));
         }
 
         protected virtual void Dispose(bool disposing)

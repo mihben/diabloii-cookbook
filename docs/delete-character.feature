@@ -16,17 +16,7 @@ Feature: DC - Delete character
                 | Id                                     |
                 | {A540722D-B676-4534-AF17-055C40D8C912} |
 
-        Scenario Outline: [INT-DC003][400-BadRequest] - Delete other account's character
-            Given Character exists with <Id> and <Account> account
-            When Call /api/character/<Id> DELETE endpoint with <NewAccount>
-            Then Response with 400 - Bad Request
-            And Error code - 204
-            And Error message - 'Character does not exists'
-            Examples:
-                | Id                                     | Account     | NewAccount       |
-                | {A540722D-B676-4534-AF17-055C40D8C912} | TestAccount | integration_test |
-
-        Scenario Outline: [INT-DC004][202-Accepted] - Delete character level
+        Scenario Outline: [INT-DC003][202-Accepted] - Delete character
             Given Character not exists with <Id>
             When Call /api/character/<Id> DELETE endpoint
             Then Response with 202 - Accepted

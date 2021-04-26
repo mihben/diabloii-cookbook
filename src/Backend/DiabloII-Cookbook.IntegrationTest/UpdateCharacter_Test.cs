@@ -114,7 +114,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{existingCharacter.Id}", content, correlationId, TimeSpan.FromSeconds(100));
+            var response = await client.PutAsync($"/api/character/{existingCharacter.Id}", content, correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
