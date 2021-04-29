@@ -14,13 +14,11 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
     public class UpdateCharacterCommandHandler : ICommandHandler<UpdateCharacterCommand>
     {
         private readonly DatabaseContext _context;
-        private readonly AccountContext _accountContext;
         private readonly ILogger<UpdateCharacterCommandHandler> _logger;
 
-        public UpdateCharacterCommandHandler(DatabaseContext context, AccountContext accountContext, ILogger<UpdateCharacterCommandHandler> logger)
+        public UpdateCharacterCommandHandler(DatabaseContext context, ILogger<UpdateCharacterCommandHandler> logger)
         {
             _context = context;
-            _accountContext = accountContext;
             _logger = logger;
         }
 
