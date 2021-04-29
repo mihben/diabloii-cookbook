@@ -1,7 +1,6 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
 using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -46,7 +45,7 @@ namespace DiabloII_Cookbook.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertAsync([FromBody]CreateCharacter command, CancellationToken cancellationToken)
+        public async Task<IActionResult> InsertAsync([FromBody] CreateCharacter command, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Create {name} character", command.Name);
             await _commandSender.SendAsync(new CreateCharacterCommand(_httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value, command.Class, command.Name, command.Level, command.IsLadder, command.IsExpansion), cancellationToken);
@@ -54,7 +53,7 @@ namespace DiabloII_Cookbook.Web.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdateCharacter parameter, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateCharacter parameter, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Update {id} character", id);
             await _commandSender.SendAsync(new UpdateCharacterCommand(id, parameter.Level, parameter.Runes), cancellationToken);

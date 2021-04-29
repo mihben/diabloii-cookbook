@@ -1,10 +1,8 @@
-﻿using DiabloII_Cookbook.Application.Contexts;
-using DiabloII_Cookbook.Application.DatabaseContexts;
+﻿using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 

@@ -110,7 +110,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             var existingCharacter = new Fixture().Build<CharacterEntity>()
                                                     .Without(ce => ce.Runes)
                                                     .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account,  new AccountEntity { Id = Guid.NewGuid(), BattleTag = "TestAccount" })
+                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "TestAccount" })
                                                 .Create();
             var command = new Fixture().Build<CreateCharacterCommand>().FromFactory(() => DataFactories.Create(name)).Create();
 

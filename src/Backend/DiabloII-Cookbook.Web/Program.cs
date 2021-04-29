@@ -1,18 +1,13 @@
 using DiabloII_Cookbook.Api.Queries;
-using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.QueryHandlers;
 using DiabloII_Cookbook.Application.Wireup;
-using DiabloII_Cookbook.Web.Middlewares;
-using LightInject;
 using LightInject.Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
 using Serilog;
@@ -95,12 +90,6 @@ namespace DiabloII_Cookbook.Web
                     });
                     services.AddAuthentication("blizzard")
                         .AddJwtBearer("blizzard", options => context.Configuration.GetSection("Authentication:Blizzard").Bind(options));
-                })
-                .ConfigureContainer<IServiceRegistry>(container =>
-                {
-                    container.Register<AccountContext>(new PerRequestLifeTime());
-                    container.Register<IAccountContext>(factory => factory.GetInstance<AccountContext>(), new PerScopeLifetime());
-                    container.Register<IAccountContextMutator>(factory => factory.GetInstance<AccountContext>(), new PerScopeLifetime());
                 });
     }
 }

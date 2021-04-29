@@ -3,14 +3,14 @@ using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
 using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {

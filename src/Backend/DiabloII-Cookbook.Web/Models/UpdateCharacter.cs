@@ -12,6 +12,6 @@ namespace DiabloII_Cookbook.Web.Models
         {
             Level = level;
             Runes = runes;
-        }        
+        }
     }
 }
