@@ -1,8 +1,9 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DiabloII_Cookbook.Application.Options
 {
+    [ExcludeFromCodeCoverage]
     public class DatabaseOptions
     {
         [Required]

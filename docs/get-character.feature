@@ -21,12 +21,12 @@ Feature: GC - Get character
             When Call '/api/character' GET method
             Then Response with 204 - No Content
 
-        Scenario: [INT-GC005][401-Unathorized] - Get characters without authentication
+        Scenario: [INT-GC005][401-Unathorized] - Get character detail without authentication
             Given I have character with <id> 'integration-test' account
             When Call '/api/character/<id>' GET method
             Then Response with 403 - Unathorized
 
-        Scenario: [INT-GC006][200-Ok] - Get character detail without authentication
+        Scenario: [INT-GC006][200-Ok] - Get character detail
             Given I have character with <id> 'integration-test' account
             When Call '/api/character/<id>' GET method
             Then Response with 202 - Accepted

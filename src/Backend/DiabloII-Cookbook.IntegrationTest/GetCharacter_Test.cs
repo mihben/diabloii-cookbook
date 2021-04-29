@@ -6,6 +6,7 @@ using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -106,6 +107,49 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact(DisplayName = "[INT-GC005][401-Unathorized] - Get character detail without authentication")]
+        [Trait("Feature", "GC - Get character")]
+        public async Task GetCharacterDetailWithoutAuthorization()
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid();
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync($"/api/character/{Guid.NewGuid()}", correlationId, TimeSpan.FromSeconds(5));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact(DisplayName = "[INT-GC006][200-Ok] - Get character detail")]
+        [Trait("Feature", "GC - Get character")]
+        public async Task GetCharacterDetail()
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid();
+            var client = _factory.CreateClient();
+            var existingCharacter = new Fixture().Build<CharacterEntity>()
+                                                     .With(ce => ce.Runes, new List<CharacterRuneEntity>())
+                                                     .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
+                                                 .Create();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
+
+            var context = _factory.Services.GetRequiredService<DatabaseContext>();
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+
+            // Act
+            var response = await client.GetAsync($"/api/character/{existingCharacter.Id}", correlationId, TimeSpan.FromSeconds(5));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Assert.True(await response.ValidateAsync(existingCharacter));
         }
 
         protected virtual void Dispose(bool disposing)
