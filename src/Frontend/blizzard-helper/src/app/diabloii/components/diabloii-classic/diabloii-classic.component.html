@@ -1,0 +1,55 @@
+<div class="main">
+    <div class="character panel">
+        <div class="character-image">
+            <button class="arrow" (click)="previous()">                
+                <img src="../../../../assets/diabloii/classic/left.png">
+            </button>
+        
+            <div style="display: flex;">
+                <img class="class-image" src="{{ character.$class | asset:  'diabloii\\classic\\classes':'gif' }}">
+            </div>
+
+            <button class="arrow" (click)="next()">
+                <img src="../../../../assets/diabloii/classic/right.png">
+            </button>
+        </div>
+
+        <div class="character-information">
+            <p class="label">Name:</p>
+            <p class="item">{{ character.name }}</p>
+
+            <p class="label">Level:</p>
+            <input type="number" class="item" [(ngModel)]="character.level">
+
+            <p class="label">Expansion:</p>
+            <p class="item">{{ character.isExpansion | yesNo  }}</p>
+
+            <p class="label">Ladder:</p>
+            <p class="item">{{ character.isLadder | yesNo }}</p>
+        </div>
+        
+        <div class="character-runes">
+            <div class="rune-selector" *ngFor="let rune of runes">
+                <input style="margin-right: 8px;" type="checkbox"/>
+                <app-rune [rune]="rune" assets='diabloii\\classic\\runes'></app-rune>
+            </div>
+        </div>
+
+        <div class="character-buttons">
+            <button>Add</button>
+            <button style="margin-left: auto;">Delete</button>
+        </div>
+    </div>
+
+    <div class="data">
+        <div class="filter panel">            
+            <p>Filters</p>
+        </div>
+
+        <div class="rune-words">
+            <div class="rune-word panel" *ngFor="let runeWord of runeWords">
+                {{runeWord}}
+            </div>
+        </div>
+    </div>
+</div>
