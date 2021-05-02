@@ -1,12 +1,17 @@
+import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Rune } from 'src/app/shared/models/rune.model';
+import { ConfirmationService } from 'src/app/shared/services/confirmation.service';
 import { Character } from '../../models/character.model';
 import { DiabloiiClassisRuneService } from '../../services/diabloii-classis-rune.service';
+import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
 
 @Component({
   selector: 'app-diabloii-classic',
   templateUrl: './diabloii-classic.component.html',
-  styleUrls: ['./diabloii-classic.component.scss']
+  styleUrls: ['./diabloii-classic.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DiabloiiClassicComponent implements OnInit {
   runeWords: Array<string> = [
@@ -32,7 +37,9 @@ export class DiabloiiClassicComponent implements OnInit {
   index: number = 0;
   character: Character = this.characters[this.index];
 
-  constructor(private runeService: DiabloiiClassisRuneService) { 
+  constructor(private runeService: DiabloiiClassisRuneService,
+    private confirmationService: ConfirmationService,
+    private dialogService: MatDialog) { 
   }
 
   ngOnInit(): void {
@@ -56,4 +63,17 @@ export class DiabloiiClassicComponent implements OnInit {
     }
   }
 
+  add() : void {
+    this.dialogService.open(DiabloiiClassicNewCharacterComponent);
+  }
+
+  delete(): void {
+    this.confirmationService.confirm(`Do you really want to delete ${this.character.name}?`)
+      .subscribe(result => {
+        if (result) {
+          this.characters = this.characters.filter(c => c.name !== this.character.name);
+          this.character = this.characters[this.index === 0 ? 0 : this.index === this.characters.length ? --this.index : this.index];
+        }
+      })
+  }
 }

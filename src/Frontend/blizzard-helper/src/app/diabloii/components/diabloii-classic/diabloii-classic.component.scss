@@ -124,6 +124,11 @@ div {
 
         margin-top: $size-margin-normal;
     }
+
+    &.cdk-overlay-pane {
+        width: max-content;
+        height: max-content;
+    }
 }
 
 img {
@@ -183,7 +188,7 @@ button:active:enabled {
     padding-top: 3px;
 }
 
-p {
+ p {
     font-size: $size-font-normal;
     font-family: $font;
     align-self: center;
@@ -229,6 +234,10 @@ input[type=checkbox] {
     height: 1.3em;
 
     align-self: center;
+
+    &.item {
+        grid-column: item;
+    }    
 }
 
 input[type=checkbox]:checked {
@@ -242,4 +251,15 @@ input[type=checkbox]:checked {
 app-rune {
     font-family: $font;
     color: $color-rune;
+}
+
+mat-dialog-container.mat-dialog-container {
+    background-color: $color-background;
+    color: $color-foreground;
+    
+    border-image: url('../../../../assets/diabloii//classic/border.png') 30 round;
+    border-image-width: auto;
+    border-style: solid;
+
+    padding: 8px;
 }

@@ -5,6 +5,8 @@ import { AssetPipe } from './pipes/asset.pipe';
 import { YesNoPipe } from './pipes/yes-no.pipe';
 import { RuneComponent } from './components/rune/rune.component';
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 
 
 
@@ -14,10 +16,12 @@ import { LoadingScreenComponent } from './components/loading-screen/loading-scre
     AssetPipe,
     YesNoPipe,
     RuneComponent,
-    LoadingScreenComponent
+    LoadingScreenComponent,
+    ConfirmationComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatDialogModule
   ],
   exports: [
     AssetPipe,
