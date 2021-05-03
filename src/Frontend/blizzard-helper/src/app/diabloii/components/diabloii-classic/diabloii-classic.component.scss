@@ -2,6 +2,7 @@ $color-foreground: #7b7b7b;
 $color-rune: #CE8800;
 $color-button: #000000;
 $color-background: #000000;
+$color-magic: #197917;
 
 $size-margin-normal: 4px;
 $size-margin-huge: 30px;
@@ -9,6 +10,9 @@ $size-margin-huge: 30px;
 $size-font-normal: 16px;
 
 $font: 'Diablo Classic';
+
+$image-background: '../../../../assets/diabloii/classic/background.gif';
+$image-border: '../../../../assets/diabloii//classic/border.png';
 
 @font-face {
     font-family: 'Diablo Classic';
@@ -21,11 +25,11 @@ div {
     width: 100%;
     height: 100%;
     background-color: transparent;
-    color: $color-foreground;
+    color: $color-foreground !important;
 
     &.main {
         background-color: #000000;
-        background-image: url('../../../../assets/diabloii/classic/background.gif');
+        background-image: url($image-background);
         background-repeat: no-repeat;
         background-position: center;
         background-size: 40%;
@@ -37,7 +41,7 @@ div {
     }
 
     &.panel {
-        border-image: url('../../../../assets/diabloii//classic/border.png') 30 round;
+        border-image: url($image-border) 30 round;
         border-image-width: auto;
         border-style: solid;
 
@@ -257,9 +261,64 @@ mat-dialog-container.mat-dialog-container {
     background-color: $color-background;
     color: $color-foreground;
     
-    border-image: url('../../../../assets/diabloii//classic/border.png') 30 round;
+    border-image: url($image-border) 30 round;
     border-image-width: auto;
     border-style: solid;
 
     padding: 8px;
+}
+
+mat-select.mat-select {    
+    border-image: url($image-border) 30 round;
+    border-image-width: auto;
+    border-style: solid;
+
+    align-self: center;
+
+    font-size: $size-font-normal;
+    font-family: $font;
+    color: $color-foreground;
+
+    height: 1.5em;
+
+    &.item {
+        grid-column: item;
+    }
+}
+
+div.mat-select-arrow {    
+    color: transparent;
+
+    background-image: url('../../../../assets/diabloii/classic/left.png');
+    background-size: contain;
+}
+
+div.mat-select-panel {
+    color: $color-foreground;
+    background-color: $color-background;
+
+    font-family: $font;
+    font-size: $size-font-normal;
+
+    border-image: url($image-border) 30 round;
+    border-image-width: auto;
+    border-style: solid;
+}
+
+.mat-option {
+    color: $color-foreground;
+
+    font-family: $font;
+    font-size: $size-font-normal;
+}
+
+.mat-option.mat-selected {
+    color: $color-magic;
+}
+
+form.character {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
 }

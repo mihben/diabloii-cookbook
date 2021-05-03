@@ -1,9 +1,10 @@
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Character } from './../../models/character.model';
 import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Rune } from 'src/app/shared/models/rune.model';
 import { ConfirmationService } from 'src/app/shared/services/confirmation.service';
-import { Character } from '../../models/character.model';
 import { DiabloiiClassisRuneService } from '../../services/diabloii-classis-rune.service';
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
 
@@ -14,6 +15,15 @@ import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-ch
   encapsulation: ViewEncapsulation.None
 })
 export class DiabloiiClassicComponent implements OnInit {
+
+  public characterForm: FormGroup = new FormGroup({
+    $class: new FormControl(''),
+    name: new FormControl(''),
+    level: new FormControl(1),
+    isExpansion: new FormControl(false),
+    isLadder: new FormControl(false)
+  })
+
   runeWords: Array<string> = [
     "Nadir",
     "Nadir",
@@ -35,7 +45,6 @@ export class DiabloiiClassicComponent implements OnInit {
   ]
 
   index: number = 0;
-  character: Character = this.characters[this.index];
 
   constructor(private runeService: DiabloiiClassisRuneService,
     private confirmationService: ConfirmationService,
@@ -44,14 +53,20 @@ export class DiabloiiClassicComponent implements OnInit {
 
   ngOnInit(): void {
     this.runeService.getRunes()
-      .subscribe(runes => this.runes = runes);
+      .subscribe(runes => 
+        {
+          runes.forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
+          this.runes = runes
+        });
+
+    this.refresh(0);
   }
 
   next(): void {
     if (this.index < this.characters.length - 1) 
     {
       this.index = this.index + 1;
-      this.character = this.characters[this.index];
+      this.refresh(this.index);
     }
   }  
   
@@ -59,21 +74,38 @@ export class DiabloiiClassicComponent implements OnInit {
     if (this.index > 0) 
     {
       this.index = this.index - 1;
-      this.character = this.characters[this.index];
+      this.refresh(this.index);
     }
   }
 
   add() : void {
-    this.dialogService.open(DiabloiiClassicNewCharacterComponent);
+    this.dialogService.open(DiabloiiClassicNewCharacterComponent)
+      .afterClosed().subscribe({
+        next: (character: Character) => {
+          if (character !== undefined && character !== null){
+            this.index = this.characters.push(character) - 1;
+            this.refresh(this.index);
+          }
+        }
+      });
   }
 
   delete(): void {
-    this.confirmationService.confirm(`Do you really want to delete ${this.character.name}?`)
+    const name = this.characterForm.get('name')?.value;
+    this.confirmationService.confirm(`Do you really want to delete ${name}?`)
       .subscribe(result => {
-        if (result) {
-          this.characters = this.characters.filter(c => c.name !== this.character.name);
-          this.character = this.characters[this.index === 0 ? 0 : this.index === this.characters.length ? --this.index : this.index];
+        if (result) {   
+          this.characters = this.characters.filter(c => c.name !== name);
+          this.refresh(this.index === 0 ? 0 : this.index === this.characters.length ? --this.index : this.index);
         }
       })
+  }
+
+  save(character: Character): void {
+    console.log(character);
+  }
+
+  refresh(index: number) {
+    this.characterForm.setValue(this.characters[index]);
   }
 }

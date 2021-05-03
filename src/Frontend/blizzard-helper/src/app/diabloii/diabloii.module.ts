@@ -11,7 +11,7 @@ import { DiabloiiClassisRuneService } from './services/diabloii-classis-rune.ser
 import { ConfirmationService } from '../shared/services/confirmation.service';
 import { DiabloiiClassicNewCharacterComponent } from './components/diabloii-classic-new-character/diabloii-classic-new-character.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule
   ],
   providers: [HttpClient, DiabloiiClassisRuneService, ConfirmationService]
 })
