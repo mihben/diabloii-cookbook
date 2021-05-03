@@ -1,3 +1,4 @@
+import { CharacterService } from './../../services/character.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Character } from './../../models/character.model';
 import { ViewEncapsulation } from '@angular/core';
@@ -17,7 +18,7 @@ import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-ch
 export class DiabloiiClassicComponent implements OnInit {
 
   public characterForm: FormGroup = new FormGroup({
-    $class: new FormControl(''),
+    class: new FormControl(''),
     name: new FormControl(''),
     level: new FormControl(1),
     isExpansion: new FormControl(false),
@@ -34,19 +35,12 @@ export class DiabloiiClassicComponent implements OnInit {
 
   runes: Array<Rune> = [ ]
 
-  characters: Array<Character> = [
-    new Character("Amazon", "Amazon", 10, true, false),
-    new Character("Assassin", "Assassin", 8, true, true),
-    new Character("Barbarian", "Barbarian", 20, true, false),
-    new Character("Druid", "Druid", 75, false, false),
-    new Character("Necromancer", "Necromancer", 20, true, false),
-    new Character("Paladin", "Paladin", 39, true, true),
-    new Character("Sorceress", "Sorceress", 65, true, false)
-  ]
+  characters: Array<string> = [];
 
   index: number = 0;
 
   constructor(private runeService: DiabloiiClassisRuneService,
+    private characterService: CharacterService,
     private confirmationService: ConfirmationService,
     private dialogService: MatDialog) { 
   }
@@ -57,9 +51,13 @@ export class DiabloiiClassicComponent implements OnInit {
         {
           runes.forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
           this.runes = runes
-        });
 
-    this.refresh(0);
+          this.characterService.getCharacters()
+          .subscribe(characters => {          
+            this.characters = characters;
+            this.refresh(0);
+          });
+        });
   }
 
   next(): void {
@@ -81,8 +79,15 @@ export class DiabloiiClassicComponent implements OnInit {
       .afterClosed().subscribe({
         next: (character: Character) => {
           if (character !== undefined && character !== null){
-            this.index = this.characters.push(character) - 1;
-            this.refresh(this.index);
+            this.characterService.save(character).subscribe({
+              next: response => {
+                this.characterService.getCharacters()
+                .subscribe(characters => {          
+                  this.characters = characters;
+                  this.refresh(this.characters.length - 1);
+                });
+              }
+            });
           }
         }
       });
@@ -93,21 +98,43 @@ export class DiabloiiClassicComponent implements OnInit {
     this.confirmationService.confirm(`Do you really want to delete ${name}?`)
       .subscribe(result => {
         if (result) {   
-          this.characters = this.characters.filter(c => c.name !== name);
+          this.characterService.delete(this.characters[this.index]).subscribe({
+            next: response => {
+              this.characterService.getCharacters().subscribe({
+                next: characters => {
+                  this.characters = characters;
+                  this.refresh(0);
+                }
+              })
+            }
+          })
           this.refresh(this.index === 0 ? 0 : this.index === this.characters.length ? --this.index : this.index);
         }
       })
   }
 
   save(character: Character): void {
-    console.log(character);
+    this.characterService.update(this.characters[this.index], this.characterForm.get('level')?.value, this.runes.filter(r => this.characterForm.get(r.id)?.value ?? false))
+      .subscribe({
+        next: () => { }
+      });
   }
 
   refresh(index: number) {
-    this.characterForm.get('$class')?.setValue(this.characters[index].$class);    
-    this.characterForm.get('name')?.setValue(this.characters[index].name);    
-    this.characterForm.get('level')?.setValue(this.characters[index].level);    
-    this.characterForm.get('isExpansion')?.setValue(this.characters[index].isExpansion);    
-    this.characterForm.get('isLadder')?.setValue(this.characters[index].isLadder);    
+    this.characterService.getCharacter(this.characters[index]).subscribe({
+      next: character => {
+        console.log(character.class);
+        
+        this.characterForm.get('class')?.setValue(character.class);    
+        this.characterForm.get('name')?.setValue(character.name);    
+        this.characterForm.get('level')?.setValue(character.level);    
+        this.characterForm.get('isExpansion')?.setValue(character.isExpansion);    
+        this.characterForm.get('isLadder')?.setValue(character.isLadder);   
+        
+        this.runes.forEach(rune => this.characterForm.get(rune.id)?.setValue(!!character.runes.find(cr => rune.id === cr.id)));
+        
+        this.index = index;
+      }
+    })
   }
 }

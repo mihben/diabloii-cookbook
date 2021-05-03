@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
 import { AuthConfig, OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 export const authConfig: AuthConfig = {
   issuer: environment.authorization.issuer,
@@ -41,7 +42,8 @@ export function storageFactory() : OAuthStorage {
   providers: [
     HttpClient,
     { provide: AuthConfig, useValue: authConfig },
-    { provide: OAuthStorage, useFactory: storageFactory }
+    { provide: OAuthStorage, useFactory: storageFactory },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

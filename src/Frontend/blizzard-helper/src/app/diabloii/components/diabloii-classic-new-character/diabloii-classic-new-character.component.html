@@ -1,6 +1,6 @@
 <form (submit)="save(this.formGroup.value)" [formGroup]="formGroup" style="display: grid; grid-template-rows: repeat(min-content 8px); grid-template-columns: [label] min-content 4px [item] auto;">
     <p class="label">Class:</p>
-    <mat-select class="item" formControlName="$class">
+    <mat-select class="item" formControlName="class">
         <mat-option *ngFor="let class of classes" value="{{ class }}">{{ class }}</mat-option>
     </mat-select>
 
