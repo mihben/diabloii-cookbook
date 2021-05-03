@@ -65,16 +65,14 @@ export class DiabloiiClassicComponent implements OnInit {
   next(): void {
     if (this.index < this.characters.length - 1) 
     {
-      this.index = this.index + 1;
-      this.refresh(this.index);
+      this.refresh(++this.index);
     }
   }  
   
   previous(): void {
     if (this.index > 0) 
     {
-      this.index = this.index - 1;
-      this.refresh(this.index);
+      this.refresh(--this.index);
     }
   }
 
@@ -106,6 +104,10 @@ export class DiabloiiClassicComponent implements OnInit {
   }
 
   refresh(index: number) {
-    this.characterForm.setValue(this.characters[index]);
+    this.characterForm.get('$class')?.setValue(this.characters[index].$class);    
+    this.characterForm.get('name')?.setValue(this.characters[index].name);    
+    this.characterForm.get('level')?.setValue(this.characters[index].level);    
+    this.characterForm.get('isExpansion')?.setValue(this.characters[index].isExpansion);    
+    this.characterForm.get('isLadder')?.setValue(this.characters[index].isLadder);    
   }
 }

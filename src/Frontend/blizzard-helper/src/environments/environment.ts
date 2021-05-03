@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  backend: {
+    url: "http://localhost:5000/api"
+  },
+  authorization: {
+    issuer: "https://eu.battle.net/oauth",
+    clientId: "e74e669060b7418aa8ca66ac7ba82395",
+    clientSecret: "veq2ngqk3WhqFhq8iylHZm8FDFp0ZRh1"
+  }
 };
 
 /*

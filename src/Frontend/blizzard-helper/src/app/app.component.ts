@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Component, OnInit } from '@angular/core';
 import { LoadingScreen } from './shared/models/loading-screen.model';
 
 @Component({
@@ -6,7 +7,8 @@ import { LoadingScreen } from './shared/models/loading-screen.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'blizzard-helper';
 
   images: Array<LoadingScreen> = [
@@ -16,5 +18,21 @@ export class AppComponent {
     { name: "Diablo", message: "Not even death can save you from me!" },
     { name: "Baal", message: "Enough of your idle speculation, Mephisto! I breached the fortress and saw it firsthand: the Worldstone is GONE! The angels I killed knew nothing about it. But since you are so perceptive, maybe you remember who else has been missing: Lilith - we must find her, rip her limb from limb, take the Worldstone BACK!" }
   ]
+
+  constructor(private authService: OAuthService) { }
+
+  ngOnInit(): void {
+    this.authService.loadDiscoveryDocumentAndTryLogin()
+    .then((response) => {
+      if (!this.authService.hasValidIdToken() || !this.authService.hasValidAccessToken()) {
+        this.authService.initCodeFlow();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+
 
 }

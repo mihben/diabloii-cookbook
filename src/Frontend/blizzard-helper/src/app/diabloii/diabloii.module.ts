@@ -6,12 +6,13 @@ import { DiabloiiClassicComponent } from './components/diabloii-classic/diabloii
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DiabloiiClassisRuneService } from './services/diabloii-classis-rune.service';
 import { ConfirmationService } from '../shared/services/confirmation.service';
 import { DiabloiiClassicNewCharacterComponent } from './components/diabloii-classic-new-character/diabloii-classic-new-character.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
+import { AuthInterceptor } from '../shared/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,8 @@ import {MatSelectModule} from '@angular/material/select';
     ReactiveFormsModule,
     MatSelectModule
   ],
-  providers: [HttpClient, DiabloiiClassisRuneService, ConfirmationService]
+  providers: [HttpClient, DiabloiiClassisRuneService, ConfirmationService,    
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ]
 })
 export class DiabloiiModule { }

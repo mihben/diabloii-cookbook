@@ -50,8 +50,8 @@ namespace DiabloII_Cookbook.Web
                         app.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();
-                            endpoints.MapRequestReceiver("/api");
-                                //.RequireAuthorization("battle-tag");
+                            endpoints.MapRequestReceiver("/api")
+                                .RequireAuthorization("battle-tag");
                         });
                     });
                 })

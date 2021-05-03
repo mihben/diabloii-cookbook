@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -5,6 +6,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from 'src/environments/environment';
+import { AuthConfig, OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
+
+export const authConfig: AuthConfig = {
+  issuer: environment.authorization.issuer,
+  tokenEndpoint: `${environment.authorization.issuer}/token`,
+  redirectUri: window.location.origin,
+  clientId: environment.authorization.clientId,
+  dummyClientSecret: environment.authorization.clientSecret,
+  useHttpBasicAuth: true,
+  responseType: 'code',
+  scope: 'openid',
+  oidc: true,
+  showDebugInformation: true
+}
+
+export function storageFactory() : OAuthStorage {
+  return localStorage
+}
 
 @NgModule({
   declarations: [
@@ -14,9 +34,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    OAuthModule.forRoot(),
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    HttpClient,
+    { provide: AuthConfig, useValue: authConfig },
+    { provide: OAuthStorage, useFactory: storageFactory }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
