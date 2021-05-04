@@ -28,7 +28,8 @@ export class DiabloiiClassicComponent implements OnInit {
     isLadder: new FormControl(false)
   })
 
-  public itemTypes: Array<ItemType> = [];
+  public weapons: Array<ItemType> = [];
+  public armors: Array<ItemType> = [];
   public filterForm: FormGroup = new FormGroup({});
 
   public runeWords: RuneWord[] = [ ];
@@ -65,7 +66,8 @@ export class DiabloiiClassicComponent implements OnInit {
         .subscribe({
           next: itemTypes => {
             itemTypes.forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
-            this.itemTypes = itemTypes
+            this.weapons = itemTypes.filter(it => it.group === "Weapon");
+            this.armors = itemTypes.filter(it => it.group === "Armor");
           }
         });
   }
@@ -146,10 +148,9 @@ export class DiabloiiClassicComponent implements OnInit {
     })
   }
 
-  selectItemTypeFilter(group: string) {
-    const targetItemTypes = this.itemTypes.filter(it => it.group === group);
-    var targetValue = targetItemTypes.every(it => !this.filterForm.get(it.id)?.value);
-    targetItemTypes.forEach(it => this.filterForm.get(it.id)?.setValue(targetValue));
+  selectItemTypeFilter(itemTypes: ItemType[]) {
+    var targetValue = itemTypes.every(it => !this.filterForm.get(it.id)?.value);
+    itemTypes.forEach(it => this.filterForm.get(it.id)?.setValue(targetValue));
   }
 
   getAllRuneWords() : void {

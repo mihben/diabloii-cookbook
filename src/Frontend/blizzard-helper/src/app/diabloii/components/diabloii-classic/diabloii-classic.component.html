@@ -45,21 +45,30 @@
 
     <div class="data">
         <form class="filter" [formGroup]="filterForm">
-            <div class="filter panel">
-                <div class="selector" *ngFor="let itemType of itemTypes" style="margin-left: 4px;">
-                    <input style="margin-right: 8px;" type="checkbox" formControlName="{{ itemType.id }}"/>
-                    <p>{{ itemType.name }}</p>
-                </div>                    
+            <div class="filter panel">                
+                <div class="armor">
+                    <div class="selector" style="margin-top: 4px;" *ngFor="let armor of armors">
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ armor.id }}"/>
+                        <p>{{ armor.name }}</p>
+                    </div>                   
+                </div>
+
+                <div class="weapon">
+                    <div class="selector" *ngFor="let weapon of weapons">
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ weapon.id }}"/>
+                        <p>{{ weapon.name }}</p>
+                    </div>                 
+                </div>
                 
                 <div style="display: flex; grid-column: 1 / 4; padding: 4px; margin-top: 4px;">
                     <div style="display: flex;">
-                        <button (click)="selectItemTypeFilter('Weapon')">Weapons</button>
-                        <button (click)="selectItemTypeFilter('Armor')">Armors</button>
+                        <button (click)="selectItemTypeFilter(this.weapons)" style="margin-right: 4px;">Weapons</button>
+                        <button (click)="selectItemTypeFilter(this.armors)">Armors</button>
                     </div>
                     
                     <div style="display: flex;">
                         <button style="margin-left: auto;">Search</button>
-                        <button (click)="getAllRuneWords()">All</button>
+                        <button (click)="getAllRuneWords()" style="margin-left: 4px;">All</button>
                     </div>
                 </div>
             </div>

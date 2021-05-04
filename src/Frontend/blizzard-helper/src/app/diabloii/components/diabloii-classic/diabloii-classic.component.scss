@@ -5,6 +5,7 @@ $color-background: #000000;
 $color-magic: #197917;
 
 $size-margin-normal: 4px;
+$size-margin-double: 8px;
 $size-margin-huge: 30px;
 
 $size-font-normal: 14px;
@@ -41,6 +42,8 @@ div {
         grid-template-columns: [character] 25% $size-margin-normal [data] auto;
 
         padding: $size-margin-normal;
+
+        overflow-y: hidden;
     }
 
     &.panel {
@@ -61,15 +64,10 @@ div {
     &.filter {
         flex: 0 0 0;
 
-        display: grid;
+        display: flex;
+        flex-flow: row wrap;
+        flex: 0 0 0;
 
-        grid-template-columns: repeat(3, [itemType] auto);
-        row-gap: $size-margin-normal;
-        column-gap: $size-margin-normal;
-
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: $size-margin-normal;
         margin-bottom: $size-margin-normal;
     }
 
@@ -83,6 +81,8 @@ div {
         margin-bottom: $size-margin-normal;
 
         height: min-content;
+
+        padding: $size-margin-normal;
     }
 
     &.character {
@@ -144,6 +144,30 @@ div {
     &.cdk-overlay-pane {
         width: max-content;
         height: max-content;
+    }
+
+    &.weapon {
+        width: max-content;
+        height: max-content;
+
+        align-self: center;
+        margin-right: auto;
+        margin-top: $size-margin-normal;
+
+        display: grid;
+        grid-template-columns: repeat(3, [weapon] auto);
+        column-gap: $size-margin-double;
+        row-gap: $size-margin-normal;
+    }
+
+    &.armor {
+        width: max-content;
+        height: min-content;
+
+        align-self: center;
+        margin-left: auto;
+        margin-right: $size-margin-double;
+        margin-top: $size-margin-normal;
     }
 }
 
