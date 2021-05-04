@@ -81,8 +81,8 @@ jobs:
         
       - name: Resolve
         run: npm install
-        working-directory: ./src/Frontend
+        working-directory: ./src/Frontend/blizzard-helper
         
       - name: Build
         run: ng build --prod
-        working-directory: ./src/Frontend
+        working-directory: ./src/Frontend/blizzard-helper
