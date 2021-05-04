@@ -32,7 +32,7 @@
             <div class="character-runes">
                 <div class="selector" *ngFor="let rune of runes">
                     <input style="margin-right: 8px;" type="checkbox" formControlName="{{ rune.id }}"/>
-                    <app-rune [rune]="rune" assets='diabloii\\classic\\runes'></app-rune>
+                    <app-rune [rune]="rune" [level]="this.characterForm.get('level')?.value" assets='diabloii\\classic\\runes'></app-rune>
                 </div>
             </div>
             

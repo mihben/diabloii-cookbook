@@ -3,7 +3,7 @@
     <p class="item-type">{{ runeWord.itemTypes | itemType }}</p>
 
     <div class="ingredients">
-        <app-rune *ngFor="let ingredient of runeWord.ingredients" [rune]="ingredient.rune" assets='diabloii\\classic\\runes'></app-rune>
+        <app-rune style="margin-left: 4px;" *ngFor="let ingredient of runeWord.ingredients" [level]="level" [rune]="ingredient.rune" assets='diabloii\\classic\\runes'></app-rune>
     </div>
 
     <p class="property" *ngFor="let property of runeWord.properties" innerHtml="{{ property | property }}"></p>

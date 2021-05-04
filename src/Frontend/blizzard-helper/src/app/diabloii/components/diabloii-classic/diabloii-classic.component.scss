@@ -7,18 +7,21 @@ $color-magic: #197917;
 $size-margin-normal: 4px;
 $size-margin-huge: 30px;
 
-$size-font-normal: 16px;
+$size-font-normal: 14px;
 
-$font: 'Diablo Classic';
+$font: 'Exocet';
 
 $image-background: '../../../../assets/diabloii/classic/background.gif';
 $image-border: '../../../../assets/diabloii//classic/border.png';
 
 @font-face {
-    font-family: 'Diablo Classic';
+    font-family: 'Exocet';
     font-style: normal;
-    font-weight: bold;
-    src: local('Diablo Classic'), url('../../../../assets/diabloii/classic/diablo.woff') format('woff');
+    font-weight: normal;
+    src: local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.woff') format('woff'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.ttf') format('truetype'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.eot') format('eot'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.svg') format('svg')
 }
 
 div {
@@ -171,7 +174,7 @@ button {
 
     border-width: 0px;
 
-    font-weight: bold;
+    font-weight: bolder;
     font-family: $font;
     color: $color-button;
 

@@ -1,5 +1,37 @@
 div {
     display: flex;
+
+    &.tool-tip {
+        display: inline-block;
+        position: relative;
+
+        height: fit-content;
+        width: fit-content;
+    }
+
+    &.tool-tip .tool-tip-text {
+        display: inline-grid;
+
+        visibility: hidden;
+
+        width: max-content;
+        height: max-content;
+
+        background-color: black;
+
+        color: #7b7b7b;
+        text-align: left;
+
+        padding: 4px;
+        border-radius: 6px;
+       
+        position: absolute;
+        z-index: 1;
+      }
+      
+      &.tool-tip:hover .tool-tip-text {
+        visibility: visible;
+      }
 }
 
 img {
@@ -7,8 +39,45 @@ img {
 }
 
 p {
-    margin-left: 2px;
-    align-self: center;
+    &.name {
+        margin-left: 2px;
 
-    color: #CE8800;
+        align-self: center;
+        justify-self: center;
+    
+        color: #CE8800;
+
+        font-weight: bold;
+    }
+
+    &.name-unadoptable {
+        color: rgba($color: #CE8800, $alpha: 0.6);
+    }
+
+    &.description {        
+        color: #7b7b7b;
+
+        justify-self: center;
+    }
+
+    &.level {
+        justify-self: center;
+
+        margin-top: 8px;
+    }
+
+    &.adoptable {
+        color: green;
+    }
+
+    &.unadoptable {
+        color: red;
+    }
 }
+
+span {
+    &.label {
+        font-weight: bold;
+    }
+}
+
