@@ -1,9 +1,9 @@
-import { Rune } from './../../shared/models/rune.model';
-import { environment } from './../../../environments/environment';
+import { Rune } from '../../../shared/models/rune.model';
+import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Character } from '../models/character.model';
+import { Character } from '../../models/character.model';
 
 @Injectable({
   providedIn: 'root'

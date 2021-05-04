@@ -6,16 +6,22 @@ import { DiabloiiClassicComponent } from './components/diabloii-classic/diabloii
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { DiabloiiClassisRuneService } from './services/diabloii-classis-rune.service';
+import { DiabloiiClassisRuneService } from './services/rune/diabloii-classis-rune.service';
 import { ConfirmationService } from '../shared/services/confirmation.service';
 import { DiabloiiClassicNewCharacterComponent } from './components/diabloii-classic-new-character/diabloii-classic-new-character.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
+import { DiabloiiClassicRuneWordsComponent } from './components/diabloii-classic-rune-words/diabloii-classic-rune-words.component';
+import { ItemTypePipe } from './pipes/item-type.pipe';
+import { PropertyPipe } from './pipes/property.pipe';
 
 @NgModule({
   declarations: [
     DiabloiiClassicComponent,
-    DiabloiiClassicNewCharacterComponent
+    DiabloiiClassicNewCharacterComponent,
+    DiabloiiClassicRuneWordsComponent,
+    ItemTypePipe,
+    PropertyPipe
   ],
   imports: [
     CommonModule,

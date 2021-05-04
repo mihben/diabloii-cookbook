@@ -1,4 +1,4 @@
-import { CharacterService } from './../../services/character.service';
+import { CharacterService } from '../../services/character/diabloii-classis-character.service';
 import { Character } from './../../models/character.model';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';

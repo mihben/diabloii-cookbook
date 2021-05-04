@@ -1,0 +1,50 @@
+$color-rune: #CE8800;
+$color-property: #5255CE;
+$color-skill: #197917;
+
+p {
+    text-align: center;
+
+    &.name {
+        color: $color-rune;
+        font-size: 20px;
+    }
+
+    &.item-type {
+        font-size: 12px;
+    }
+
+    &.level {
+        margin-top: 16px;
+    }
+
+    &.adoptable {
+        color: green;
+    }
+
+    &.unadoptable {
+        color: red;
+    }
+
+    &.property {
+        color: $color-property;
+    }
+}
+
+div {
+    &.ingredients {
+        display: flex;
+        flex-flow: row wrap;
+
+        height: min-content;
+
+        justify-content: center;
+
+        margin-top: 16px;
+        margin-bottom: 32px;
+    }
+}
+
+::ng-deep span.skill {
+    color: $color-skill;
+}

@@ -45,7 +45,7 @@ div {
         border-image-width: auto;
         border-style: solid;
 
-        background-color: rgba($color: $color-background, $alpha: 0.7);
+        background-color: rgba($color: $color-background, $alpha: 0.9);
     }
 
     &.data {
@@ -58,6 +58,15 @@ div {
     &.filter {
         flex: 0 0 0;
 
+        display: grid;
+
+        grid-template-columns: repeat(3, [itemType] auto);
+        row-gap: $size-margin-normal;
+        column-gap: $size-margin-normal;
+
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: $size-margin-normal;
         margin-bottom: $size-margin-normal;
     }
 
@@ -70,7 +79,7 @@ div {
     &.rune-word {
         margin-bottom: $size-margin-normal;
 
-        height: 300px;
+        height: min-content;
     }
 
     &.character {
@@ -115,7 +124,7 @@ div {
         margin-bottom: $size-margin-normal;
     }
 
-    &.rune-selector {
+    &.selector {
         display: flex;
         flex-flow: row wrap;
     }
@@ -318,6 +327,13 @@ div.mat-select-panel {
 
 form.character {
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+form.filter {
+    height: min-content;
     width: 100%;
     display: flex;
     flex-flow: column wrap;

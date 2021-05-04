@@ -1,12 +1,15 @@
-import { CharacterService } from './../../services/character.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { RuneWord } from './../../models/rune-word.model';
+import { ItemType } from './../../models/item-type.model';
+import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-classic-filter.service';
+import { CharacterService } from '../../services/character/diabloii-classis-character.service';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Character } from './../../models/character.model';
 import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Rune } from 'src/app/shared/models/rune.model';
 import { ConfirmationService } from 'src/app/shared/services/confirmation.service';
-import { DiabloiiClassisRuneService } from '../../services/diabloii-classis-rune.service';
+import { DiabloiiClassisRuneService } from '../../services/rune/diabloii-classis-rune.service';
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
 
 @Component({
@@ -25,29 +28,28 @@ export class DiabloiiClassicComponent implements OnInit {
     isLadder: new FormControl(false)
   })
 
-  runeWords: Array<string> = [
-    "Nadir",
-    "Nadir",
-    "Nadir",
-    "Nadir",
-    "Nadir"
-  ]
+  public itemTypes: Array<ItemType> = [];
+  public filterForm: FormGroup = new FormGroup({});
 
-  runes: Array<Rune> = [ ]
+  public runeWords: RuneWord[] = [ ];
 
-  characters: Array<string> = [];
+  public runes: Array<Rune> = [ ]
+
+  public characters: Array<string> = [];
 
   index: number = 0;
 
   constructor(private runeService: DiabloiiClassisRuneService,
     private characterService: CharacterService,
     private confirmationService: ConfirmationService,
-    private dialogService: MatDialog) { 
+    private dialogService: MatDialog,
+    private filterService: DiabloiiClassicFilterService) { 
   }
 
   ngOnInit(): void {
     this.runeService.getRunes()
-      .subscribe(runes => 
+      .subscribe({
+        next: runes => 
         {
           runes.forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
           this.runes = runes
@@ -57,6 +59,14 @@ export class DiabloiiClassicComponent implements OnInit {
             this.characters = characters;
             this.refresh(0);
           });
+      }});
+
+    this.filterService.getItemTypes()
+        .subscribe({
+          next: itemTypes => {
+            itemTypes.forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
+            this.itemTypes = itemTypes
+          }
         });
   }
 
@@ -123,8 +133,6 @@ export class DiabloiiClassicComponent implements OnInit {
   refresh(index: number) {
     this.characterService.getCharacter(this.characters[index]).subscribe({
       next: character => {
-        console.log(character.class);
-        
         this.characterForm.get('class')?.setValue(character.class);    
         this.characterForm.get('name')?.setValue(character.name);    
         this.characterForm.get('level')?.setValue(character.level);    
@@ -136,5 +144,18 @@ export class DiabloiiClassicComponent implements OnInit {
         this.index = index;
       }
     })
+  }
+
+  selectItemTypeFilter(group: string) {
+    const targetItemTypes = this.itemTypes.filter(it => it.group === group);
+    var targetValue = targetItemTypes.every(it => !this.filterForm.get(it.id)?.value);
+    targetItemTypes.forEach(it => this.filterForm.get(it.id)?.setValue(targetValue));
+  }
+
+  getAllRuneWords() : void {
+    this.filterService.getRuneWords()
+      .subscribe({
+        next: runeWords => this.runeWords = runeWords
+      })
   }
 }

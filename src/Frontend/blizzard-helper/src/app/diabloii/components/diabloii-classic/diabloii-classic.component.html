@@ -30,7 +30,7 @@
             </div>
             
             <div class="character-runes">
-                <div class="rune-selector" *ngFor="let rune of runes">
+                <div class="selector" *ngFor="let rune of runes">
                     <input style="margin-right: 8px;" type="checkbox" formControlName="{{ rune.id }}"/>
                     <app-rune [rune]="rune" assets='diabloii\\classic\\runes'></app-rune>
                 </div>
@@ -44,14 +44,29 @@
     </div>
 
     <div class="data">
-        <div class="filter panel">            
-            <p>Filters</p>
-        </div>
+        <form class="filter" [formGroup]="filterForm">
+            <div class="filter panel">
+                <div class="selector" *ngFor="let itemType of itemTypes" style="margin-left: 4px;">
+                    <input style="margin-right: 8px;" type="checkbox" formControlName="{{ itemType.id }}"/>
+                    <p>{{ itemType.name }}</p>
+                </div>                    
+                
+                <div style="display: flex; grid-column: 1 / 4; padding: 4px; margin-top: 4px;">
+                    <div style="display: flex;">
+                        <button (click)="selectItemTypeFilter('Weapon')">Weapons</button>
+                        <button (click)="selectItemTypeFilter('Armor')">Armors</button>
+                    </div>
+                    
+                    <div style="display: flex;">
+                        <button style="margin-left: auto;">Search</button>
+                        <button (click)="getAllRuneWords()">All</button>
+                    </div>
+                </div>
+            </div>
+        </form>
 
         <div class="rune-words">
-            <div class="rune-word panel" *ngFor="let runeWord of runeWords">
-                {{runeWord}}
-            </div>
+            <app-diabloii-classic-rune-words *ngFor="let runeWord of runeWords" [runeWord]="runeWord" [level]="this.characterForm.get('level')?.value"></app-diabloii-classic-rune-words>
         </div>
     </div>
 </div>

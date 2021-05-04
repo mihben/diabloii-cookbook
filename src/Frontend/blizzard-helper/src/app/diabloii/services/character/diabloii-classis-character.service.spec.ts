@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CharacterService } from './character.service';
+import { CharacterService } from './diabloii-classis-character.service';
 
 describe('CharacterService', () => {
   let service: CharacterService;
