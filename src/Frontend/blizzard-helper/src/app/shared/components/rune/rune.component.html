@@ -1,0 +1,17 @@
+<div class="tool-tip">
+    <div>
+        <img src="{{rune.name | asset: assets:'png'}}">
+         <p [ngClass]="isAdoptableName()">{{rune.name}}</p>
+    </div>
+    
+    <div class="tool-tip-text panel">
+        <p class="name" style="margin-bottom: 16px;">{{ rune.name }}</p>
+
+        <p class="description"><span class="label">Weapon: </span>{{ rune.inWeapon }}</p>
+        <p class="description"><span class="label">Helm: </span>{{ rune.inHelm }}</p>
+        <p class="description"><span class="label">Armor: </span>{{ rune.inArmor }}</p>
+        <p class="description"><span class="label">Shield: </span>{{ rune.inShield }}</p>
+
+        <p class="level" [ngClass]="isAdoptable()">Required level: {{ rune.level }}</p>
+    </div>
+</div>
