@@ -1,0 +1,23 @@
+<form (submit)="save(this.formGroup.value)" [formGroup]="formGroup" style="display: grid; grid-template-rows: repeat(min-content 8px); grid-template-columns: [label] min-content 4px [item] auto;">
+    <p class="label">Class:</p>
+    <mat-select class="item" formControlName="class">
+        <mat-option *ngFor="let class of classes" value="{{ class }}">{{ class }}</mat-option>
+    </mat-select>
+
+    <p class="label" itemid="name">Name:</p>
+    <input class="item" type="text" formControlName="name">
+
+    <p class="label" itemid="level">Level:</p>
+    <input class="item" id="level" type="number" formControlName="level">
+
+    <p class="label" itemid="expansion">Expansion:</p>
+    <input class="item" id="expansion" type="checkbox" formControlName="isExpansion">
+
+    <p class="label" itemid="ladder">Ladder:</p>
+    <input class="item" type="checkbox" formControlName="isLadder">
+
+    <div style="display: flex; grid-column: 1 / 4; margin-top: 8px;">
+        <button type="submit">Save</button>
+        <button type="cancel" (click)="cancel()" style="margin-left: auto;">Cancel</button>
+    </div>
+</form>

@@ -1,0 +1,367 @@
+$color-foreground: #7b7b7b;
+$color-rune: #CE8800;
+$color-button: #000000;
+$color-background: #000000;
+$color-magic: #197917;
+
+$size-margin-normal: 4px;
+$size-margin-double: 8px;
+$size-margin-huge: 30px;
+
+$size-font-normal: 14px;
+
+$font: 'Exocet';
+
+$image-background: '../../../../assets/diabloii/classic/background.gif';
+$image-border: '../../../../assets/diabloii//classic/border.png';
+
+@font-face {
+    font-family: 'Exocet';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.woff') format('woff'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.ttf') format('truetype'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.eot') format('eot'),
+         local('Exocet'), url('../../../../assets/diabloii/classic/fonts/EXL_____.svg') format('svg')
+}
+
+div {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    color: $color-foreground !important;
+
+    &.main {
+        background-color: #000000;
+        background-image: url($image-background);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 40%;
+
+        display: grid;
+        grid-template-columns: [character] 25% $size-margin-normal [data] auto;
+
+        padding: $size-margin-normal;
+
+        overflow-y: hidden;
+    }
+
+    &.panel {
+        border-image: url($image-border) 30 round;
+        border-image-width: auto;
+        border-style: solid;
+
+        background-color: rgba($color: $color-background, $alpha: 0.9);
+    }
+
+    &.data {
+        grid-column: data;
+
+        display: flex;
+        flex-flow: column wrap;    
+    }
+
+    &.filter {
+        flex: 0 0 0;
+
+        display: flex;
+        flex-flow: row wrap;
+        flex: 0 0 0;
+
+        margin-bottom: $size-margin-normal;
+    }
+
+    &.rune-words {
+        flex: 1 0 0;
+
+        overflow-y: auto;
+    }
+
+    &.rune-word {
+        margin-bottom: $size-margin-normal;
+
+        height: min-content;
+
+        padding: $size-margin-normal;
+    }
+
+    &.character {
+        grid-column: character;
+
+        display: flex;
+        flex-flow: column wrap;
+
+        padding: $size-margin-normal;
+    }
+
+    &.character-image {
+        flex: 1 0 0;
+
+        display: flex;
+
+        align-self: stretch;
+    }
+
+    &.character-information {
+        flex: 0 0 0;
+        
+        display: grid;
+
+        grid-template-columns: [label] min-content $size-margin-normal [item] auto;
+        grid-template-rows: repeat(min-content $size-margin-normal);
+
+        margin-top: $size-margin-normal;
+        margin-bottom: $size-margin-normal;
+    }
+
+    &.character-runes {
+        flex: 0 0 0;
+
+        display: grid;
+
+        grid-template-columns: repeat(3, [rune] auto);
+        row-gap: $size-margin-normal;
+        column-gap: $size-margin-normal;
+
+        margin-top: $size-margin-normal;
+        margin-bottom: $size-margin-normal;
+    }
+
+    &.selector {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    &.character-buttons {
+        flex: 0 0 0;
+
+        display: flex;
+        flex-flow: row wrap;
+
+        margin-top: $size-margin-normal;
+    }
+
+    &.cdk-overlay-pane {
+        width: max-content;
+        height: max-content;
+    }
+
+    &.weapon {
+        width: max-content;
+        height: max-content;
+
+        align-self: center;
+        margin-right: auto;
+        margin-top: $size-margin-normal;
+
+        display: grid;
+        grid-template-columns: repeat(3, [weapon] auto);
+        column-gap: $size-margin-double;
+        row-gap: $size-margin-normal;
+    }
+
+    &.armor {
+        width: max-content;
+        height: min-content;
+
+        align-self: center;
+        margin-left: auto;
+        margin-right: $size-margin-double;
+        margin-top: $size-margin-normal;
+    }
+}
+
+img {
+    width: max-content;
+    height: max-content;
+
+    &.class-image {
+        width: auto;
+        height: auto;
+
+        margin-top: $size-margin-huge;
+        margin-bottom: $size-margin-huge;
+        margin-left: auto;
+        margin-right: auto;
+
+        align-self: stretch;
+    }
+}
+
+button {
+    -webkit-appearance: none;
+
+    background-image: url('../../../../assets/diabloii/classic/button.png');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+
+    border-width: 0px;
+
+    font-weight: bolder;
+    font-family: $font;
+    color: $color-button;
+
+    height: 1.8em;
+    width: 120px;
+
+    &.arrow, &.arrow:active:enabled {
+        background-image: unset;
+        background-color: transparent;
+        border-color: transparent;
+
+        height: max-content;
+        width: max-content;
+
+        align-self: center;
+    }
+}
+
+button:disabled {
+    background-image: url('../../../../assets/diabloii/classic/disabled-button.jpg');
+
+    color: rgba($color: $color-button, $alpha: 0.7);
+}
+
+button:active:enabled {
+    background-image: url('../../../../assets/diabloii/classic/active-button.jpg');
+    padding-top: 3px;
+}
+
+ p {
+    font-size: $size-font-normal;
+    font-family: $font;
+    align-self: center;
+
+    &.label {
+        grid-column: label;
+    }
+
+    &.item {
+        grid-column: item
+    }
+}
+
+input[type=text], input[type=number] {
+    border-image: url('../../../../assets/diabloii//classic/input.png') 3 round;
+    border-image-width: auto;
+    border-style: solid;
+
+    background-color: transparent;
+
+    color: $color-foreground;
+    font-size: $size-font-normal;
+    font-family: $font;
+    
+    padding-left: 4px;
+
+    height: 1.5em;
+    
+    align-self: center;
+
+    &.item {
+        grid-column: item;
+    }    
+}
+
+input[type=checkbox] {
+    -webkit-appearance: none;
+
+    background-image: url('../../../../assets/diabloii/classic/unchecked.png');
+    background-size: contain;
+
+    width: 1.3em;
+    height: 1.3em;
+
+    align-self: center;
+
+    &.item {
+        grid-column: item;
+    }    
+}
+
+input[type=checkbox]:checked {
+    background-image: url('../../../../assets/diabloii/classic/checked.png');
+}
+
+*:focus {
+    outline: none;
+}
+
+app-rune {
+    font-family: $font;
+    color: $color-rune;
+}
+
+mat-dialog-container.mat-dialog-container {
+    background-color: $color-background;
+    color: $color-foreground;
+    
+    border-image: url($image-border) 30 round;
+    border-image-width: auto;
+    border-style: solid;
+
+    padding: 8px;
+}
+
+mat-select.mat-select {    
+    border-image: url($image-border) 30 round;
+    border-image-width: auto;
+    border-style: solid;
+
+    align-self: center;
+
+    font-size: $size-font-normal;
+    font-family: $font;
+    color: $color-foreground;
+
+    height: 1.5em;
+
+    &.item {
+        grid-column: item;
+    }
+}
+
+div.mat-select-arrow {    
+    color: transparent;
+
+    background-image: url('../../../../assets/diabloii/classic/left.png');
+    background-size: contain;
+}
+
+div.mat-select-panel {
+    color: $color-foreground;
+    background-color: $color-background;
+
+    font-family: $font;
+    font-size: $size-font-normal;
+
+    border-image: url($image-border) 30 round;
+    border-image-width: auto;
+    border-style: solid;
+}
+
+.mat-option {
+    color: $color-foreground;
+
+    font-family: $font;
+    font-size: $size-font-normal;
+}
+
+.mat-option.mat-selected {
+    color: $color-magic;
+}
+
+form.character {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+form.filter {
+    height: min-content;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+}
