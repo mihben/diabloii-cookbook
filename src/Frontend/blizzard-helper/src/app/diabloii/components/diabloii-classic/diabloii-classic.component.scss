@@ -44,6 +44,10 @@ div {
         padding: $size-margin-normal;
 
         overflow-y: hidden;
+
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
     &.panel {
@@ -364,4 +368,8 @@ form.filter {
     width: 100%;
     display: flex;
     flex-flow: column wrap;
+}
+
+.hidden {
+    visibility: hidden;
 }

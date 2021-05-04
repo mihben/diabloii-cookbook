@@ -11,8 +11,6 @@ export class DiabloiiClassisRuneService {
   constructor(private client: HttpClient) { }
 
   getRunes() : Observable<Array<Rune>> {
-    return this.client.post<Array<Rune>>(environment.backend.url, {}, { headers: new HttpHeaders({
-      'Message-Type': 'DiabloII_Cookbook.Api.Queries.GetRunesQuery, DiabloII-Cookbook.Api'
-    }) });
+    return this.client.get<Array<Rune>>(`${environment.backend.url}/rune`);
   }
 }

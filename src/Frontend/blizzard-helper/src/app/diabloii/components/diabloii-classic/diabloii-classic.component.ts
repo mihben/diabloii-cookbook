@@ -4,13 +4,14 @@ import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-c
 import { CharacterService } from '../../services/character/diabloii-classis-character.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Character } from './../../models/character.model';
-import { ViewEncapsulation } from '@angular/core';
+import {  ViewEncapsulation } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Rune } from 'src/app/shared/models/rune.model';
 import { ConfirmationService } from 'src/app/shared/services/confirmation.service';
 import { DiabloiiClassisRuneService } from '../../services/rune/diabloii-classis-rune.service';
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
+import { LoadingScreen } from 'src/app/shared/models/loading-screen.model';
 
 @Component({
   selector: 'app-diabloii-classic',
@@ -28,6 +29,14 @@ export class DiabloiiClassicComponent implements OnInit {
     isLadder: new FormControl(false)
   })
 
+  public images: Array<LoadingScreen> = [
+    { name: "Andariel", message: "Die, maggot!" },
+    { name: "Duriel", message: "Looking for Baal!?" },
+    { name: "Mephisto", message: "Cursed am I to lead an army of the blind; they do not perceive that the angels are fleeing this realm, and the ones they find are merely trapped or lost! A great change is upon us; withdraw from the fields, my brothers... ... some battles can only won with words..." },
+    { name: "Diablo", message: "Not even death can save you from me!" },
+    { name: "Baal", message: "Enough of your idle speculation, Mephisto! I breached the fortress and saw it firsthand: the Worldstone is GONE! The angels I killed knew nothing about it. But since you are so perceptive, maybe you remember who else has been missing: Lilith - we must find her, rip her limb from limb, take the Worldstone BACK!" }
+  ]
+
   public weapons: Array<ItemType> = [];
   public armors: Array<ItemType> = [];
   public filterForm: FormGroup = new FormGroup({});
@@ -37,6 +46,8 @@ export class DiabloiiClassicComponent implements OnInit {
   public runes: Array<Rune> = [ ]
 
   public characters: Array<string> = [];
+
+  public loading: boolean = false;
 
   index: number = 0;
 
@@ -48,6 +59,11 @@ export class DiabloiiClassicComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
+
+    let getRunes = true;
+    let getfilters = true;
+
     this.runeService.getRunes()
       .subscribe({
         next: runes => 
@@ -60,7 +76,10 @@ export class DiabloiiClassicComponent implements OnInit {
             this.characters = characters;
             this.refresh(0);
           });
-      }});
+      }})
+      .add(() => {
+        getRunes = false;
+      });
 
     this.filterService.getItemTypes()
         .subscribe({
@@ -69,7 +88,14 @@ export class DiabloiiClassicComponent implements OnInit {
             this.weapons = itemTypes.filter(it => it.group === "Weapon");
             this.armors = itemTypes.filter(it => it.group === "Armor");
           }
+        })
+        .add(() => {
+          getfilters = false;
         });
+  }
+
+  hideLoadingScreen() {
+    this.loading = false;
   }
 
   next(): void {
