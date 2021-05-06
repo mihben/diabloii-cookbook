@@ -14,6 +14,8 @@ using System.Net.Http.Headers;
 using DiabloII_Cookbook.Application.Entities;
 using System.Xml.Linq;
 using System.Threading;
+using DiabloII_Cookbook.IntegrationTest.Builders;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiabloII_Cookbook.IntegrationTest
 {
@@ -50,19 +52,14 @@ namespace DiabloII_Cookbook.IntegrationTest
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
             var command = new Fixture().Create<AddItemTypeFilterCommand>();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Id, command.CharacterId)
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                    .Without(ce => ce.Filters)
-                                                .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity(id: command.CharacterId);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             var context = _factory.Services.GetService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(new Fixture().Build<ItemTypeEntity>().With(ite => ite.Id, command.ItemTypeId).Create(), new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.AddAsync(new Fixture().CreateItemTypeEntity(command.ItemTypeId), new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 
             // Act
@@ -72,7 +69,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             context.ChangeTracker.Clear();
-            var entity = await context.Characters.FindAsync(new object[] { command.CharacterId });
+            var entity = await context.Characters.Include(c => c.Filters).FirstAsync(c => c.Id.Equals(existingCharacter.Id), new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             Assert.Collection(entity.Filters, f => f.ItemTypeId.Equals(command.ItemTypeId));
         }
     }

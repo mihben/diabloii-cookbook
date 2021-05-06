@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
+using DiabloII_Cookbook.IntegrationTest.Builders;
 using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,11 +64,7 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Level, 1)
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity();
 
             var context = _factory.Services.GetService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);

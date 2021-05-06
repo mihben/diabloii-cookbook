@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
+using DiabloII_Cookbook.IntegrationTest.Builders;
 using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,10 +52,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             // Arrange
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                     .Without(ce => ce.Runes)
-                                                     .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                 .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
@@ -131,10 +129,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             // Arrange
             var correlationId = Guid.NewGuid();
             var client = _factory.CreateClient();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                     .With(ce => ce.Runes, new List<CharacterRuneEntity>())
-                                                     .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                 .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 

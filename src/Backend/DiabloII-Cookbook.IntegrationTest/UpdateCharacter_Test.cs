@@ -3,6 +3,7 @@ using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
 using DiabloII_Cookbook.Application.Mappers;
+using DiabloII_Cookbook.IntegrationTest.Builders;
 using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.EntityFrameworkCore;
@@ -91,13 +92,7 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var name = new Fixture().Create<string>();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Level, 1)
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
@@ -109,7 +104,7 @@ namespace DiabloII_Cookbook.IntegrationTest
 
             var content = new
             {
-                Level = 2,
+                Level = existingCharacter.Level > 99 ? 98 : existingCharacter.Level + 1,
                 Runes = Enumerable.Empty<Rune>()
             };
 
@@ -123,7 +118,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             var entity = await context.Characters.FindAsync(existingCharacter.Id);
 
             // Level update to 2
-            Assert.Equal(2, entity.Level);
+            Assert.Equal(existingCharacter.Level == 99 ? 98 : existingCharacter.Level + 1, entity.Level);
         }
 
         [Fact(DisplayName = "[INT-UC004][202-Accepted] - Update character runes")]
@@ -132,14 +127,8 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var name = new Fixture().Create<string>();
             var runeEntity = new Fixture().Build<RuneEntity>().Without(re => re.Characters).Without(re => re.RuneWords).Create();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .With(ce => ce.Level, 1)
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                .Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity(runes: new List<CharacterRuneEntity>());
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);

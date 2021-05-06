@@ -39,7 +39,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             var client = _factory.CreateClient();
 
             // Call /api/character POST endpoint without authentication
-            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", new Fixture().CreateCharacterCommand(), correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 401 - Unathorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -56,7 +56,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", new Fixture().GenerateCreateCharacter(), correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", new Fixture().CreateCharacterCommand(), correlationId, TimeSpan.FromSeconds(5));
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
@@ -76,7 +76,7 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var command = new Fixture().GenerateCreateCharacter();
+            var command = new Fixture().CreateCharacterCommand();
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
@@ -106,13 +106,8 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var name = new Fixture().Create<string>();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "TestAccount" })
-                                                .Create();
-            var command = new Fixture().Build<CreateCharacterCommand>().FromFactory(() => DataFactories.Create(name)).Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity("TestAccount");
+            var command = new Fixture().CreateCharacterCommand();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
@@ -147,13 +142,8 @@ namespace DiabloII_Cookbook.IntegrationTest
         {
             // Arrange
             var correlationId = Guid.NewGuid();
-            var name = new Fixture().Create<string>();
-            var existingCharacter = new Fixture().Build<CharacterEntity>()
-                                                    .Without(ce => ce.Runes)
-                                                    .With(ce => ce.Name, name)
-                                                    .With(ce => ce.Account, new AccountEntity { Id = Guid.NewGuid(), BattleTag = "integration_test" })
-                                                .Create();
-            var command = new Fixture().Build<CreateCharacterCommand>().FromFactory(() => DataFactories.Create(name)).Create();
+            var existingCharacter = new Fixture().CreateCharacterEntity();
+            var command = new Fixture().CreateCharacterCommand(existingCharacter.Name);
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
@@ -174,7 +164,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             Assert.Equal(402, error.Code);
 
             // Message - 'TestCharacter has been already created'
-            Assert.Equal($"{name} has been already created", error.Message);
+            Assert.Equal($"{existingCharacter.Name} has been already created", error.Message);
         }
 
         protected virtual void Dispose(bool disposing)
