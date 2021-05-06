@@ -1,4 +1,4 @@
-<app-loading-screen *ngIf="loading" style="z-index: 1; position: relative;" assets='diabloii\classic\loading-screen' [images]='images'></app-loading-screen>
+<app-loading-screen @fadeOut *ngIf="loading" style="z-index: 1; position: relative;" assets='diabloii\classic\loading-screen' [images]='images'></app-loading-screen>
 
 <div class="main">
     <div class="character panel">
@@ -50,14 +50,14 @@
             <div class="filter panel">                
                 <div class="armor">
                     <div class="selector" style="margin-top: 4px;" *ngFor="let armor of armors">
-                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ armor.id }}"/>
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ armor.id }}" (change)="saveItemTypeFilter(armor.id)"/>
                         <p>{{ armor.name }}</p>
                     </div>                   
                 </div>
 
                 <div class="weapon">
                     <div class="selector" *ngFor="let weapon of weapons">
-                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ weapon.id }}"/>
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ weapon.id }}" (change)="saveItemTypeFilter(weapon.id)"/>
                         <p>{{ weapon.name }}</p>
                     </div>                 
                 </div>

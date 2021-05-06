@@ -1,3 +1,3 @@
 Feature: FRW - Filter rune words
 
-    Feature Description
+    Scenario: [INT-FRW0001][401-Unathorized]: 

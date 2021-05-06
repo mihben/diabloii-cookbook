@@ -23,4 +23,8 @@ export class DiabloiiClassicFilterService {
       'Message-Type': 'DiabloII_Cookbook.Api.Queries.GetAllRuneWordsQuery, DiabloII-Cookbook.Api'
     }) })
   }
+
+  public addFilter(characterId: string, itemTypeId: string) {
+    return this.httpClient.post(`${environment.backend.url}/filter`, { characterId, itemTypeId });
+  }
 }

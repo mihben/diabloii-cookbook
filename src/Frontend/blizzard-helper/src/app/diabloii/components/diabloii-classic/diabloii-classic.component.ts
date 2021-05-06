@@ -4,7 +4,7 @@ import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-c
 import { CharacterService } from '../../services/character/diabloii-classis-character.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Character } from './../../models/character.model';
-import {  ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Rune } from 'src/app/shared/models/rune.model';
@@ -12,12 +12,18 @@ import { ConfirmationService } from 'src/app/shared/services/confirmation.servic
 import { DiabloiiClassisRuneService } from '../../services/rune/diabloii-classis-rune.service';
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
 import { LoadingScreen } from 'src/app/shared/models/loading-screen.model';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-diabloii-classic',
   templateUrl: './diabloii-classic.component.html',
   styleUrls: ['./diabloii-classic.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [trigger('fadeOut', [
+    transition(':leave', [
+      animate('200ms', style({ opacity: 0 }))
+    ])
+  ])]
 })
 export class DiabloiiClassicComponent implements OnInit {
 
@@ -41,9 +47,9 @@ export class DiabloiiClassicComponent implements OnInit {
   public armors: Array<ItemType> = [];
   public filterForm: FormGroup = new FormGroup({});
 
-  public runeWords: RuneWord[] = [ ];
+  public runeWords: RuneWord[] = [];
 
-  public runes: Array<Rune> = [ ]
+  public runes: Array<Rune> = []
 
   public characters: Array<string> = [];
 
@@ -55,75 +61,67 @@ export class DiabloiiClassicComponent implements OnInit {
     private characterService: CharacterService,
     private confirmationService: ConfirmationService,
     private dialogService: MatDialog,
-    private filterService: DiabloiiClassicFilterService) { 
+    private filterService: DiabloiiClassicFilterService) {
   }
 
   ngOnInit(): void {
     this.loading = true;
 
-    let getRunes = true;
-    let getfilters = true;
-
     this.runeService.getRunes()
       .subscribe({
-        next: runes => 
-        {
+        next: runes => {
           runes.forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
           this.runes = runes
 
           this.characterService.getCharacters()
-          .subscribe(characters => {          
-            this.characters = characters;
-            this.refresh(0);
-          });
-      }})
-      .add(() => {
-        getRunes = false;
+            .subscribe(characters => {
+              this.characters = characters;
+              this.refresh(0);
+            });
+        }
       });
 
     this.filterService.getItemTypes()
-        .subscribe({
-          next: itemTypes => {
-            itemTypes.forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
-            this.weapons = itemTypes.filter(it => it.group === "Weapon");
-            this.armors = itemTypes.filter(it => it.group === "Armor");
-          }
-        })
-        .add(() => {
-          getfilters = false;
-        });
+      .subscribe({
+        next: itemTypes => {
+          itemTypes.forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
+          this.weapons = itemTypes.filter(it => it.group === "Weapon");
+          this.armors = itemTypes.filter(it => it.group === "Armor");
+        },
+        complete: () => {
+        }
+      });
   }
 
-  hideLoadingScreen() {
+  public hideLoadingScreen() {
+    console.log("Hide loading screen");
     this.loading = false;
   }
 
   next(): void {
-    if (this.index < this.characters.length - 1) 
-    {
+    if (this.index < this.characters.length - 1) {
       this.refresh(++this.index);
     }
-  }  
-  
+  }
+
   previous(): void {
-    if (this.index > 0) 
-    {
+    if (this.index > 0) {
       this.refresh(--this.index);
     }
   }
 
-  add() : void {
+  add(): void {
     this.dialogService.open(DiabloiiClassicNewCharacterComponent)
       .afterClosed().subscribe({
         next: (character: Character) => {
-          if (character !== undefined && character !== null){
+          if (character !== undefined && character !== null) {
             this.characterService.save(character).subscribe({
               next: response => {
                 this.characterService.getCharacters()
-                .subscribe(characters => {          
-                  this.characters = characters;
-                  this.refresh(this.characters.length - 1);
-                });
+                  .subscribe(characters => {
+                    this.characters = characters;
+                    this.refresh(this.characters.length - 1);
+                  });
               }
             });
           }
@@ -135,7 +133,7 @@ export class DiabloiiClassicComponent implements OnInit {
     const name = this.characterForm.get('name')?.value;
     this.confirmationService.confirm(`Do you really want to delete ${name}?`)
       .subscribe(result => {
-        if (result) {   
+        if (result) {
           this.characterService.delete(this.characters[this.index]).subscribe({
             next: response => {
               this.characterService.getCharacters().subscribe({
@@ -161,14 +159,20 @@ export class DiabloiiClassicComponent implements OnInit {
   refresh(index: number) {
     this.characterService.getCharacter(this.characters[index]).subscribe({
       next: character => {
-        this.characterForm.get('class')?.setValue(character.class);    
-        this.characterForm.get('name')?.setValue(character.name);    
-        this.characterForm.get('level')?.setValue(character.level);    
-        this.characterForm.get('isExpansion')?.setValue(character.isExpansion);    
-        this.characterForm.get('isLadder')?.setValue(character.isLadder);   
+        console.log(character);
         
+
+        this.characterForm.get('class')?.setValue(character.class);
+        this.characterForm.get('name')?.setValue(character.name);
+        this.characterForm.get('level')?.setValue(character.level);
+        this.characterForm.get('isExpansion')?.setValue(character.isExpansion);
+        this.characterForm.get('isLadder')?.setValue(character.isLadder);
+
         this.runes.forEach(rune => this.characterForm.get(rune.id)?.setValue(!!character.runes.find(cr => rune.id === cr.id)));
-        
+
+        this.weapons.forEach(w => this.filterForm.get(w.id)?.setValue(!!character.filter.itemTypes.includes(w.id)))
+        this.armors.forEach(a => this.filterForm.get(a.id)?.setValue(!!character.filter.itemTypes.includes(a.id)))
+
         this.index = index;
       }
     })
@@ -179,10 +183,18 @@ export class DiabloiiClassicComponent implements OnInit {
     itemTypes.forEach(it => this.filterForm.get(it.id)?.setValue(targetValue));
   }
 
-  getAllRuneWords() : void {
+  getAllRuneWords(): void {
     this.filterService.getRuneWords()
       .subscribe({
         next: runeWords => this.runeWords = runeWords
       })
+  }
+
+  public saveItemTypeFilter(itemTypeId: string){
+    if (this.filterForm.get(itemTypeId)?.value) {
+      this.filterService.addFilter(this.characters[this.index], itemTypeId).subscribe({
+        next: () => {}
+      });
+    }
   }
 }

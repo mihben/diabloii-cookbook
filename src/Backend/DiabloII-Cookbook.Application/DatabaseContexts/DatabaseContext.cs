@@ -12,6 +12,7 @@ namespace DiabloII_Cookbook.Application.DatabaseContexts
         public DbSet<RuneEntity> Runes { get; set; }
         public DbSet<CharacterEntity> Characters { get; set; }
         public DbSet<AccountEntity> Accounts { get; set; }
+        public DbSet<FilterEntity> Filters { get; set; }
 
         public DatabaseContext([NotNull] DbContextOptions<DatabaseContext> options)
             : base(options)
@@ -31,6 +32,7 @@ namespace DiabloII_Cookbook.Application.DatabaseContexts
             modelBuilder.BuildSkillEntity();
             modelBuilder.BuildPropertyEntity();
             modelBuilder.BuildRuneWordItemTypeEntity();
+            modelBuilder.BuildFilterEntity();
 
             base.OnModelCreating(modelBuilder);
         }

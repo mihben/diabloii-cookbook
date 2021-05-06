@@ -14,5 +14,6 @@ namespace DiabloII_Cookbook.Application.Entities
         public bool IsLadder { get; set; }
         public bool IsExpansion { get; set; }
         public ICollection<CharacterRuneEntity> Runes { get; set; }
+        public ICollection<FilterEntity> Filters { get; set; }
     }
 }

@@ -9,5 +9,6 @@ namespace DiabloII_Cookbook.Application.Entities
         public string Name { get; set; }
         public string Group { get; set; }
         public ICollection<RuneWordItemTypeEntity> RuneWords { get; set; }
+        public ICollection<FilterEntity> Filters { get; set; }
     }
 }

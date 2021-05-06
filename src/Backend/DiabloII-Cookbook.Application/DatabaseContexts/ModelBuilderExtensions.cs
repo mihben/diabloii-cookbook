@@ -9,6 +9,33 @@ namespace DiabloII_Cookbook.Application.DatabaseContexts
 {
     public static class ModelBuilderExtensions
     {
+        public static void BuildFilterEntity(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FilterEntity>()
+                .ToTable("filters")
+                .HasKey(fe => new { fe.Id });
+
+            modelBuilder.Entity<FilterEntity>()
+                .Property(fe => fe.Id)
+                .HasColumnName("id");
+            modelBuilder.Entity<FilterEntity>()
+                .HasOne(fe => fe.Character)
+                .WithMany(ce => ce.Filters)
+                .HasForeignKey(fe => fe.CharacterId)
+                .HasConstraintName("fk_filter_entity_character");
+            modelBuilder.Entity<FilterEntity>()
+                .HasOne(fe => fe.ItemType)
+                .WithMany(ite => ite.Filters)
+                .HasForeignKey(fe => fe.ItemTypeId)
+                .HasConstraintName("fk_filter_entity_item_type");
+            modelBuilder.Entity<FilterEntity>()
+                .Property(fe => fe.CharacterId)
+                .HasColumnName("character_id");
+            modelBuilder.Entity<FilterEntity>()
+                .Property(fe => fe.ItemTypeId)
+                .HasColumnName("item_type_id");
+        }
+
         public static void BuildAccountEntity(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountEntity>()

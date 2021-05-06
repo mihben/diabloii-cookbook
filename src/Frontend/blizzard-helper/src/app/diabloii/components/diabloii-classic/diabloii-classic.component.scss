@@ -195,7 +195,7 @@ img {
 button {
     -webkit-appearance: none;
 
-    background-image: url('../../../../assets/diabloii/classic/button.png');
+    background: url('../../../../assets/diabloii/classic/button.png');
     background-repeat: round;
     background-clip: padding-box;
     background-size: cover;
@@ -222,13 +222,20 @@ button {
 }
 
 button:disabled {
-    background-image: url('../../../../assets/diabloii/classic/disabled-button.jpg');
+    background: url('../../../../assets/diabloii/classic/disabled-button.jpg');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
 
     color: rgba($color: $color-button, $alpha: 0.7);
 }
 
 button:active:enabled {
-    background-image: url('../../../../assets/diabloii/classic/active-button.jpg');
+    background: url('../../../../assets/diabloii/classic/active-button.jpg');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+
     padding-top: 3px;
 }
 
@@ -271,7 +278,7 @@ input[type=text], input[type=number] {
 input[type=checkbox] {
     -webkit-appearance: none;
 
-    background-image: url('../../../../assets/diabloii/classic/unchecked.png');
+    background: url('../../../../assets/diabloii/classic/unchecked.png');
     background-size: contain;
 
     width: 1.3em;
@@ -285,7 +292,7 @@ input[type=checkbox] {
 }
 
 input[type=checkbox]:checked {
-    background-image: url('../../../../assets/diabloii/classic/checked.png');
+    background: url('../../../../assets/diabloii/classic/checked.png');
 }
 
 *:focus {

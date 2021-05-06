@@ -12,13 +12,14 @@ namespace DiabloII_Cookbook.Api.DataTransferObjects
         public bool IsLadder { get; }
         public bool IsExpansion { get; }
         public IEnumerable<Rune> Runes { get; }
+        public Filter Filter { get; }
 
         public static Character Empty => new Character();
 
         private Character() { }
 
 
-        public Character(Guid id, string @class, string name, int level, bool isLadder, bool isExpansion, IEnumerable<Rune> runes)
+        public Character(Guid id, string @class, string name, int level, bool isLadder, bool isExpansion, IEnumerable<Rune> runes, Filter filter)
         {
             Id = id;
             Class = @class;
@@ -27,6 +28,7 @@ namespace DiabloII_Cookbook.Api.DataTransferObjects
             IsLadder = isLadder;
             IsExpansion = isExpansion;
             Runes = runes;
+            Filter = filter;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
         public async Task<Character> HandleAsync(GetCharacterDetailQuery query, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Get {id} character detail", query.Id);
-            return (await _context.Characters.Include(c => c.Runes).ThenInclude(ce => ce.Rune).SingleOrDefaultAsync(c => c.Id == query.Id, cancellationToken))
+            return (await _context.Characters.Include(c => c.Runes).ThenInclude(ce => ce.Rune).Include(c => c.Filters).SingleOrDefaultAsync(c => c.Id == query.Id, cancellationToken))
                     .ToDto();
         }
     }
