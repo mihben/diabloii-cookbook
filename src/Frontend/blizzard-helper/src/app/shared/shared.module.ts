@@ -7,8 +7,8 @@ import { RuneComponent } from './components/rune/rune.component';
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-
-
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { SsoRedirectComponent } from './components/sso-redirect/sso-redirect.component';
 
 @NgModule({
   declarations: [
@@ -17,17 +17,22 @@ import { ConfirmationComponent } from './components/confirmation/confirmation.co
     YesNoPipe,
     RuneComponent,
     LoadingScreenComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    NavigationComponent,
+    SsoRedirectComponent
   ],
   imports: [
     CommonModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   exports: [
     AssetPipe,
     YesNoPipe,
     RuneComponent,
-    LoadingScreenComponent
+    LoadingScreenComponent,
+    NavigationComponent
+  ],
+  providers: [  
   ]
 })
 export class SharedModule { }

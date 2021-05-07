@@ -14,7 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: OAuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!request.url.startsWith('https://eu.battle.net/')){
+    if (!request.url.includes('eu.battle.net')){
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.getIdToken()}`

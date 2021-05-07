@@ -6,7 +6,7 @@ import { ItemType } from '../models/item-type.model';
 })
 export class ItemTypePipe implements PipeTransform {
 
-  transform(value: ItemType[], ...args: unknown[]): unknown {
+  transform(value: ItemType[], ...args: unknown[]): string {
     return `(${value.map(v => v.name).join(', ')})`;
   }
 

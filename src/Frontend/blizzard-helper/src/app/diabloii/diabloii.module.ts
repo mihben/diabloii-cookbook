@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DiabloiiClassicRuneWordsComponent } from './components/diabloii-classic-rune-words/diabloii-classic-rune-words.component';
 import { ItemTypePipe } from './pipes/item-type.pipe';
 import { PropertyPipe } from './pipes/property.pipe';
+import { DiabloiiClassicCharacterLevelPipe } from './pipes/diabloii-classic-character-level.pipe';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PropertyPipe } from './pipes/property.pipe';
     DiabloiiClassicNewCharacterComponent,
     DiabloiiClassicRuneWordsComponent,
     ItemTypePipe,
-    PropertyPipe
+    PropertyPipe,
+    DiabloiiClassicCharacterLevelPipe
   ],
   imports: [
     CommonModule,

@@ -9,7 +9,7 @@
                 </button>
             
                 <div style="display: flex;">
-                    <img class="class-image" src="{{ this.characterForm.get('class')?.value | asset:  'diabloii\\classic\\classes':'gif' }}" (load)="hideLoadingScreen()">
+                    <img class="class-image" src="{{ this.characterForm.get('class')?.value | asset:  'diabloii\\classic\\classes':'gif' }}">
                 </div>
 
                 <button class="arrow" (click)="next()">

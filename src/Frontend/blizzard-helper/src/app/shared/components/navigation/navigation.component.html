@@ -1,0 +1,5 @@
+<div>
+    <p>Hello {{ battleTag }}</p>
+    <p class="account link" (click)="login()" *ngIf="!loggedIn()">Login</p>
+    <p class="account link" (click)="logout()" *ngIf="loggedIn()">Logout</p>
+</div>

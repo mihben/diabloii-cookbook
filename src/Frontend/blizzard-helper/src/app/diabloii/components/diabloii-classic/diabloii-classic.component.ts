@@ -1,3 +1,4 @@
+import { concatMap, finalize, switchMap, take } from 'rxjs/operators';
 import { RuneWord } from './../../models/rune-word.model';
 import { ItemType } from './../../models/item-type.model';
 import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-classic-filter.service';
@@ -13,12 +14,13 @@ import { DiabloiiClassisRuneService } from '../../services/rune/diabloii-classis
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
 import { LoadingScreen } from 'src/app/shared/models/loading-screen.model';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { concat, forkJoin, merge, Observable,  } from 'rxjs';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-diabloii-classic',
   templateUrl: './diabloii-classic.component.html',
   styleUrls: ['./diabloii-classic.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   animations: [trigger('fadeOut', [
     transition(':leave', [
       animate('200ms', style({ opacity: 0 }))
@@ -67,28 +69,22 @@ export class DiabloiiClassicComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    this.runeService.getRunes()
-      .subscribe({
-        next: runes => {
-          runes.forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
-          this.runes = runes
+    forkJoin([ this.runeService.getRunes(), this.filterService.getItemTypes()])
+      .pipe(concatMap((projects) => {
+          projects[1].forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
+          this.weapons = projects[1].filter(it => it.group === "Weapon");
+          this.armors = projects[1].filter(it => it.group === "Armor");
 
-          this.characterService.getCharacters()
-            .subscribe(characters => {
-              this.characters = characters;
-              this.refresh(0);
-            });
-        }
-      });
+          projects[0].forEach(rune => this.characterForm.addControl(rune.id, new FormControl(false)));
+          this.runes = projects[0];
 
-    this.filterService.getItemTypes()
+          return this.characterService.getCharacters();
+      }))
+      .pipe(finalize(() => this.loading = false))
       .subscribe({
-        next: itemTypes => {
-          itemTypes.forEach(it => this.filterForm.addControl(it.id, new FormControl(false)));
-          this.weapons = itemTypes.filter(it => it.group === "Weapon");
-          this.armors = itemTypes.filter(it => it.group === "Armor");
-        },
-        complete: () => {
+        next: characters => { 
+          this.characters = characters;
+          this.refresh(0);
         }
       });
   }
@@ -160,7 +156,6 @@ export class DiabloiiClassicComponent implements OnInit {
     this.characterService.getCharacter(this.characters[index]).subscribe({
       next: character => {
         console.log(character);
-        
 
         this.characterForm.get('class')?.setValue(character.class);
         this.characterForm.get('name')?.setValue(character.name);
