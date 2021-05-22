@@ -4,13 +4,21 @@ using DiabloII_Cookbook.Application.Wireup;
 using LightInject.Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
+using Netension.Request.NetCore.Asp.Middlewares;
 using Serilog;
+using Serilog.Sinks.Grafana.Loki;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace DiabloII_Cookbook.Web
 {
@@ -53,6 +61,13 @@ namespace DiabloII_Cookbook.Web
                 .UseSerilog((context, configuration) =>
                 {
                     configuration.ReadFrom.Configuration(context.Configuration);
+
+                    configuration.WriteTo.GrafanaLoki("https://loki.mihben.work", labels: new List<LokiLabel>
+                    {
+                        new LokiLabel { Key = "application", Value = "DiabloII_Cookbook" },
+                        new LokiLabel { Key = "environment", Value = "Development" },
+                        new LokiLabel { Key = "timestamp", Value = DateTime.UtcNow.ToString() }
+                    });
                 })
                 .UseRequesting((builder) =>
                 {
@@ -65,6 +80,8 @@ namespace DiabloII_Cookbook.Web
                     {
                         register.RegistrateLoopbackRequestReceiver((builder) => builder.UseCorrelation());
                         register.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
+
+                        register.UseCorrelationLogger();
                     });
 
                     builder.RegistrateRequestSenders(register =>

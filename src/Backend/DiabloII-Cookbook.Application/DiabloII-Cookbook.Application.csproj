@@ -21,8 +21,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="5.0.0" />
     <PackageReference Include="Netension.Core" Version="1.1.1-beta.7" />
-    <PackageReference Include="Netension.Request.Abstraction" Version="0.0.1-beta.70" />
-    <PackageReference Include="Netension.Request.Infrastructure.EFCore" Version="0.0.1-beta.70" />
+    <PackageReference Include="Netension.Request.Abstraction" Version="0.0.1-beta.71" />
+    <PackageReference Include="Netension.Request.Infrastructure.EFCore" Version="0.0.1-beta.71" />
     <PackageReference Include="Npgsql" Version="5.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
   </ItemGroup>
