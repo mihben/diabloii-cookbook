@@ -1,21 +1,19 @@
-import { concatMap, finalize, switchMap, take } from 'rxjs/operators';
-import { RuneWord } from './../../models/rune-word.model';
-import { ItemType } from './../../models/item-type.model';
-import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-classic-filter.service';
-import { CharacterService } from '../../services/character/diabloii-classis-character.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Character } from './../../models/character.model';
-import { ViewEncapsulation } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { forkJoin } from 'rxjs';
+import { concatMap, finalize } from 'rxjs/operators';
+import { LoadingScreen } from 'src/app/shared/models/loading-screen.model';
 import { Rune } from 'src/app/shared/models/rune.model';
 import { ConfirmationService } from 'src/app/shared/services/confirmation.service';
+import { CharacterService } from '../../services/character/diabloii-classis-character.service';
 import { DiabloiiClassisRuneService } from '../../services/rune/diabloii-classis-rune.service';
 import { DiabloiiClassicNewCharacterComponent } from '../diabloii-classic-new-character/diabloii-classic-new-character.component';
-import { LoadingScreen } from 'src/app/shared/models/loading-screen.model';
-import { animate, style, transition, trigger } from '@angular/animations';
-import { concat, forkJoin, merge, Observable,  } from 'rxjs';
-import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
+import { Character } from './../../models/character.model';
+import { ItemType } from './../../models/item-type.model';
+import { RuneWord } from './../../models/rune-word.model';
+import { DiabloiiClassicFilterService } from './../../services/filter/diabloii-classic-filter.service';
 
 @Component({
   selector: 'app-diabloii-classic',
@@ -23,7 +21,7 @@ import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
   styleUrls: ['./diabloii-classic.component.scss'],
   animations: [trigger('fadeOut', [
     transition(':leave', [
-      animate('200ms', style({ opacity: 0 }))
+      animate('2000ms ease', style({ opacity: 0 }))
     ])
   ])]
 })

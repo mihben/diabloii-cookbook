@@ -38,6 +38,8 @@ $image-border: '../../../../assets/diabloii//classic/border.png';
         background-position: center;
         background-size: 40%;
 
+        z-index: -1;
+
         display: grid;
         grid-template-columns: [character] 25% $size-margin-normal [data] auto;
 
