@@ -8,5 +8,10 @@ namespace DiabloII_Cookbook.Client.Extensions
         {
             return $"/assets/classic/runes/{rune.Name}.png";
         }
+
+        public static string IsApplicable(this Rune rune, int level)
+        {
+            return rune.Level <= level ? "level-applicable" : "level-unapplicable";
+        }
     }
 }

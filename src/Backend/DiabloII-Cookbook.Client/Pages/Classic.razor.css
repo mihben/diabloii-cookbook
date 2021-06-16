@@ -1,5 +1,7 @@
 ﻿::deep {
     --font-family: "Exocet";
+    --color-rune: #CE8800;
+    --color-text: #7b7b7b;
 }
 
 @font-face {
@@ -16,7 +18,7 @@
     font-style: normal;
 }
 
-div .container {
+div.container {
     background-image: url("/assets/classic/background.gif");
     background-repeat: no-repeat;
     background-position: center;
@@ -40,6 +42,7 @@ div.panel {
     border-image-width: auto;
     border-image-repeat: stretch;
     border-image-slice: 10%;
+    padding: 8px;
 }
 
 div.right {
@@ -47,32 +50,30 @@ div.right {
 }
 
 div.left {
+    width: 400px;
     grid-column: left;
+    display: flex;
+    flex-flow: column;
 }
 
 div.character-information {
-    width: 400px;
-    display: grid;
-    grid-template-rows: [selector]auto [information]min-content;
-    grid-row-gap: 4px;
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 auto;
 }
 
 div.character-selector {
-    width: 100%;
-    height: 100%;
     padding-top: 32px;
     padding-bottom: 32px;
     padding-left: 8px;
     padding-right: 8px;
-    grid-row: selector;
     display: flex;
+    flex: 1 1 auto;
 }
 
 div.character-detail {
     padding-top: 4px;
     padding-bottom: 4px;
-    padding-right: 8px;
-    padding-left: 8px;
     display: grid;
     grid-template-columns: [label]auto [value]100%;
     grid-template-rows: repeat(4, min-content);
@@ -85,11 +86,12 @@ div.rune-selector {
     grid-template-columns: repeat(3, [select]min-content [rune]auto);
     grid-column-gap: 4px;
     grid-row-gap: 4px;
-
     padding-top: 4px;
     padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
+}
+
+div.button-row {
+    display: flex;
 }
 
 div.rune-select {
@@ -97,11 +99,11 @@ div.rune-select {
 }
 
 img.character-image {
-    width: stretch;
-    height: stretch;
-
     margin-right: 16px;
     margin-left: 16px;
+    flex: 0 1 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 img.arrow {
@@ -110,8 +112,16 @@ img.arrow {
     height: 20px;
 }
 
+.left {
+    margin-right: auto;
+}
+
+.right {
+    margin-left: auto
+}
+
 label, span {
-    color: #7b7b7b;
+    color: var(--color-text);
 }
 
 label {
@@ -120,17 +130,35 @@ label {
 
 input[type="checkbox"] {
     -webkit-appearance: none;
-
     background-image: url("/assets/classic/elements/unchecked.png");
     background-repeat: round;
-
     padding: 9px;
-
     align-self: center;
-
     height: min-content;
 }
 
-input[type="checkbox"]:checked {
-    background-image: url("/assets/classic/elements/checked.png");
+    input[type="checkbox"]:checked {
+        background-image: url("/assets/classic/elements/checked.png");
+    }
+
+button {
+    -webkit-appearance: none;
+    background-image: url('/assets/classic/elements/button.png');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+    border-width: 0px;
+    height: 1.8em;
+    width: 120px;
+    font-weight: bold;
+    font-family: var(--font-family);
 }
+
+    button:active {
+        background-image: url('/assets/classic/elements/pressed-button.jpg');
+        padding-top: 3px;
+    }
+
+    button:disabled {
+        background-image: url('/assets/classic/elements/disabled-button.jpg');
+    }

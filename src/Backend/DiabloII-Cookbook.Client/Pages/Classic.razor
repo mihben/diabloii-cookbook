@@ -36,9 +36,15 @@
             @foreach(var rune in Runes)
             {
                 <input class="rune-select" type="checkbox"/>
-                <RuneComponent Rune="@rune"/>                                    
+                <RuneComponent Rune="@rune" Level="@Character.Level"/>                                    
             }
         </div>
+
+        <div class="button-row">
+            <button class="left">Create</button>
+            <button class="right">Delete</button>
+        </div>
+
     </div>
 
     <div class="panel right">
@@ -69,7 +75,7 @@
     };
 
         var list = new List<Character>();
-        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Amazon", 10, true, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Amazon", 25, true, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(1), "Assassin", "Assassin", 10, false, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Barbarian", 10, false, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(3), "Druid", "Druid", 10, false, false, Enumerable.Empty<Rune>()));

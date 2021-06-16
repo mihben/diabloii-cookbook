@@ -1,5 +1,5 @@
 ﻿span {
-    color: #CE8800;
+    color: var(--color-rune);
 
     vertical-align: middle;
 }
@@ -12,4 +12,12 @@ div {
     display: inline;
 
     cursor: default;
+}
+
+div.level-applicable {
+    opacity: 1;
+}
+
+div.level-unapplicable {
+    opacity: 0.4;
 }
