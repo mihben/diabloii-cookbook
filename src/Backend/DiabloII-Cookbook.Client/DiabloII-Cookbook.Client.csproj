@@ -20,4 +20,8 @@
     <ProjectReference Include="..\DiabloII-Cookbook\DiabloII-Cookbook.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\classic\fonts\" />
+  </ItemGroup>
+
 </Project>

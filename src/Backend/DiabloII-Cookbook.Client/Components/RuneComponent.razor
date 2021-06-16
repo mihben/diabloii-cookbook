@@ -1,0 +1,12 @@
+﻿@using DiabloII_Cookbook.Api.DataTransferObjects
+@using DiabloII_Cookbook.Client.Extensions
+
+<div class="rune">
+    <img src="@Rune.GetImage()"/>
+    <span>@Rune.Name</span>
+</div>
+
+@code {
+    [Parameter]
+    public Rune Rune { get; set; }
+}

@@ -1,16 +1,43 @@
 ﻿@page "/classic"
 
 @using DiabloII_Cookbook.Api.DataTransferObjects;
+@using DiabloII_Cookbook.Api.Queries
 @using DiabloII_Cookbook.Client.Extensions;
+@using DiabloII_Cookbook.Client.Components;
+@using System.Threading
+
+@inject HttpClient client;
 
 <div class="container">
     <div class="panel left">
         <div class="character-information">
             <div class="character-selector">
                 <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync"/>
-                <img class="character-image" src="@Character.GetImage()"/>
+                <img class="character-image" src="@Character?.GetImage()"/>
                 <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync"/>
             </div>
+
+            <div class="character-detail">
+                <label>Name:</label>
+                <span>@Character?.Name</span>
+
+                <label>Level:</label>
+                <span>@Character?.Level</span>
+
+                <label>Ladder:</label>
+                <span>@Character?.IsLadder.ToReadable()</span>
+
+                <label>Expansion:</label>
+                <span>@Character?.IsExpansion.ToReadable()</span>
+            </div>
+        </div>
+
+        <div class="rune-selector">
+            @foreach(var rune in Runes)
+            {
+                <input class="rune-select" type="checkbox"/>
+                <RuneComponent Rune="@rune"/>                                    
+            }
         </div>
     </div>
 
@@ -23,34 +50,38 @@
     public IEnumerable<Guid> Characters { get; private set; }
     public Character Character { get; private set; }
 
+    public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
+
     private int _index = 0;
     private IEnumerable<Character> _characterList;
 
     protected override async Task OnInitializedAsync()
     {
         Characters = new List<Guid>
-        {
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid()
-        };
+    {
+        Guid.NewGuid(),
+        Guid.NewGuid(),
+        Guid.NewGuid(),
+        Guid.NewGuid(),
+        Guid.NewGuid(),
+        Guid.NewGuid(),
+        Guid.NewGuid()
+    };
 
         var list = new List<Character>();
-        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(1), "Assassin", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(3), "Druid", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(4), "Necromancer", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(5), "Paladin", "Test", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(6), "Sorceress", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Amazon", 10, true, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(1), "Assassin", "Assassin", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Barbarian", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(3), "Druid", "Druid", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(4), "Necromancer", "Necromancer", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(5), "Paladin", "Paladin", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(6), "Sorceress", "Sorceress", 10, false, false, Enumerable.Empty<Rune>()));
 
         _characterList = list;
 
-        await RefreshCharacterAsync(_index);
+        Runes = await GetRunesAsync(default);
+
+    await RefreshCharacterAsync(_index);
     }
 
     public async Task PreviousAsync()
@@ -68,5 +99,13 @@
         Character = _characterList.ElementAt(index);
 
         return Task.CompletedTask;
+    }
+
+    private async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
+    {
+        var query = new GetRunesQuery();
+        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
+        var result = await client.PostAsJsonAsync("api", query, cancellationToken);
+        return await result.Content.ReadFromJsonAsync<IEnumerable<Rune>>(cancellationToken: cancellationToken);
     }
 }

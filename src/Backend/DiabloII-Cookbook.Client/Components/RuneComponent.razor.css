@@ -1,0 +1,15 @@
+﻿span {
+    color: #CE8800;
+
+    vertical-align: middle;
+}
+
+img {
+    vertical-align: middle;
+}
+
+div {
+    display: inline;
+
+    cursor: default;
+}
