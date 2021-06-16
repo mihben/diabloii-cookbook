@@ -1,0 +1,72 @@
+﻿@page "/classic"
+
+@using DiabloII_Cookbook.Api.DataTransferObjects;
+@using DiabloII_Cookbook.Client.Extensions;
+
+<div class="container">
+    <div class="panel left">
+        <div class="character-information">
+            <div class="character-selector">
+                <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync"/>
+                <img class="character-image" src="@Character.GetImage()"/>
+                <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel right">
+
+    </div>
+</div>
+
+@code {
+    public IEnumerable<Guid> Characters { get; private set; }
+    public Character Character { get; private set; }
+
+    private int _index = 0;
+    private IEnumerable<Character> _characterList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Characters = new List<Guid>
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid()
+        };
+
+        var list = new List<Character>();
+        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(1), "Assassin", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(3), "Druid", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(4), "Necromancer", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(5), "Paladin", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(6), "Sorceress", "Test", 10, false, false, Enumerable.Empty<Rune>()));
+
+        _characterList = list;
+
+        await RefreshCharacterAsync(_index);
+    }
+
+    public async Task PreviousAsync()
+    {
+        if (_index > 0) await RefreshCharacterAsync(--_index);
+    }
+
+    public async Task NextAsync()
+    {
+        if (_index < Characters.Count() - 1) await RefreshCharacterAsync(++_index);
+    }
+
+    private Task RefreshCharacterAsync(int index)
+    {
+        Character = _characterList.ElementAt(index);
+
+        return Task.CompletedTask;
+    }
+}
