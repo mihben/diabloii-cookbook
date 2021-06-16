@@ -8,10 +8,10 @@ img {
     vertical-align: middle;
 }
 
-div {
+div.rune {
     display: inline;
-
     cursor: default;
+    margin-left: 4px;
 }
 
 div.level-applicable {

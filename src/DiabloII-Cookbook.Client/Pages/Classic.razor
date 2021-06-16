@@ -47,8 +47,24 @@
 
     </div>
 
-    <div class="panel right">
+    <div class="right data">
+        <div class="panel filter">
+            <div class="button-row">
+                <button class="left">@Character?.Name</button>
 
+                <div class="right">
+                    <button>Filter</button>
+                    <button @onclick="GetAllRuneWordsAsync">All</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="rune-words-container">
+            @foreach (var runeWord in RuneWords)
+            {
+                <RuneWordComponent RuneWord="@runeWord" Level="@Character.Level"/>
+            }
+        </div>
     </div>
 </div>
 
@@ -57,6 +73,8 @@
     public Character Character { get; private set; }
 
     public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
+
+    public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
     private int _index = 0;
     private IEnumerable<Character> _characterList;
@@ -75,7 +93,7 @@
     };
 
         var list = new List<Character>();
-        list.Add(new Character(Characters.ElementAt(0), "Amazon", "Amazon", 25, true, false, Enumerable.Empty<Rune>()));
+        list.Add(new Character(Characters.ElementAt(0), "Assassin", "Amazon", 25, true, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(1), "Assassin", "Assassin", 10, false, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Barbarian", 10, false, false, Enumerable.Empty<Rune>()));
         list.Add(new Character(Characters.ElementAt(3), "Druid", "Druid", 10, false, false, Enumerable.Empty<Rune>()));
@@ -87,7 +105,7 @@
 
         Runes = await GetRunesAsync(default);
 
-    await RefreshCharacterAsync(_index);
+        await RefreshCharacterAsync(_index);
     }
 
     public async Task PreviousAsync()
@@ -110,8 +128,18 @@
     private async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
     {
         var query = new GetRunesQuery();
+        client.DefaultRequestHeaders.Clear();
         client.DefaultRequestHeaders.Add("message-type", query.MessageType);
         var result = await client.PostAsJsonAsync("api", query, cancellationToken);
         return await result.Content.ReadFromJsonAsync<IEnumerable<Rune>>(cancellationToken: cancellationToken);
+    }
+
+    public async Task GetAllRuneWordsAsync()
+    {
+        var query = new GetAllRuneWordsQuery();
+        client.DefaultRequestHeaders.Clear();
+        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
+        var result = await client.PostAsJsonAsync("api", query, default);
+        RuneWords = await result.Content.ReadFromJsonAsync<IEnumerable<RuneWord>>(cancellationToken: default);
     }
 }

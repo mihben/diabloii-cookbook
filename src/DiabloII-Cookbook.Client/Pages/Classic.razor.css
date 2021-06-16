@@ -2,6 +2,7 @@
     --font-family: "Exocet";
     --color-rune: #CE8800;
     --color-text: #7b7b7b;
+    --color-magic: #197917;
 }
 
 @font-face {
@@ -47,6 +48,14 @@ div.panel {
 
 div.right {
     grid-column: right;
+
+}
+
+div.data {
+    width: 100%;
+
+    display: flex;
+    flex-flow: column wrap;
 }
 
 div.left {
@@ -98,10 +107,24 @@ div.rune-select {
     grid-column: select;
 }
 
+div.filter {
+    height: min-content;
+
+    width: 100%;
+}
+
+div.rune-words-container {
+    overflow-y: scroll;
+
+    flex: 1 0 0;
+
+    overflow-y: auto;
+}
+
 img.character-image {
     margin-right: 16px;
     margin-left: 16px;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     margin-left: auto;
     margin-right: auto;
 }
