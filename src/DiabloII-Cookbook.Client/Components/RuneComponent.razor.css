@@ -12,6 +12,8 @@ div.rune {
     display: inline;
     cursor: default;
     margin-left: 4px;
+
+    font-size: 14px;
 }
 
 div.level-applicable {
