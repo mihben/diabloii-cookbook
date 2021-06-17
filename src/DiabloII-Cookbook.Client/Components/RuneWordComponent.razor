@@ -1,7 +1,11 @@
 ﻿@using DiabloII_Cookbook.Api.DataTransferObjects;
+@using DiabloII_Cookbook.Client.Extensions
 
 <div class="panel">
     <p class="name">@RuneWord.Name</p>
+    <p class="item-types">
+        (<span>@RuneWord.GetItemTypes()</span>)
+    </p>
 
     <div class="ingredients">
         @foreach (var ingredient in @RuneWord?.Ingredients)
@@ -10,10 +14,14 @@
         }
     </div>
 
-    @foreach (var property in RuneWord.Properties)
-    {
-        <p class="description">@property.Description</p>
-    }
+    <p class="properties">
+        @foreach (var property in RuneWord.Properties)
+        {
+            <p class="property">@property.GetDescription(Level)</p>
+        }        
+    </p>
+
+    <p class="@RuneWord.IsApplicable(Level)">Required level: @RuneWord.Level</p>
 </div>
 
 @code {

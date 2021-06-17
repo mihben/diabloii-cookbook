@@ -15,9 +15,9 @@ div.rune {
 }
 
 div.level-applicable {
-    opacity: 1;
+    font-weight: bold;
 }
 
 div.level-unapplicable {
-    opacity: 0.4;
+    opacity: 0.9;
 }
