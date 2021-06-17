@@ -5,6 +5,7 @@
 @using DiabloII_Cookbook.Client.Extensions;
 @using DiabloII_Cookbook.Client.Components;
 @using System.Threading
+@using DiabloII_Cookbook.Client.Models;
 
 @inject HttpClient client;
 
@@ -12,9 +13,9 @@
     <div class="panel left">
         <div class="character-information">
             <div class="character-selector">
-                <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync"/>
-                <img class="character-image" src="@Character?.GetImage()"/>
-                <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync"/>
+                <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync" />
+                <img class="character-image" src="@Character?.GetImage()" />
+                <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync" />
             </div>
 
             <div class="character-detail">
@@ -32,11 +33,11 @@
             </div>
         </div>
 
-        <div class="rune-selector">
-            @foreach(var rune in Runes)
+        <div class="selector">
+            @foreach (var rune in Runes)
             {
-                <input class="rune-select" type="checkbox"/>
-                <RuneComponent Rune="@rune" Level="@Character.Level"/>                                    
+                <input class="rune-select" type="checkbox" />
+                <RuneComponent Rune="@rune" Level="@Character.Level" />
             }
         </div>
 
@@ -49,8 +50,32 @@
 
     <div class="right data">
         <div class="panel filter">
+            <div class="filter-container">
+                <div class="armor-filters">
+                    @foreach (var armor in ArmorTypes)
+                    {
+                        <div class="selector">
+                            <input type="checkbox" @bind="armor.Selected" />
+                            <span>@armor.ItemType.Name</span>
+                        </div>
+                    }
+                </div>>
+                <div class="weapon-filters">
+                    @foreach (var weapon in WeaponTypes)
+                    {
+                        <div class="selector">
+                            <input type="checkbox" @bind="weapon.Selected"/>
+                            <span>@weapon.ItemType.Name</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
             <div class="button-row">
-                <button class="left">@Character?.Name</button>
+                <div class="left">
+                    <button @onclick="SelectArmors">Armors</button>
+                    <button @onclick="SelectWeapons">Weapons</button>
+                </div>
 
                 <div class="right">
                     <button>Filter</button>
@@ -62,7 +87,7 @@
         <div class="rune-words-container">
             @foreach (var runeWord in RuneWords)
             {
-                <RuneWordComponent RuneWord="@runeWord" Level="@Character.Level"/>
+                <RuneWordComponent RuneWord="@runeWord" Level="@Character.Level" />
             }
         </div>
     </div>
@@ -74,6 +99,9 @@
 
     public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
 
+    public IEnumerable<Filter> ArmorTypes { get; private set; } = Enumerable.Empty<Filter>();
+    public IEnumerable<Filter> WeaponTypes { get; private set; } = Enumerable.Empty<Filter>();
+
     public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
     private int _index = 0;
@@ -82,7 +110,7 @@
     protected override async Task OnInitializedAsync()
     {
         Characters = new List<Guid>
-    {
+{
         Guid.NewGuid(),
         Guid.NewGuid(),
         Guid.NewGuid(),
@@ -104,6 +132,10 @@
         _characterList = list;
 
         Runes = await GetRunesAsync(default);
+
+        var itemTypes = await GetItemTypesAsync(default);
+        ArmorTypes = itemTypes.AsFilter("Armor");
+        WeaponTypes = itemTypes.AsFilter("Weapon");
 
         await RefreshCharacterAsync(_index);
     }
@@ -141,5 +173,38 @@
         client.DefaultRequestHeaders.Add("message-type", query.MessageType);
         var result = await client.PostAsJsonAsync("api", query, default);
         RuneWords = await result.Content.ReadFromJsonAsync<IEnumerable<RuneWord>>(cancellationToken: default);
+    }
+
+    public async Task<IEnumerable<ItemType>> GetItemTypesAsync(CancellationToken cancellationToken)
+    {
+        var query = new GetItemTypesQuery();
+        client.DefaultRequestHeaders.Clear();
+        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
+        var result = await client.PostAsJsonAsync("api", query, cancellationToken);
+        return await result.Content.ReadFromJsonAsync<IEnumerable<ItemType>>(cancellationToken: cancellationToken);
+    }
+
+    public void SelectArmors()
+    {
+        var target = ArmorTypes.All(at => !at.Selected);
+
+        foreach (var armor in ArmorTypes)
+        {
+            armor.Selected = target;
+        }
+
+        Console.WriteLine("Select armors");
+
+        StateHasChanged();
+    }
+
+    public void SelectWeapons()
+    {
+        var target = WeaponTypes.All(wt => !wt.Selected);
+
+        foreach (var weapon in WeaponTypes)
+        {
+            weapon.Selected = target;
+        }
     }
 }

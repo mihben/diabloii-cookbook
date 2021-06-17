@@ -90,14 +90,18 @@ div.character-detail {
     grid-row-gap: 4px;
 }
 
-div.rune-selector {
+div.selector {
     display: grid;
     grid-template-columns: repeat(3, [select]min-content [rune]auto);
     grid-column-gap: 4px;
     grid-row-gap: 4px;
+
     padding-top: 4px;
     padding-bottom: 4px;
+
+    align-items: center;
 }
+
 
 div.button-row {
     display: flex;
@@ -111,6 +115,33 @@ div.filter {
     height: min-content;
 
     width: 100%;
+
+    display: flex;
+    flex-flow: column wrap;
+}
+
+div.filter-container {
+    display: grid;
+
+    grid-template-columns: [armor-filters]max-content [weapon-filters]max-content;
+    grid-column-gap: 4px;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.armor-filters {
+    grid-column: armor-filters;
+
+    vertical-align: central;
+}
+
+div.weapon-filters {
+    grid-column: weapon-filters;
+
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    grid-column-gap: 4px;
 }
 
 div.rune-words-container {
