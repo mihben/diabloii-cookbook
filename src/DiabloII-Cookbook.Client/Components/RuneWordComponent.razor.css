@@ -20,8 +20,8 @@ p, span {
 }
 
     p.properties {
-        margin-block-start: 16px;
-        margin-block-end: 8px;
+        margin-block-start: 32px;
+        margin-block-end: 16px;
 
         color: var(--color-magic);
     }
@@ -44,15 +44,23 @@ p, span {
 
     p.item-types {
         margin-block-start: 0px;
-        margin-block-end: 0px;
+        margin-block-end: 4px;
 
         color: var(--color-text);
 
         font-size: 12px;
     }
 
+    p.level {
+        margin-block-start: 16px;
+        margin-block-end: 0px;
+
+        font-size: 12px;
+    }
+
     p.applicable {
         color: green;
+
     }
 
     p.unapplicable {
@@ -60,6 +68,6 @@ p, span {
     }
 
 div.ingredients {
-    margin-block-start: 8px;
-    margin-block-end: 16px;
+    margin-block-start: 4px;
+    margin-block-end: 32px;
 }
