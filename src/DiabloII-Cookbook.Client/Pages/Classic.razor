@@ -6,7 +6,10 @@
 @using DiabloII_Cookbook.Client.Components;
 @using System.Threading
 @using DiabloII_Cookbook.Client.Models;
+@using Blazored.Modal
+@using Blazored.Modal.Services
 
+@inject IModalService Modal;
 @inject HttpClient client;
 
 <div class="container">
@@ -42,8 +45,8 @@
         </div>
 
         <div class="button-row">
-            <button class="left">Create</button>
-            <button class="right">Delete</button>
+            <button class="left-row" @onclick="CreateAsync">Create</button>
+            <button class="right-row">Delete</button>
         </div>
 
     </div>
@@ -52,19 +55,19 @@
         <div class="panel filter">
             <div class="filter-container">
                 <div class="armor-filters">
-                    @foreach (var armor in ArmorTypes)
+                    @foreach (var armor in ArmorFilters)
                     {
                         <div class="selector">
-                            <input type="checkbox" @bind="armor.Selected" />
+                            <input type="checkbox" @bind-value="@armor.Selected" />
                             <span>@armor.ItemType.Name</span>
                         </div>
                     }
                 </div>>
                 <div class="weapon-filters">
-                    @foreach (var weapon in WeaponTypes)
+                    @foreach (var weapon in WeaponFilters)
                     {
                         <div class="selector">
-                            <input type="checkbox" @bind="weapon.Selected"/>
+                            <input type="checkbox" @bind-value="@weapon.Selected" />
                             <span>@weapon.ItemType.Name</span>
                         </div>
                     }
@@ -72,13 +75,13 @@
             </div>
 
             <div class="button-row">
-                <div class="left">
+                <div class="left-row">
                     <button @onclick="SelectArmors">Armors</button>
                     <button @onclick="SelectWeapons">Weapons</button>
                 </div>
 
-                <div class="right">
-                    <button>Filter</button>
+                <div class="right-row">
+                    <button @onclick="FilterRuneWordsAsync">Filter</button>
                     <button @onclick="GetAllRuneWordsAsync">All</button>
                 </div>
             </div>
@@ -94,31 +97,31 @@
 </div>
 
 @code {
-    public IEnumerable<Guid> Characters { get; private set; }
+    public List<Guid> Characters { get; private set; }
     public Character Character { get; private set; }
 
     public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
 
-    public IEnumerable<Filter> ArmorTypes { get; private set; } = Enumerable.Empty<Filter>();
-    public IEnumerable<Filter> WeaponTypes { get; private set; } = Enumerable.Empty<Filter>();
+    public IEnumerable<Filter> ArmorFilters { get; private set; } = Enumerable.Empty<Filter>();
+    public IEnumerable<Filter> WeaponFilters { get; private set; } = Enumerable.Empty<Filter>();
 
     public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
     private int _index = 0;
-    private IEnumerable<Character> _characterList;
+    private List<Character> _characterList;
 
     protected override async Task OnInitializedAsync()
     {
         Characters = new List<Guid>
-{
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid()
-    };
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid()
+        };
 
         var list = new List<Character>();
         list.Add(new Character(Characters.ElementAt(0), "Assassin", "Amazon", 25, true, false, Enumerable.Empty<Rune>()));
@@ -134,8 +137,8 @@
         Runes = await GetRunesAsync(default);
 
         var itemTypes = await GetItemTypesAsync(default);
-        ArmorTypes = itemTypes.AsFilter("Armor");
-        WeaponTypes = itemTypes.AsFilter("Weapon");
+        ArmorFilters = itemTypes.AsFilter("Armor");
+        WeaponFilters = itemTypes.AsFilter("Weapon");
 
         await RefreshCharacterAsync(_index);
     }
@@ -186,25 +189,50 @@
 
     public void SelectArmors()
     {
-        var target = ArmorTypes.All(at => !at.Selected);
+        var target = ArmorFilters.All(at => !at.Selected);
 
-        foreach (var armor in ArmorTypes)
+        foreach (var armor in ArmorFilters)
         {
             armor.Selected = target;
         }
 
         Console.WriteLine("Select armors");
-
-        StateHasChanged();
     }
 
     public void SelectWeapons()
     {
-        var target = WeaponTypes.All(wt => !wt.Selected);
+        var target = WeaponFilters.All(wt => !wt.Selected);
 
-        foreach (var weapon in WeaponTypes)
+        foreach (var weapon in WeaponFilters)
         {
             weapon.Selected = target;
+        }
+    }
+
+    public async Task FilterRuneWordsAsync()
+    {
+        Console.WriteLine(WeaponFilters.Count(wf => wf.Selected) + ArmorFilters.Count(af => af.Selected));
+
+        foreach (var filter in WeaponFilters.Where(af => af.Selected))
+        {
+            Console.WriteLine(filter.ItemType.Name);
+        }
+    }
+
+    public async Task CreateAsync()
+    {
+        var modalReference = Modal.Show<CreateCharacter>();
+
+        var result = await modalReference.Result;
+        if (!result.Cancelled)
+        {
+            var character = (Character)result.Data;
+            Characters.Add(character.Id);
+
+            _characterList.Add(character);
+
+            _index = _characterList.IndexOf(_characterList.First(cl => cl.Id.Equals(character.Id)));
+            await RefreshCharacterAsync(_index);
         }
     }
 }

@@ -1,0 +1,67 @@
+﻿@using Blazored.Modal; 
+@using Blazored.Modal.Services
+@using DiabloII_Cookbook.Api.DataTransferObjects
+@using DiabloII_Cookbook.Api.Queries
+
+@inject HttpClient client;
+
+<div class="container">
+    <label>Class:</label>
+    <select @bind=Class>
+        @foreach (var _class in Classes)
+        {
+            <option value="@_class">@_class</option>
+        }
+    </select>   
+
+    <label>Name:</label>
+    <input type="text" @bind="Name" />
+
+    <label>Level:</label>
+    <input type="number" @bind="Level" />
+
+    <label>Expansion:</label>
+    <input type="checkbox" @bind="IsExpansion" />
+
+    <label>Ladder:</label>
+    <input type="checkbox" @bind="IsLadder" />
+
+    <div class="button-row">
+        <button class="left" @onclick="CreateAsync">Create</button>
+        <button class="right" @onclick="CancelAsync">Cancel</button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    private BlazoredModalInstance ModalInstance { get; set; }
+
+    private string Class { get; set; }
+    private string Name { get; set; }
+    private int Level { get; set; }
+    private bool IsExpansion { get; set; } = true;
+    private bool IsLadder { get; set; }
+
+    private IEnumerable<string> Classes { get; set; } = Enumerable.Empty<string>();
+
+    protected async override Task OnInitializedAsync()
+    {        
+        var query = new GetClassesQuery();
+        client.DefaultRequestHeaders.Clear();
+        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
+        var result = await client.PostAsJsonAsync("api", query, default);
+        Classes = await result.Content.ReadFromJsonAsync<IEnumerable<string>>(cancellationToken: default);
+
+        Class = Classes.FirstOrDefault();
+    }
+
+    public async Task CreateAsync()
+    {
+        await ModalInstance.CloseAsync(ModalResult.Ok<Character>(new Character(Guid.NewGuid(), Class, Name, Level, IsLadder, IsExpansion, Enumerable.Empty<Rune>())));
+    }
+
+    public async Task CancelAsync()
+    {
+        await ModalInstance.CancelAsync();
+    }
+}

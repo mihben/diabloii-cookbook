@@ -1,11 +1,4 @@
-﻿::deep {
-    --font-family: "Exocet";
-    --color-rune: #CE8800;
-    --color-text: #7b7b7b;
-    --color-magic: #4850B8;
-}
-
-@font-face {
+﻿@font-face {
     font-family: "Exocet";
     src: url("/assets/classic/fonts/Exocet-Heavy.ttf") format('truetype');
     font-weight: bold;
@@ -90,19 +83,6 @@ div.character-detail {
     grid-row-gap: 4px;
 }
 
-div.selector {
-    display: grid;
-    grid-template-columns: repeat(3, [select]min-content [rune]auto);
-    grid-column-gap: 4px;
-    grid-row-gap: 4px;
-
-    padding-top: 4px;
-    padding-bottom: 4px;
-
-    align-items: center;
-}
-
-
 div.button-row {
     display: flex;
 }
@@ -121,19 +101,28 @@ div.filter {
 }
 
 div.filter-container {
-    display: grid;
-
-    grid-template-columns: [armor-filters]max-content [weapon-filters]max-content;
-    grid-column-gap: 4px;
+    display: flex;
 
     margin-left: auto;
     margin-right: auto;
+
+    margin-block-end: 8px;
+}
+
+div.selector {
+    display: grid;
+    grid-template-columns: repeat(3, [select]min-content [rune]auto);
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    align-items: center;
 }
 
 div.armor-filters {
     grid-column: armor-filters;
 
-    vertical-align: central;
+    align-self: center;
 }
 
 div.weapon-filters {
@@ -166,11 +155,11 @@ img.arrow {
     height: 20px;
 }
 
-.left {
+.left-row {
     margin-right: auto;
 }
 
-.right {
+.right-row {
     margin-left: auto
 }
 
@@ -197,13 +186,17 @@ input[type="checkbox"] {
 
 button {
     -webkit-appearance: none;
+
     background-image: url('/assets/classic/elements/button.png');
     background-repeat: round;
     background-clip: padding-box;
     background-size: cover;
+
     border-width: 0px;
+
     height: 1.8em;
     width: 120px;
+
     font-weight: bold;
     font-family: var(--font-family);
 }

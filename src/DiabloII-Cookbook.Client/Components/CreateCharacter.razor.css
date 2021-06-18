@@ -1,0 +1,139 @@
+﻿div.container {
+    display: grid;
+
+    grid-template-columns: [label]min-content [field]auto;
+    grid-row-gap: 4px;
+    grid-column-gap: 4px;
+
+    font-family: var(--font-family);
+
+    width: 400px;
+}
+
+label {
+    grid-column: label;
+
+    color: var(--color-text);
+
+    align-self: center;
+}
+
+input, select {
+    grid-column: field;
+
+    align-self: center;
+
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    width: stretch;
+
+    font-family: var(--font-family);
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    background-image: url("/assets/classic/elements/unchecked.png");
+    background-repeat: round;
+    padding: 9px;
+    align-self: center;
+    height: min-content;
+    width: min-content;
+}
+
+    input[type="checkbox"]:checked {
+        background-image: url("/assets/classic/elements/checked.png");
+    }
+
+    input[type="text"], input[type="number"] {
+        -webkit-appearance: none;
+
+        background-image: url("/assets/classic/elements/input.png");
+        background-repeat: round;
+        background-clip: padding-box;
+        background-size: cover;
+        background-color: black;
+
+        border-width: 0px;
+
+        padding-top: 4px;
+        padding-bottom: 4px;
+        height: max-content;
+
+        outline: none;
+
+        color: var(--color-text);
+
+        padding-left: 8px;
+        padding-right: 8px;
+
+        align-content: center;
+    }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+select {
+    -webkit-appearance: none;
+
+    background-image: url("/assets/classic/elements/input.png");
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+    background-color: black;
+    outline: none;
+
+    border-width: 0px;
+
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    color: var(--color-text);
+    font-family: var(--color-text);
+
+    display: inline-block;
+}
+
+button {
+    -webkit-appearance: none;
+    background-image: url('/assets/classic/elements/button.png');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+    border-width: 0px;
+    height: 1.8em;
+    width: 120px;
+    font-weight: bold;
+    font-family: var(--font-family);
+}
+
+    button:active {
+        background-image: url('/assets/classic/elements/pressed-button.jpg');
+        padding-top: 3px;
+    }
+
+    button:disabled {
+        background-image: url('/assets/classic/elements/disabled-button.jpg');
+    }
+
+div.button-row {
+    display: flex;
+
+    grid-column: 1 / span 2;
+
+    justify-self: stretch;
+
+    margin-top: 16px;
+}
+
+.left {
+    margin-right: auto;
+}
+
+.right {
+    margin-left: auto;
+}

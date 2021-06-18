@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.Modal;
 
 namespace DiabloII_Cookbook.Client
 {
@@ -14,6 +15,8 @@ namespace DiabloII_Cookbook.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5001/") });
+
+            builder.Services.AddBlazoredModal();
 
             await builder.Build().RunAsync();
         }

@@ -1,5 +1,13 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --font-family: "Exocet";
+    --color-rune: #CE8800;
+    --color-text: #7b7b7b;
+    --color-magic: #4850B8;
+    --border: url("/assets/classic/elements/border.png");
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
@@ -62,4 +70,20 @@ a, .btn-link {
 
 * {
     box-sizing: border-box;
+}
+
+.dialog {
+    display: flex;
+    z-index: 102;
+    flex-direction: column;
+    background-color: black;
+
+    border-image: var(--border);
+    border-style: solid;
+    border-image-width: auto;
+    border-image-repeat: stretch;
+    border-image-slice: 10%;
+
+    padding: 0.5rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,.25);
 }
