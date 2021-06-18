@@ -4,6 +4,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Blazored.Modal;
+using DiabloII_Cookbook.Client.Services;
 
 namespace DiabloII_Cookbook.Client
 {
@@ -15,6 +16,10 @@ namespace DiabloII_Cookbook.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5001/") });
+
+            builder.Services.AddScoped<IRuneService, RuneService>();
+            builder.Services.AddScoped<IFilterService, FilterService>();
+            builder.Services.AddScoped<ICharacterService, CharacterService>();
 
             builder.Services.AddBlazoredModal();
 

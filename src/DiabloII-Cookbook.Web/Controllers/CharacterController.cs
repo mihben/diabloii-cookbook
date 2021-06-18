@@ -17,7 +17,7 @@ namespace DiabloII_Cookbook.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "battle-tag")]
+    //[Authorize(Policy = "battle-tag")]
     public class CharacterController : ControllerBase
     {
         private readonly ICommandSender _commandSender;
@@ -36,7 +36,8 @@ namespace DiabloII_Cookbook.Web.Controllers
         [HttpGet]
         public async Task<IEnumerable<Guid>> GetAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetCharactersQuery(_httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value), cancellationToken);
+            // _httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value
+            return await _querySender.QueryAsync(new GetCharactersQuery("Mihben#1868"), cancellationToken);
         }
 
         [HttpGet("{id:guid}")]

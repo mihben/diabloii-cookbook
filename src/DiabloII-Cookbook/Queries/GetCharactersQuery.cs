@@ -6,7 +6,7 @@ namespace DiabloII_Cookbook.Api.Queries
 {
     public class GetCharactersQuery : Query<IEnumerable<Guid>>
     {
-        public string BattleTag { get; set; }
+        public string BattleTag { get; }
 
         public GetCharactersQuery(string battleTag)
         {

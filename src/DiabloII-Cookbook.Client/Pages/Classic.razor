@@ -8,9 +8,12 @@
 @using DiabloII_Cookbook.Client.Models;
 @using Blazored.Modal
 @using Blazored.Modal.Services
+@using DiabloII_Cookbook.Client.Services;
 
 @inject IModalService Modal;
-@inject HttpClient client;
+@inject IRuneService RuneService;
+@inject IFilterService FilterService;
+@inject ICharacterService CharacterService; 
 
 <div class="container">
     <div class="panel left">
@@ -40,7 +43,7 @@
             @foreach (var rune in Runes)
             {
                 <input class="rune-select" type="checkbox" />
-                <RuneComponent Rune="@rune" Level="@Character.Level" />
+                <RuneComponent Rune="@rune" Level="@Character?.Level" />
             }
         </div>
 
@@ -90,49 +93,29 @@
         <div class="rune-words-container">
             @foreach (var runeWord in RuneWords)
             {
-                <RuneWordComponent RuneWord="@runeWord" Level="@Character.Level" />
+                <RuneWordComponent RuneWord="@runeWord" Level="@Character?.Level" />
             }
         </div>
     </div>
 </div>
 
 @code {
-    public List<Guid> Characters { get; private set; }
+    private int _index = 0;
+
+    public IEnumerable<Guid> Characters { get; private set; }
     public Character Character { get; private set; }
 
     public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
 
-    public IEnumerable<Filter> ArmorFilters { get; private set; } = Enumerable.Empty<Filter>();
+    public IEnumerable<Filter> ArmorFilters{ get; private set; } = Enumerable.Empty<Filter>();
     public IEnumerable<Filter> WeaponFilters { get; private set; } = Enumerable.Empty<Filter>();
 
     public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
-    private int _index = 0;
-    private List<Character> _characterList;
 
     protected override async Task OnInitializedAsync()
     {
-        Characters = new List<Guid>
-        {
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid()
-        };
-
-        var list = new List<Character>();
-        list.Add(new Character(Characters.ElementAt(0), "Assassin", "Amazon", 25, true, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(1), "Assassin", "Assassin", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(2), "Barbarian", "Barbarian", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(3), "Druid", "Druid", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(4), "Necromancer", "Necromancer", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(5), "Paladin", "Paladin", 10, false, false, Enumerable.Empty<Rune>()));
-        list.Add(new Character(Characters.ElementAt(6), "Sorceress", "Sorceress", 10, false, false, Enumerable.Empty<Rune>()));
-
-        _characterList = list;
+        Characters = await GetCharactersAsync(default);
 
         Runes = await GetRunesAsync(default);
 
@@ -153,38 +136,30 @@
         if (_index < Characters.Count() - 1) await RefreshCharacterAsync(++_index);
     }
 
-    private Task RefreshCharacterAsync(int index)
+    private async Task<IEnumerable<Guid>> GetCharactersAsync(CancellationToken cancellationToken)
     {
-        Character = _characterList.ElementAt(index);
+        return await CharacterService.GetCharactersAsync(cancellationToken);
+    }
 
-        return Task.CompletedTask;
+    private async Task RefreshCharacterAsync(int index)
+    {
+        if (Characters.Count() == 0) return;
+        Character = await CharacterService.GetCharacterAsync(Characters.ElementAt(index), default);
     }
 
     private async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
     {
-        var query = new GetRunesQuery();
-        client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
-        var result = await client.PostAsJsonAsync("api", query, cancellationToken);
-        return await result.Content.ReadFromJsonAsync<IEnumerable<Rune>>(cancellationToken: cancellationToken);
+        return await RuneService.GetRunesAsync(cancellationToken);
     }
 
     public async Task GetAllRuneWordsAsync()
     {
-        var query = new GetAllRuneWordsQuery();
-        client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
-        var result = await client.PostAsJsonAsync("api", query, default);
-        RuneWords = await result.Content.ReadFromJsonAsync<IEnumerable<RuneWord>>(cancellationToken: default);
+        RuneWords = await RuneService.GetRuneWordsAsync(default);
     }
 
     public async Task<IEnumerable<ItemType>> GetItemTypesAsync(CancellationToken cancellationToken)
     {
-        var query = new GetItemTypesQuery();
-        client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
-        var result = await client.PostAsJsonAsync("api", query, cancellationToken);
-        return await result.Content.ReadFromJsonAsync<IEnumerable<ItemType>>(cancellationToken: cancellationToken);
+        return await FilterService.GetItemTypesAsync(cancellationToken);
     }
 
     public void SelectArmors()
@@ -226,13 +201,8 @@
         var result = await modalReference.Result;
         if (!result.Cancelled)
         {
-            var character = (Character)result.Data;
-            Characters.Add(character.Id);
-
-            _characterList.Add(character);
-
-            _index = _characterList.IndexOf(_characterList.First(cl => cl.Id.Equals(character.Id)));
-            await RefreshCharacterAsync(_index);
+            Characters = await GetCharactersAsync(default);
+            await RefreshCharacterAsync(Characters.Count() - 1);
         }
     }
 }

@@ -10,18 +10,18 @@
     <div class="ingredients">
         @foreach (var ingredient in @RuneWord?.Ingredients)
         {
-            <RuneComponent Rune="ingredient.Rune" Level="Level"/>
+            <RuneComponent Rune="ingredient.Rune" Level="Level ?? 99"/>
         }
     </div>
 
     <p class="properties">
         @foreach (var property in RuneWord.Properties)
         {
-            <p class="property">@property.GetDescription(Level)</p>
+            <p class="property">@property.GetDescription(Level ?? 0)</p>
         }        
     </p>
 
-    <p class="level @RuneWord.IsApplicable(Level)">Required level: @RuneWord.Level</p>
+    <p class="level @RuneWord.IsApplicable(Level ?? 99)">Required level: @RuneWord.Level</p>
 </div>
 
 @code {
@@ -29,5 +29,5 @@
     public RuneWord RuneWord { get; set; }
 
     [Parameter]
-    public int Level { get; set; }
+    public int? Level { get; set; }
 }

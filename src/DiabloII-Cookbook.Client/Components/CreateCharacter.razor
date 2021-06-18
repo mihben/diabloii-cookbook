@@ -2,8 +2,10 @@
 @using Blazored.Modal.Services
 @using DiabloII_Cookbook.Api.DataTransferObjects
 @using DiabloII_Cookbook.Api.Queries
+@using DiabloII_Cookbook.Client.Services;
 
 @inject HttpClient client;
+@inject ICharacterService CharacterService;
 
 <div class="container">
     <label>Class:</label>
@@ -57,6 +59,7 @@
 
     public async Task CreateAsync()
     {
+        await CharacterService.CreateAsync(Class, Name, Level, IsExpansion, IsLadder, default);
         await ModalInstance.CloseAsync(ModalResult.Ok<Character>(new Character(Guid.NewGuid(), Class, Name, Level, IsLadder, IsExpansion, Enumerable.Empty<Rune>())));
     }
 
