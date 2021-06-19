@@ -8,5 +8,6 @@ namespace DiabloII_Cookbook.Client.Services
     public interface IFilterService
     {
         Task<IEnumerable<ItemType>> GetItemTypesAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<string>> GetClassesAsync(CancellationToken cancellationToken);
     }
 }

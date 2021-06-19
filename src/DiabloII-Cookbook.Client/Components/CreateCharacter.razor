@@ -4,8 +4,8 @@
 @using DiabloII_Cookbook.Api.Queries
 @using DiabloII_Cookbook.Client.Services;
 
-@inject HttpClient client;
 @inject ICharacterService CharacterService;
+@inject IFilterService FilterService;
 
 <div class="container">
     <label>Class:</label>
@@ -47,12 +47,8 @@
     private IEnumerable<string> Classes { get; set; } = Enumerable.Empty<string>();
 
     protected async override Task OnInitializedAsync()
-    {        
-        var query = new GetClassesQuery();
-        client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Add("Message-Type", query.MessageType);
-        var result = await client.PostAsJsonAsync("api", query, default);
-        Classes = await result.Content.ReadFromJsonAsync<IEnumerable<string>>(cancellationToken: default);
+    {   
+        Classes = await FilterService.GetClassesAsync(default);
 
         Class = Classes.FirstOrDefault();
     }

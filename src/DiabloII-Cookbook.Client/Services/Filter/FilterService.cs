@@ -21,5 +21,10 @@ namespace DiabloII_Cookbook.Client.Services
         {
             return await _client.QueryAsync<GetItemTypesQuery, IEnumerable<ItemType>>(new GetItemTypesQuery(), cancellationToken);
         }
+
+        public async Task<IEnumerable<string>> GetClassesAsync(CancellationToken cancellationToken)
+        {
+            return await _client.QueryAsync<GetClassesQuery, IEnumerable<string>>(new GetClassesQuery(), cancellationToken);
+        }
     }
 }
