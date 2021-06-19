@@ -16,46 +16,46 @@ env:
 jobs: 
   # This workflow contains a single job called "build"
 
-  build:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
+  # build:
+    # # The type of runner that the job will run on
+    # runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:                    
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.11
+    # # Steps represent a sequence of tasks that will be executed as part of the job
+    # steps:                    
+      # - name: Set up JDK 11
+        # uses: actions/setup-java@v1
+        # with:
+          # java-version: 1.11
           
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis  
+      # - name: Checkout
+        # uses: actions/checkout@v2
+        # with:
+          # fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis  
           
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1.7.2
+      # - name: Setup .NET Core SDK
+        # uses: actions/setup-dotnet@v1.7.2
 
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: pwsh
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      # - name: Install SonarCloud scanner
+        # if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        # shell: pwsh
+        # run: |
+          # New-Item -Path .\.sonar\scanner -ItemType Directory
+          # dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: pwsh
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"mihben_diabloii-cookbook" /n:"DiabloII-Cookbook" /o:"mihben" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"          
-          dotnet build $(Resolve-Path -Path "src\*.sln") --configuration Release
-          dotnet test $(Resolve-Path -Path "src\*.sln") --results-directory TestResults --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"          
+      # - name: Build and analyze
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # shell: pwsh
+        # run: |
+          # .\.sonar\scanner\dotnet-sonarscanner begin /k:"mihben_diabloii-cookbook" /n:"DiabloII-Cookbook" /o:"mihben" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"          
+          # dotnet build $(Resolve-Path -Path "src\*.sln") --configuration Release
+          # dotnet test $(Resolve-Path -Path "src\*.sln") --results-directory TestResults --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          # .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"          
           
   publish-backend:          
     runs-on: ubuntu-latest
-    needs: [build]
+    #needs: [build]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -76,19 +76,20 @@ jobs:
         uses: docker/login-action@v1 
         with:
           registry: https://docker.pkg.github.com
+          username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: ./src/Backend/DiabloII-Cookbook.Web/Dockerfile
+          file: ./src/DiabloII-Cookbook.Web/Dockerfile
           context: .
           tags: docker.pkg.github.com/mihben/diabloii-cookbook/diabloii-cookbook:${{ steps.calculate_version.outputs.version }}
           
   publish-frontend:
     runs-on: ubuntu-latest
-    needs: [build]
+    #needs: [build]
     steps:
       - name: Calculate Version
         id: calculate_version
@@ -109,12 +110,13 @@ jobs:
         uses: docker/login-action@v1 
         with:
           registry: https://docker.pkg.github.com
+          username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: ./src/Frontend/blizzard-helper/Dockerfile
+          file: ./src/DiabloII-Cookbook.Client/Dockerfile
           context: .
           tags: docker.pkg.github.com/mihben/diabloii-cookbook/diabloii-cookbook-frontend:${{ steps.calculate_version.outputs.version }}
