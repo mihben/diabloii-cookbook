@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Blazored.Modal;
 using DiabloII_Cookbook.Client.Services;
+using Blazored.LocalStorage;
+using System.Text.Json;
+using DiabloII_Cookbook.Client.Contexts;
 
 namespace DiabloII_Cookbook.Client
 {
@@ -19,9 +22,22 @@ namespace DiabloII_Cookbook.Client
 
             builder.Services.AddScoped<IRuneService, RuneService>();
             builder.Services.AddScoped<IFilterService, FilterService>();
-            builder.Services.AddScoped<ICharacterService, HttpCharacterService>();
+            builder.Services.AddScoped<HttpCharacterService>();
+            builder.Services.AddScoped<LocalCharacterService>();
+            builder.Services.AddScoped<ICharacterService>((provider) =>
+            {
+                if (provider.GetRequiredService<IAuthorizationContext>().IsAuthorized) return provider.GetRequiredService<HttpCharacterService>();
+                else return provider.GetRequiredService<LocalCharacterService>();
+            });
+            builder.Services.AddScoped<IAuthorizationContext, AuthorizationContext>();
 
             builder.Services.AddBlazoredModal();
+            builder.Services.AddBlazoredLocalStorage(options =>
+            {
+                options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                options.JsonSerializerOptions.WriteIndented = false;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            });
 
             await builder.Build().RunAsync();
         }
