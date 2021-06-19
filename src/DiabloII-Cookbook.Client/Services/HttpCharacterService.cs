@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace DiabloII_Cookbook.Client.Services
 {
-    public class CharacterService : ICharacterService
+    public class HttpCharacterService : ICharacterService
     {
         private readonly HttpClient _client;
 
-        public CharacterService(HttpClient client)
+        public HttpCharacterService(HttpClient client)
         {
             _client = client;
         }
@@ -27,13 +27,19 @@ namespace DiabloII_Cookbook.Client.Services
 
         public async Task<Character> GetCharacterAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _client.QueryAsync(new GetCharacterDetailQuery(id), cancellationToken);
+            var response = await _client.GetAsync($"api/character/{id}", cancellationToken);
+            return await response.Content.ReadFromJsonAsync<Character>(cancellationToken: cancellationToken);
         }
 
         public async Task<IEnumerable<Guid>> GetCharactersAsync(CancellationToken cancellationToken)
         {
             var response = await _client.GetAsync("api/character", cancellationToken);
             return await response.Content.ReadFromJsonAsync<IEnumerable<Guid>>(cancellationToken: cancellationToken);
+        }
+
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            await _client.DeleteAsync($"api/character/{id}", cancellationToken);
         }
     }
 }

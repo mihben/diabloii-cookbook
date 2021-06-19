@@ -19,7 +19,7 @@ namespace DiabloII_Cookbook.Client
 
             builder.Services.AddScoped<IRuneService, RuneService>();
             builder.Services.AddScoped<IFilterService, FilterService>();
-            builder.Services.AddScoped<ICharacterService, CharacterService>();
+            builder.Services.AddScoped<ICharacterService, HttpCharacterService>();
 
             builder.Services.AddBlazoredModal();
 

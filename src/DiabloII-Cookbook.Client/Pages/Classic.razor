@@ -49,7 +49,7 @@
 
         <div class="button-row">
             <button class="left-row" @onclick="CreateAsync">Create</button>
-            <button class="right-row">Delete</button>
+            <button class="right-row" @onclick="DeleteAsync">Delete</button>
         </div>
 
     </div>
@@ -201,6 +201,19 @@
         var result = await modalReference.Result;
         if (!result.Cancelled)
         {
+            Characters = await GetCharactersAsync(default);
+            await RefreshCharacterAsync(Characters.Count() - 1);
+        }
+    }
+
+    public async Task DeleteAsync()
+    {
+        var modalReference = Modal.Show<ConfirmationDialog>();
+
+        var result = await modalReference.Result;
+        if (!result.Cancelled)
+        {
+            await CharacterService.DeleteAsync(Character.Id, default);
             Characters = await GetCharactersAsync(default);
             await RefreshCharacterAsync(Characters.Count() - 1);
         }
