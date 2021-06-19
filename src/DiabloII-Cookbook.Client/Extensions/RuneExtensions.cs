@@ -2,7 +2,6 @@
 using DiabloII_Cookbook.Client.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace DiabloII_Cookbook.Client.Extensions
 {
@@ -10,7 +9,7 @@ namespace DiabloII_Cookbook.Client.Extensions
     {
         public static string GetImage(this Rune rune)
         {
-            return $"/assets/classic/runes/{rune.Name}.png";
+            return $"/assets/classic/runes/{rune.Name.ToLower()}.png";
         }
 
         public static string IsApplicable(this Rune rune, int level)
