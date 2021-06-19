@@ -76,6 +76,7 @@ jobs:
         uses: docker/login-action@v1 
         with:
           registry: https://docker.pkg.github.com
+          username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build and push
@@ -109,6 +110,7 @@ jobs:
         uses: docker/login-action@v1 
         with:
           registry: https://docker.pkg.github.com
+          username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build and push
