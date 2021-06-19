@@ -62,7 +62,7 @@
                     @foreach (var armor in ArmorFilters)
                     {
                         <div class="selector">
-                            <input type="checkbox" @bind-value="@armor.Selected" />
+                            <input type="checkbox" @bind="armor.Selected" />
                             <span>@armor.ItemType.Name</span>
                         </div>
                     }
@@ -71,7 +71,7 @@
                     @foreach (var weapon in WeaponFilters)
                     {
                         <div class="selector">
-                            <input type="checkbox" @bind-value="@weapon.Selected" />
+                            <input type="checkbox" @bind="weapon.Selected" />
                             <span>@weapon.ItemType.Name</span>
                         </div>
                     }
@@ -179,8 +179,6 @@
         {
             armor.Selected = target;
         }
-
-        Console.WriteLine("Select armors");
     }
 
     public void SelectWeapons()
@@ -193,14 +191,9 @@
         }
     }
 
-    public async Task FilterRuneWordsAsync()
+    public  Task FilterRuneWordsAsync()
     {
-        Console.WriteLine(WeaponFilters.Count(wf => wf.Selected) + ArmorFilters.Count(af => af.Selected));
-
-        foreach (var filter in WeaponFilters.Where(af => af.Selected))
-        {
-            Console.WriteLine(filter.ItemType.Name);
-        }
+        return Task.CompletedTask;
     }
 
     public async Task CreateAsync()

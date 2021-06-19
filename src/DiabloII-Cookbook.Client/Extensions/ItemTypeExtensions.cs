@@ -10,7 +10,7 @@ namespace DiabloII_Cookbook.Client.Extensions
     {
         public static IEnumerable<Filter> AsFilter(this IEnumerable<ItemType> itemTypes, string group)
         {
-            return itemTypes.Where(it => it.Group.Equals(group, StringComparison.InvariantCultureIgnoreCase)).Select(it => new Filter(it));
+            return itemTypes.Where(it => it.Group.Equals(group, StringComparison.InvariantCultureIgnoreCase)).Select(it => new Filter(it)).ToList();
         }
     }
 }

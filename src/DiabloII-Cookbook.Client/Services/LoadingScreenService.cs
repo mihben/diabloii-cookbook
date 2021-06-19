@@ -33,8 +33,6 @@ namespace DiabloII_Cookbook.Client.Services
 
         private void InvokePropertyChanged(string propertyName)
         {
-            Console.WriteLine($"PropertyChanged: {IsLoading}");
-
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
