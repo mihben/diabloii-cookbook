@@ -25,6 +25,8 @@ namespace DiabloII_Cookbook.Client
 
             builder.RootComponents.Add<App>("#app");
 
+            builder.Configuration.AddEnvironmentVariables();
+
             builder.Logging
                 .ClearProviders()
                 .AddSerilog(new LoggerConfiguration()
