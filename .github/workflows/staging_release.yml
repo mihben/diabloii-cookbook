@@ -86,8 +86,7 @@ jobs:
           file: ./src/DiabloII-Cookbook.Web/Dockerfile
           context: .
           tags: |            
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook:${{ github.ref }}
+            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook:${{ steps.calculate_version.outputs.version }}
             
   publish-frontend:
     runs-on: ubuntu-latest
@@ -122,5 +121,4 @@ jobs:
           file: ./src/DiabloII-Cookbook.Client/Dockerfile
           context: .
           tags: | 
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook-frontend:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook-frontend:${{ github.ref }}
+            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook-frontend:${{ steps.calculate_version.outputs.version }}
