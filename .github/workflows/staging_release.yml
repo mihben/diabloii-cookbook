@@ -75,7 +75,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
-          registry: https://docker.pkg.github.com
+          registry: ghcr.io
           username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
@@ -86,7 +86,7 @@ jobs:
           file: ./src/DiabloII-Cookbook.Web/Dockerfile
           context: .
           tags: |            
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook:${{ steps.calculate_version.outputs.version }}
+            ghcr.io/${{ github.repository }}/diabloii-cookbook:${{ steps.calculate_version.outputs.version }}
             
   publish-frontend:
     runs-on: ubuntu-latest
@@ -110,7 +110,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
-          registry: https://docker.pkg.github.com
+          registry: ghcr.io
           username: mihben@gmail.com
           password: ${{ secrets.GITHUB_TOKEN }}
           
@@ -121,4 +121,4 @@ jobs:
           file: ./src/DiabloII-Cookbook.Client/Dockerfile
           context: .
           tags: | 
-            docker.pkg.github.com/${{ github.repository }}/diabloii-cookbook-frontend:${{ steps.calculate_version.outputs.version }}
+            ghcr.io/${{ github.repository }}/diabloii-cookbook-frontend:${{ steps.calculate_version.outputs.version }}
