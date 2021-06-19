@@ -8,14 +8,14 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY "./src" "./src"
 
-RUN dotnet restore "DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj"
+RUN dotnet restore "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj"
 
 COPY . .
-WORKDIR "/src/DiabloII-Cookbook.Client"
-RUN dotnet build "DiabloII-Cookbook.Client.csproj" -c Release -o /app/build
+WORKDIR "/src"
+RUN dotnet build "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "DiabloII-Cookbook.Client.csproj" -c Release -o /app/publish
+RUN dotnet publish "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
