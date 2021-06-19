@@ -26,7 +26,6 @@ div.tooltip {
     left: 50%;
     margin-left: -60px;
     text-align: center;
-    z-index: 1;
 }
 
     div.tooltip::after {

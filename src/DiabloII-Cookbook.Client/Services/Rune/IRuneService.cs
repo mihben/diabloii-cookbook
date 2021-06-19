@@ -11,5 +11,6 @@ namespace DiabloII_Cookbook.Client.Services
     {
         Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken);
         Task<IEnumerable<RuneWord>> GetRuneWordsAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<RuneWord>> GetRuneWordsAsync(IEnumerable<Rune> runes, IEnumerable<ItemType> itemTypes, CancellationToken cancellationToken);
     }
 }

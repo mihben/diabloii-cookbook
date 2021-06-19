@@ -136,8 +136,6 @@ div.weapon-filters {
 }
 
 div.rune-words-container {
-    overflow-y: scroll;
-
     flex: 1 0 0;
 
     overflow-y: auto;

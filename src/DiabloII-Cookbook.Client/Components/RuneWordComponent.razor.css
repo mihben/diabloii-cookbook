@@ -71,3 +71,8 @@ div.ingredients {
     margin-block-start: 4px;
     margin-block-end: 32px;
 }
+
+span.filtered-by {
+    font-weight: bolder;
+    color: green;
+}

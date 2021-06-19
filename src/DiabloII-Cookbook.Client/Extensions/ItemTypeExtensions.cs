@@ -12,5 +12,10 @@ namespace DiabloII_Cookbook.Client.Extensions
         {
             return itemTypes.Where(it => it.Group.Equals(group, StringComparison.InvariantCultureIgnoreCase)).Select(it => new SelectModel<ItemType>(it)).ToList();
         }
+
+        public static string FilteredBy(this ItemType itemType, IEnumerable<ItemType> selectedItemTypes)
+        {
+            return selectedItemTypes.Any(it => it.Id.Equals(itemType.Id)) ? "filtered-by" : "";
+        }
     }
 }

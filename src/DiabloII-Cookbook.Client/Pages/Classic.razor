@@ -101,7 +101,7 @@
         <div class="rune-words-container">
             @foreach (var runeWord in RuneWords)
             {
-                <RuneWordComponent RuneWord="@runeWord" Level="@Character?.Level" />
+                <RuneWordComponent RuneWord="@runeWord" Level="@Character?.Level" Filtered="@ArmorFilters.GetSelectedItems().Concat(WeaponFilters.GetSelectedItems()).ToList()"/>
             }
         </div>
     </div>
@@ -203,9 +203,9 @@
         }
     }
 
-    public Task FilterRuneWordsAsync()
+    public async Task FilterRuneWordsAsync()
     {
-        return Task.CompletedTask;
+        RuneWords = await RuneService.GetRuneWordsAsync(Runes.GetSelectedItems(), ArmorFilters.GetSelectedItems().Concat(WeaponFilters.GetSelectedItems()), default);
     }
 
     public async Task CreateAsync()
@@ -235,6 +235,6 @@
 
     public async Task UpdateAsync()
     {
-        await CharacterService.UpdateAsync(Character.Id, Character.Level, Runes.Where(r => r.Selected).Select(r => r.Item), default);
+        await CharacterService.UpdateAsync(Character.Id, Character.Level, Runes.GetSelectedItems(), default);
     }
 }

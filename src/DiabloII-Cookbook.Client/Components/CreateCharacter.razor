@@ -50,7 +50,7 @@
     {        
         var query = new GetClassesQuery();
         client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Add("message-type", query.MessageType);
+        client.DefaultRequestHeaders.Add("Message-Type", query.MessageType);
         var result = await client.PostAsJsonAsync("api", query, default);
         Classes = await result.Content.ReadFromJsonAsync<IEnumerable<string>>(cancellationToken: default);
 

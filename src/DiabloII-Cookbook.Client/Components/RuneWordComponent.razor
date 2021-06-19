@@ -4,7 +4,16 @@
 <div class="panel">
     <p class="name">@RuneWord.Name</p>
     <p class="item-types">
-        (<span>@RuneWord.GetItemTypes()</span>)
+        (
+            @foreach (var itemType in RuneWord.ItemTypes)
+            {
+                <span class="@itemType.FilteredBy(Filtered)">@itemType.Name</span>
+                @if (!itemType.Id.Equals(RuneWord.ItemTypes.Last().Id))
+                {
+                    @Separator;
+                }
+            }                
+        )
     </p>
 
     <div class="ingredients">
@@ -30,4 +39,9 @@
 
     [Parameter]
     public int? Level { get; set; }
+
+    [Parameter]
+    public IEnumerable<ItemType> Filtered { get; set; }
+
+    private string Separator => ", ";
 }
