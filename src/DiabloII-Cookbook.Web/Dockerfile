@@ -5,9 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
-COPY "./src/Backend" "./src"
-
-RUN ls -a
+COPY "./src" "./src"
 
 RUN dotnet restore "./src/DiabloII-Cookbook.Web/DiabloII-Cookbook.Web.csproj"
 COPY . .

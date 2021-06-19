@@ -6,9 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj", "DiabloII-Cookbook.Client/"]
-COPY ["DiabloII-Cookbook/DiabloII-Cookbook.Api.csproj", "DiabloII-Cookbook/"]
+COPY "./src" "./src"
+
 RUN dotnet restore "DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj"
+
 COPY . .
 WORKDIR "/src/DiabloII-Cookbook.Client"
 RUN dotnet build "DiabloII-Cookbook.Client.csproj" -c Release -o /app/build
