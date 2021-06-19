@@ -20,6 +20,6 @@ RUN dotnet publish "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.cspr
 FROM nginx:alpine
 WORKDIR /var/www/web
 COPY --from=publish /app/publish/wwwroot .
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./src/DiabloII-Cookbook.Client/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 EXPOSE 443
