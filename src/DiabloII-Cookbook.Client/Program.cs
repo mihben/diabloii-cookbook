@@ -1,17 +1,19 @@
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Blazored.Modal;
-using DiabloII_Cookbook.Client.Services;
 using Blazored.LocalStorage;
-using System.Text.Json;
+using Blazored.Modal;
 using DiabloII_Cookbook.Client.Contexts;
 using DiabloII_Cookbook.Client.Options;
+using DiabloII_Cookbook.Client.Services;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using Serilog;
+using Serilog.Sinks.Grafana.Loki;
+using Serilog.Sinks.Grafana.Loki.HttpClients;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace DiabloII_Cookbook.Client
 {
@@ -21,10 +23,13 @@ namespace DiabloII_Cookbook.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-            builder.Configuration
-                .AddInMemoryCollection(new Dictionary<string, string> { ["Backend:BaseAddress"] = "http://localhost:5001/"})
-                .AddEnvironmentVariables();
             builder.RootComponents.Add<App>("#app");
+
+            builder.Logging
+                .ClearProviders()
+                .AddSerilog(new LoggerConfiguration()
+                            .ReadFrom.Configuration(builder.Configuration.Build())
+                            .CreateLogger());
 
             builder.Services.AddSingleton<ILoadingScreenService, LoadingScreenService>();
 
