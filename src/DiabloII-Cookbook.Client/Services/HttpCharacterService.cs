@@ -1,6 +1,5 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
 using DiabloII_Cookbook.Api.DataTransferObjects;
-using DiabloII_Cookbook.Api.Queries;
 using DiabloII_Cookbook.Client.Extensions;
 using System;
 using System.Collections.Generic;
@@ -40,6 +39,11 @@ namespace DiabloII_Cookbook.Client.Services
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             await _client.DeleteAsync($"api/character/{id}", cancellationToken);
+        }
+
+        public Task UpdateAsync(Guid id, int level, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

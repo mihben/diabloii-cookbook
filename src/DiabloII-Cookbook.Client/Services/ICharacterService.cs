@@ -12,5 +12,6 @@ namespace DiabloII_Cookbook.Client.Services
         Task<Character> GetCharacterAsync(Guid id, CancellationToken cancellationToken);
         Task CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task UpdateAsync(Guid id, int level, CancellationToken cancellationToken);
     }
 }

@@ -30,7 +30,10 @@
                 <span>@Character?.Name</span>
 
                 <label>Level:</label>
-                <span>@Character?.Level</span>
+                <EditForm Model="@Character" OnValidSubmit="UpdateAsync" style="width: 100%">
+                    <InputNumber class="" TValue="int" @bind-Value="Character.Level"/>                    
+                </EditForm>
+
 
                 <label>Ladder:</label>
                 <span>@Character?.IsLadder.ToReadable()</span>
@@ -104,7 +107,7 @@
     private int _index = 0;
 
     public IEnumerable<Guid> Characters { get; private set; }
-    public Character Character { get; private set; }
+    public CharacterModel Character { get; private set; } = new CharacterModel(Guid.Empty, "Amazon", null, 0, false, false);
 
     public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
 
@@ -153,7 +156,8 @@
     private async Task RefreshCharacterAsync(int index)
     {
         if (Characters.Count() == 0) return;
-        Character = await CharacterService.GetCharacterAsync(Characters.ElementAt(index), default);
+        var character = await CharacterService.GetCharacterAsync(Characters.ElementAt(index), default);
+        Character = new CharacterModel(character.Id, character.Class, character.Name, character.Level, character.IsExpansion, character.IsLadder);
     }
 
     private async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
@@ -219,5 +223,10 @@
             Characters = await GetCharactersAsync(default);
             await RefreshCharacterAsync(Characters.Count() - 1);
         }
+    }
+
+    public async Task UpdateAsync()
+    {
+        await CharacterService.UpdateAsync(Character.Id, Character.Level, default);
     }
 }

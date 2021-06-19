@@ -46,9 +46,18 @@ namespace DiabloII_Cookbook.Client.Services
             return characters.Select(c => c.Id);
         }
 
+        public async Task UpdateAsync(Guid id, int level, CancellationToken cancellationToken)
+        {
+            var characters = await ReadCharactersAsync(cancellationToken);
+            var character = characters.Single(c => c.Id.Equals(id));
+            characters.Remove(character);
+            characters.Add(new Character(id, character.Class, character.Name, level, character.IsLadder, character.IsExpansion, character.Runes));
+            await _storage.SetItemAsync(KEY, characters, cancellationToken);
+        }
+
         private async Task<ICollection<Character>> ReadCharactersAsync(CancellationToken cancellationToken)
         {
-            return await _storage.GetItemAsync<ICollection<Character>>(KEY) ?? new List<Character>();
+            return await _storage.GetItemAsync<ICollection<Character>>(KEY, cancellationToken) ?? new List<Character>();
         }
     }
 }
