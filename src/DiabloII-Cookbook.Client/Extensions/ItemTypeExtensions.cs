@@ -8,9 +8,9 @@ namespace DiabloII_Cookbook.Client.Extensions
 {
     public static class ItemTypeExtensions
     {
-        public static IEnumerable<Filter> AsFilter(this IEnumerable<ItemType> itemTypes, string group)
+        public static IEnumerable<SelectModel<ItemType>> MakeSelectable(this IEnumerable<ItemType> itemTypes, string group)
         {
-            return itemTypes.Where(it => it.Group.Equals(group, StringComparison.InvariantCultureIgnoreCase)).Select(it => new Filter(it)).ToList();
+            return itemTypes.Where(it => it.Group.Equals(group, StringComparison.InvariantCultureIgnoreCase)).Select(it => new SelectModel<ItemType>(it)).ToList();
         }
     }
 }

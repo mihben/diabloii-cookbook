@@ -41,7 +41,7 @@ namespace DiabloII_Cookbook.Client.Services
             await _client.DeleteAsync($"api/character/{id}", cancellationToken);
         }
 
-        public Task UpdateAsync(Guid id, int level, CancellationToken cancellationToken)
+        public Task UpdateAsync(Guid id, int level, IEnumerable<Rune> runes, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

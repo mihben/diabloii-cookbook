@@ -13,49 +13,53 @@
 @inject IModalService Modal;
 @inject IRuneService RuneService;
 @inject IFilterService FilterService;
-@inject ICharacterService CharacterService; 
+@inject ICharacterService CharacterService;
 @inject ILoadingScreenService LoadingScreenService;
 
 <div class="container">
     <div class="panel left">
-        <div class="character-information">
-            <div class="character-selector">
-                <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync" />
-                <img class="character-image" src="@Character?.GetImage()" />
-                <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync" />
+
+        <EditForm Model="@Character" OnValidSubmit="UpdateAsync" style="width: 100%; height: 100%; display: flex; flex-flow: column">
+            <div class="character-information">
+                <div class="character-selector">
+                    <img class="arrow" src="/assets/classic/elements/left.png" @onclick="PreviousAsync" />
+                    <img class="character-image" src="@Character?.GetImage()" />
+                    <img class="arrow" src="/assets/classic/elements/right.png" @onclick="NextAsync" />
+                </div>
+
+                <div class="character-detail">
+                    <label>Name:</label>
+                    <span>@Character?.Name</span>
+
+                    <label>Level:</label>
+                    <InputNumber TValue="int" @bind-Value="Character.Level" />
+
+
+                    <label>Ladder:</label>
+                    <span>@Character?.IsLadder.ToReadable()</span>
+
+                    <label>Expansion:</label>
+                    <span>@Character?.IsExpansion.ToReadable()</span>
+                </div>
             </div>
 
-            <div class="character-detail">
-                <label>Name:</label>
-                <span>@Character?.Name</span>
-
-                <label>Level:</label>
-                <EditForm Model="@Character" OnValidSubmit="UpdateAsync" style="width: 100%">
-                    <InputNumber class="" TValue="int" @bind-Value="Character.Level"/>                    
-                </EditForm>
-
-
-                <label>Ladder:</label>
-                <span>@Character?.IsLadder.ToReadable()</span>
-
-                <label>Expansion:</label>
-                <span>@Character?.IsExpansion.ToReadable()</span>
+            <div class="selector">
+                @foreach (var rune in Runes)
+                {
+                    <InputCheckbox @bind-Value="rune.Selected" />
+                    <RuneComponent Rune="@rune.Item" Level="@Character?.Level" />
+                }
             </div>
-        </div>
 
-        <div class="selector">
-            @foreach (var rune in Runes)
-            {
-                <input class="rune-select" type="checkbox" />
-                <RuneComponent Rune="@rune" Level="@Character?.Level" />
-            }
-        </div>
+            <div class="button-row">
+                <div class="left-row">
+                    <button @onclick="CreateAsync">Create</button>
+                    <button @onclick="DeleteAsync">Delete</button>
+                </div>
 
-        <div class="button-row">
-            <button class="left-row" @onclick="CreateAsync">Create</button>
-            <button class="right-row" @onclick="DeleteAsync">Delete</button>
-        </div>
-
+                <button type="submit">Save</button>
+            </div>
+        </EditForm>
     </div>
 
     <div class="right data">
@@ -66,7 +70,7 @@
                     {
                         <div class="selector">
                             <input type="checkbox" @bind="armor.Selected" />
-                            <span>@armor.ItemType.Name</span>
+                            <span>@armor.Item.Name</span>
                         </div>
                     }
                 </div>>
@@ -75,7 +79,7 @@
                     {
                         <div class="selector">
                             <input type="checkbox" @bind="weapon.Selected" />
-                            <span>@weapon.ItemType.Name</span>
+                            <span>@weapon.Item.Name</span>
                         </div>
                     }
                 </div>
@@ -109,17 +113,17 @@
     public IEnumerable<Guid> Characters { get; private set; }
     public CharacterModel Character { get; private set; } = new CharacterModel(Guid.Empty, "Amazon", null, 0, false, false);
 
-    public IEnumerable<Rune> Runes { get; private set; } = Enumerable.Empty<Rune>();
+    public IEnumerable<SelectModel<Rune>> Runes { get; private set; } = Enumerable.Empty<SelectModel<Rune>>();
 
-    public IEnumerable<Filter> ArmorFilters{ get; private set; } = Enumerable.Empty<Filter>();
-    public IEnumerable<Filter> WeaponFilters { get; private set; } = Enumerable.Empty<Filter>();
+    public IEnumerable<SelectModel<ItemType>> ArmorFilters { get; private set; } = Enumerable.Empty<SelectModel<ItemType>>();
+    public IEnumerable<SelectModel<ItemType>> WeaponFilters { get; private set; } = Enumerable.Empty<SelectModel<ItemType>>();
 
     public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        LoadingScreenService.IsLoading = false || firstRender;            
+        LoadingScreenService.IsLoading = false || firstRender;
     }
 
     protected override async Task OnInitializedAsync()
@@ -128,11 +132,11 @@
 
         Characters = await GetCharactersAsync(default);
 
-        Runes = await GetRunesAsync(default);
+        Runes = (await GetRunesAsync(default)).MakeSelectable();
 
         var itemTypes = await GetItemTypesAsync(default);
-        ArmorFilters = itemTypes.AsFilter("Armor");
-        WeaponFilters = itemTypes.AsFilter("Weapon");
+        ArmorFilters = itemTypes.MakeSelectable("Armor");
+        WeaponFilters = itemTypes.MakeSelectable("Weapon");
 
         await RefreshCharacterAsync(_index);
         await base.OnInitializedAsync();
@@ -158,6 +162,10 @@
         if (Characters.Count() == 0) return;
         var character = await CharacterService.GetCharacterAsync(Characters.ElementAt(index), default);
         Character = new CharacterModel(character.Id, character.Class, character.Name, character.Level, character.IsExpansion, character.IsLadder);
+        foreach (var rune in Runes)
+        {
+            rune.Selected = character.Runes.Any(r => r.Id.Equals(rune.Item.Id));
+        }
     }
 
     private async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
@@ -195,7 +203,7 @@
         }
     }
 
-    public  Task FilterRuneWordsAsync()
+    public Task FilterRuneWordsAsync()
     {
         return Task.CompletedTask;
     }
@@ -227,6 +235,6 @@
 
     public async Task UpdateAsync()
     {
-        await CharacterService.UpdateAsync(Character.Id, Character.Level, default);
+        await CharacterService.UpdateAsync(Character.Id, Character.Level, Runes.Where(r => r.Selected).Select(r => r.Item), default);
     }
 }

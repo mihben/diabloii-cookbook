@@ -54,7 +54,7 @@ div.data {
 }
 
 div.left {
-    width: 400px;
+    width: 450px;
     grid-column: left;
     display: flex;
     flex-flow: column;
@@ -173,7 +173,7 @@ label {
     font-weight: bold;
 }
 
-input[type="checkbox"] {
+::deep input[type="checkbox"] {
     -webkit-appearance: none;
     background-image: url("/assets/classic/elements/unchecked.png");
     background-repeat: round;
@@ -182,7 +182,7 @@ input[type="checkbox"] {
     height: min-content;
 }
 
-    input[type="checkbox"]:checked {
+    ::deep input[type="checkbox"]:checked {
         background-image: url("/assets/classic/elements/checked.png");
     }
 
@@ -235,6 +235,7 @@ div.loading-screen {
     padding-right: 8px;
     align-content: center;
     width: 100%;
+    font-family: var(--font-family);
 }
 
     ::deep input[type="number"]::-webkit-inner-spin-button {

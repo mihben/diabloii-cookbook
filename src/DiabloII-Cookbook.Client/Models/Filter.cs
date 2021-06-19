@@ -1,15 +1,13 @@
-﻿using DiabloII_Cookbook.Api.DataTransferObjects;
-
-namespace DiabloII_Cookbook.Client.Models
+﻿namespace DiabloII_Cookbook.Client.Models
 {
-    public class Filter
+    public class SelectModel<TItem>
     {
         public bool Selected { get; set; }
-        public ItemType ItemType { get; }
+        public TItem Item { get; }
 
-        public Filter(ItemType itemType)
+        public SelectModel(TItem item)
         {
-            ItemType = itemType;
+            Item = item;
         }
     }
 }
