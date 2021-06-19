@@ -5,8 +5,8 @@ name: PreRelease
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the develop branch
 on:
-  push:
-    branches: [develop]
+  # push:
+  #  branches: [develop]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -81,11 +81,11 @@ jobs:
         
       - name: Resolve
         run: npm install
-        working-directory: ./src/Frontend
+        working-directory: ./src/Frontend/blizzard-helper
         
       - name: Build
         run: ng build --prod
-        working-directory: ./src/Frontend
+        working-directory: ./src/Frontend/blizzard-helper
           
   publish-backend:          
     runs-on: ubuntu-latest
@@ -151,6 +151,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: ./src/Frontend/Dockerfile
+          file: ./src/Frontend/blizzard-helper/Dockerfile
           context: .
           tags: docker-registry.mihben.net/diabloii-cookbook-frontend:${{ steps.calculate_version.outputs.version }}

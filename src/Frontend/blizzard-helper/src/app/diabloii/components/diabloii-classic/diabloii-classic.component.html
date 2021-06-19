@@ -1,0 +1,81 @@
+<div class="main">
+    <div class="character panel">
+        <form class="character" [formGroup]="characterForm" (change)="save(this.characterForm.value)">
+            <div class="character-image">
+                <button class="arrow" (click)="previous()">                
+                    <img src="../../../../assets/diabloii/classic/left.png">
+                </button>
+            
+                <div style="display: flex;">
+                    <img class="class-image" src="{{ this.characterForm.get('class')?.value | asset:  'diabloii\\classic\\classes':'gif' }}">
+                </div>
+
+                <button class="arrow" (click)="next()">
+                    <img src="../../../../assets/diabloii/classic/right.png">
+                </button>
+            </div>
+
+            <div class="character-information">
+                <p class="label">Name:</p>
+                <p class="item">{{ this.characterForm.get('name')?.value }}</p>
+
+                <p class="label">Level:</p>
+                <input type="number" class="item" formControlName="level">
+                
+                <p class="label">Expansion:</p>
+                <p class="item">{{ this.characterForm.get('isExpansion')?.value | yesNo  }}</p>
+                
+                <p class="label">Ladder:</p>
+                <p class="item">{{ this.characterForm.get('isLadder')?.value | yesNo }}</p>
+            </div>
+            
+            <div class="character-runes">
+                <div class="selector" *ngFor="let rune of runes">
+                    <input style="margin-right: 8px;" type="checkbox" formControlName="{{ rune.id }}"/>
+                    <app-rune [rune]="rune" [level]="this.characterForm.get('level')?.value" assets='diabloii\\classic\\runes'></app-rune>
+                </div>
+            </div>
+            
+            <div class="character-buttons">
+                <button (click)="add()">Add</button>
+                <button (click)="delete()" style="margin-left: auto;">Delete</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="data">
+        <form class="filter" [formGroup]="filterForm">
+            <div class="filter panel">                
+                <div class="armor">
+                    <div class="selector" style="margin-top: 4px;" *ngFor="let armor of armors">
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ armor.id }}"/>
+                        <p>{{ armor.name }}</p>
+                    </div>                   
+                </div>
+
+                <div class="weapon">
+                    <div class="selector" *ngFor="let weapon of weapons">
+                        <input style="margin-right: 8px;" type="checkbox" formControlName="{{ weapon.id }}"/>
+                        <p>{{ weapon.name }}</p>
+                    </div>                 
+                </div>
+                
+                <div style="display: flex; grid-column: 1 / 4; padding: 4px; margin-top: 4px;">
+                    <div style="display: flex;">
+                        <button (click)="selectItemTypeFilter(this.weapons)" style="margin-right: 4px;">Weapons</button>
+                        <button (click)="selectItemTypeFilter(this.armors)">Armors</button>
+                    </div>
+                    
+                    <div style="display: flex;">
+                        <button style="margin-left: auto;">Search</button>
+                        <button (click)="getAllRuneWords()" style="margin-left: 4px;">All</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="rune-words">
+            <app-diabloii-classic-rune-words *ngFor="let runeWord of runeWords" [runeWord]="runeWord" [level]="this.characterForm.get('level')?.value"></app-diabloii-classic-rune-words>
+        </div>
+    </div>
+</div>
