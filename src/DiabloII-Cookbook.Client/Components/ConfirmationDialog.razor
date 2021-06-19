@@ -1,0 +1,18 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+<div>
+    <span>Do you really want to delete @Name?</span>
+
+    <div class="button-row">
+        <button @onclick="ModalInstance.CloseAsync">Yes</button>
+        <button @onclick="ModalInstance.CancelAsync">No</button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] 
+    private BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+}

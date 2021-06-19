@@ -109,6 +109,8 @@ button {
     width: 120px;
     font-weight: bold;
     font-family: var(--font-family);
+
+    margin-left: auto;
 }
 
     button:active {
@@ -128,12 +130,4 @@ div.button-row {
     justify-self: stretch;
 
     margin-top: 16px;
-}
-
-.left {
-    margin-right: auto;
-}
-
-.right {
-    margin-left: auto;
 }

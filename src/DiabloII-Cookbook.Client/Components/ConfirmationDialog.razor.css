@@ -1,0 +1,22 @@
+﻿span {
+    color: var(--color-text);
+    font-family: var(--font-family);
+}
+
+div.button-row {
+    margin-top: 16px;
+}
+
+button {
+    -webkit-appearance: none;
+    background-image: url('/assets/classic/elements/button.png');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+    border-width: 0px;
+    height: 1.8em;
+    width: 120px;
+    font-weight: bold;
+    font-family: var(--font-family);
+    margin-left: auto;
+}
