@@ -14,6 +14,7 @@
 @inject IRuneService RuneService;
 @inject IFilterService FilterService;
 @inject ICharacterService CharacterService; 
+@inject ILoadingScreenService LoadingScreenService;
 
 <div class="container">
     <div class="panel left">
@@ -112,9 +113,16 @@
 
     public IEnumerable<RuneWord> RuneWords { get; private set; } = Enumerable.Empty<RuneWord>();
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        LoadingScreenService.IsLoading = false || firstRender;            
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        LoadingScreenService.IsLoading = true;
+
         Characters = await GetCharactersAsync(default);
 
         Runes = await GetRunesAsync(default);
@@ -124,6 +132,7 @@
         WeaponFilters = itemTypes.AsFilter("Weapon");
 
         await RefreshCharacterAsync(_index);
+        await base.OnInitializedAsync();
     }
 
     public async Task PreviousAsync()

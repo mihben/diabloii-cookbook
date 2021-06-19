@@ -1,0 +1,40 @@
+﻿@using DiabloII_Cookbook.Client.Models
+@using DiabloII_Cookbook.Client.Services
+@using DiabloII_Cookbook.Client.Extensions
+
+@inject ILoadingScreenService LoadingScreenService
+
+@**@
+@if (IsLoading){
+    <div class="overlay" >
+        <div class="container">
+            <img class="image" src="@Data.GetImage()"/>
+            <p class="quote">"@Data.Quote"</p>            
+            <p class="source">--Deckard Cain, writing on @Data.Name</p>
+
+            <p>@IsLoading</p>
+        </div>
+    </div>    
+}
+@ChildContent
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private bool _isLoading;
+    [Parameter]
+    public bool IsLoading{ get => _isLoading; set { _isLoading = value; StateHasChanged(); } }
+
+    [Parameter]
+    public EventCallback<bool> IsLoadingChanged { get; set; }
+
+    private LoadingScreenData Data { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Data = LoadingScreenService.Data;
+
+        return base.OnInitializedAsync();
+    }
+}

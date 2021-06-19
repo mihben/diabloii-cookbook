@@ -20,6 +20,8 @@ namespace DiabloII_Cookbook.Client
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5001/") });
 
+            builder.Services.AddSingleton<ILoadingScreenService, LoadingScreenService>();
+
             builder.Services.AddScoped<IRuneService, RuneService>();
             builder.Services.AddScoped<IFilterService, FilterService>();
             builder.Services.AddScoped<HttpCharacterService>();

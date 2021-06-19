@@ -2,6 +2,6 @@
 {
     public class AuthorizationContext : IAuthorizationContext
     {
-        public bool IsAuthorized { get; } = false;
+        public bool IsAuthorized { get; }
     }
 }

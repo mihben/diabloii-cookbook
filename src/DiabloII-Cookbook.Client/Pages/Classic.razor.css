@@ -23,6 +23,8 @@ div.container {
     grid-column-gap: 4px;
     padding: 4px;
     font-family: var(--font-family);
+
+    z-index: 0;
 }
 
 div.panel {
@@ -209,3 +211,9 @@ button {
     button:disabled {
         background-image: url('/assets/classic/elements/disabled-button.jpg');
     }
+
+div.loading-screen {
+    position: relative;
+
+    z-index: 1;
+}

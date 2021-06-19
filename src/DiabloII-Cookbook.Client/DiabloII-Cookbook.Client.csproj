@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\classic\fonts\" />
+    <Folder Include="wwwroot\assets\classic\loading-screen\" />
   </ItemGroup>
 
 </Project>

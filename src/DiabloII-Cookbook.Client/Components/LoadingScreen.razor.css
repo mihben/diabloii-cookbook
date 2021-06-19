@@ -1,0 +1,57 @@
+﻿div.overlay {
+    position: fixed;
+
+    display: flex;
+    flex-flow: column;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: black;
+
+    z-index: 2;
+}
+
+div.container {
+    margin-top: auto;
+    margin-bottom: auto;
+    align-self: center;
+    max-width: 30%;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+img.image {
+    height: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p {
+    color: var(--color-text);
+}
+
+    p.quote {
+        font-family: 'Book Antiqua';
+        font-style: italic;
+
+        text-align: center;
+
+        margin-block-start: 16px;
+        margin-block-end: 4px;
+    }
+
+    p.source {
+        margin-block-start: 4px;
+        
+        margin-left: auto;
+
+        font-family: Arial;
+        font-style: italic;
+    }

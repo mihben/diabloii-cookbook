@@ -1,9 +1,31 @@
-﻿@inherits LayoutComponentBase
+﻿@using DiabloII_Cookbook.Client.Components
+@using DiabloII_Cookbook.Client.Services
 
-<div class="page">
-    <div class="main">
-        <div class="content px-4">
-            @Body
+@inherits LayoutComponentBase
+
+@inject ILoadingScreenService LoadingScreenService
+
+<LoadingScreen IsLoading="@IsLoading">
+    <div class="page">
+        <div class="main">
+            <div class="content px-4">
+                @Body
+            </div>
         </div>
-    </div>
-</div>
+    </div>    
+</LoadingScreen>
+
+@code {
+    private bool IsLoading { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        LoadingScreenService.PropertyChanged += (sender, args) =>
+        {
+            IsLoading = LoadingScreenService.IsLoading;
+            StateHasChanged();
+        };
+
+        return base.OnInitializedAsync();
+    }
+}

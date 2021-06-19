@@ -8,6 +8,15 @@
     --border: url("/assets/classic/elements/border.png");
 }
 
+div.loading-screen {
+    width: 1vw;
+    height: 1vh;
+
+    display: flex;
+
+    margin: auto;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
