@@ -6,7 +6,7 @@ namespace DiabloII_Cookbook.Client.Extensions
     {
         public static string GetImage(this LoadingScreenData data)
         {
-            return $"/assets/classic/loading-screen/{data.Name}.gif";
+            return $"/assets/classic/loading-screen/{data.Name.ToLower()}.gif";
         }
     }
 }
