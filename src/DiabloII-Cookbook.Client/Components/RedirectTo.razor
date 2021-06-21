@@ -1,0 +1,12 @@
+﻿@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public string Path { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        NavigationManager.NavigateTo(Path);
+        return base.OnInitializedAsync();
+    }
+}
