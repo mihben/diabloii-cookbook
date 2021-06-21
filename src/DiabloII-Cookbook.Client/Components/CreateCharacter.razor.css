@@ -131,3 +131,12 @@ div.button-row {
 
     margin-top: 16px;
 }
+
+.left {
+    margin-right: auto;
+    margin-left: 0px;
+}
+
+.right {
+    margin-left: auto;
+}
