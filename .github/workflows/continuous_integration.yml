@@ -16,8 +16,8 @@ env:
 jobs: 
   # This workflow contains a single job called "build"
 
-  build-backend:
-    # The type of runner that the job will run on
+  build:
+    name: Build and Analyze
     runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -49,40 +49,6 @@ jobs:
         shell: pwsh
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"mihben_diabloii-cookbook" /n:"DiabloII-Cookbook" /o:"mihben" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"          
-          dotnet build $(Resolve-Path -Path "src\Backend\*.sln") --configuration Release
-          dotnet test $(Resolve-Path -Path "src\Backend\*.sln") --results-directory TestResults --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnet build $(Resolve-Path -Path "src\*.sln") --configuration Release
+          dotnet test $(Resolve-Path -Path "src\\*.sln") --results-directory TestResults --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          
-      
-  build-frontend:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis  
-          
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            
-      - name: Node 14.16.0
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.16.0
-          
-      - name: Install Angular
-        run: npm install -g @angular/cli
-        
-      - name: Resolve
-        run: npm install
-        working-directory: ./src/Frontend/blizzard-helper
-        
-      - name: Build
-        run: ng build --prod
-        working-directory: ./src/Frontend/blizzard-helper

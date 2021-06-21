@@ -7,7 +7,7 @@ name: PreRelease
 on:
   push:
     tags:
-        - 'release/*'
+        - 'prerelease/*'
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
         uses: johngeorgewright/parse-version-action@v1.0.2
         with:
           ref: ${{ github.ref }}
-          trim-start: release/
+          trim-start: prerelease/
     
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -104,7 +104,7 @@ jobs:
         uses: johngeorgewright/parse-version-action@v1.0.2
         with:
           ref: ${{ github.ref }}
-          trim-start: release/
+          trim-start: prerelease/
     
       - name: Publish
         uses: rohith/publish-nuget@v2
@@ -127,7 +127,7 @@ jobs:
         uses: johngeorgewright/parse-version-action@v1.0.2
         with:
           ref: ${{ github.ref }}
-          trim-start: release/
+          trim-start: prerelease/
           
       - name: Checkout
         uses: actions/checkout@v2
