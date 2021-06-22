@@ -19,9 +19,11 @@ namespace DiabloII_Cookbook.Client.Services
             _client = client;
         }
 
-        public async Task CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken)
+        public async Task<Guid> CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken)
         {
             await _client.SendAsync(new CreateCharacterCommand("Mihben#1868", @class, name, level, isLadder, isExpansion), cancellationToken);
+
+            return Guid.Empty;
         }
 
         public async Task<Character> GetCharacterAsync(Guid id, CancellationToken cancellationToken)

@@ -55,8 +55,7 @@
 
     public async Task CreateAsync()
     {
-        await CharacterService.CreateAsync(Class, Name, Level, IsExpansion, IsLadder, default);
-        await ModalInstance.CloseAsync(ModalResult.Ok<Character>(new Character(Guid.NewGuid(), Class, Name, Level, IsLadder, IsExpansion, Enumerable.Empty<Rune>())));
+        await ModalInstance.CloseAsync(ModalResult.Ok<Guid>(await CharacterService.CreateAsync(Class, Name, Level, IsExpansion, IsLadder, default)));
     }
 
     public async Task CancelAsync()

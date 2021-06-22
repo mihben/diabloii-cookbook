@@ -2,7 +2,6 @@
 using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Api.Queries;
 using DiabloII_Cookbook.Web.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

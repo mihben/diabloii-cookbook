@@ -159,10 +159,15 @@
         return await CharacterService.GetCharactersAsync(cancellationToken);
     }
 
-    private async Task RefreshCharacterAsync(int index)
+    public async Task RefreshCharacterAsync(int index)
     {
         if (Characters.Count() == 0) return;
-        var character = await CharacterService.GetCharacterAsync(Characters.ElementAt(index), default);
+        await RefreshCharacterAsync(Characters.ElementAt(index));
+    }
+
+    private async Task RefreshCharacterAsync(Guid id)
+    {
+        var character = await CharacterService.GetCharacterAsync(id, default);
         Character = new CharacterModel(character.Id, character.Class, character.Name, character.Level, character.IsExpansion, character.IsLadder);
         foreach (var rune in Runes)
         {
@@ -217,8 +222,9 @@
         var result = await modalReference.Result;
         if (!result.Cancelled)
         {
+            var id = (Guid)result.Data;
             Characters = await GetCharactersAsync(default);
-            await RefreshCharacterAsync(Characters.Count() - 1);
+            await RefreshCharacterAsync(id);
         }
     }
 
@@ -231,7 +237,7 @@
         {
             await CharacterService.DeleteAsync(Character.Id, default);
             Characters = await GetCharactersAsync(default);
-            await RefreshCharacterAsync(Characters.Count() - 1);
+            await RefreshCharacterAsync(0);
         }
     }
 
