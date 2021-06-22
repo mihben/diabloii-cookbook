@@ -19,7 +19,7 @@
     <div class="ingredients">
         @foreach (var ingredient in @RuneWord?.Ingredients)
         {
-            <RuneComponent Rune="ingredient.Rune" Level="Level ?? 99"/>
+            <RuneComponent Rune="ingredient.Rune" Level="Level ?? 99" Parent="Container"/>
         }
     </div>
 
@@ -42,6 +42,9 @@
 
     [Parameter]
     public IEnumerable<ItemType> Filtered { get; set; }
+
+    [Parameter]
+    public ElementReference Container { get; set; }
 
     private string Separator => ", ";
 }

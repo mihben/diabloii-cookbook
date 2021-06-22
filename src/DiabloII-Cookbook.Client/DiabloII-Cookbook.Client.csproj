@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\helper.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\assets\classic\background.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -36,6 +40,10 @@
   <ItemGroup>
     <Folder Include="wwwroot\assets\classic\fonts\" />
     <Folder Include="wwwroot\assets\classic\loading-screen\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\helper.js" />
   </ItemGroup>
 
   <ItemGroup>
