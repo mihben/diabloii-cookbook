@@ -197,21 +197,19 @@ button {
     height: 1.8em;
     width: 120px;
 
-    font-weight: bold;
     font-family: var(--font-family);
+    font-weight: bold;
 }
 
     button:active {
-        background: url('/assets/classic/elements/button.png');
+        background: url('/assets/classic/elements/pressed-button.jpg');
         background-repeat: round;
         background-clip: padding-box;
         background-size: cover;
-
-        padding-top: 3px;
     }
 
     button:disabled {
-        background: url('/assets/classic/elements/button.png');
+        background: url('/assets/classic/elements/disable-button.jpg');
         background-repeat: round;
         background-clip: padding-box;
         background-size: cover;
