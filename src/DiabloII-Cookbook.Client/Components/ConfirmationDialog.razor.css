@@ -20,3 +20,17 @@ button {
     font-family: var(--font-family);
     margin-left: auto;
 }
+
+button:active {
+    background: url('/assets/classic/elements/pressed-button.jpg');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+}
+
+button:disabled {
+    background: url('/assets/classic/elements/disable-button.jpg');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+}

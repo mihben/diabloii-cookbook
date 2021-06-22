@@ -187,7 +187,7 @@ label {
 button {
     -webkit-appearance: none;
 
-    background-image: url('/assets/classic/elements/button.png');
+    background: url('/assets/classic/elements/button.png');
     background-repeat: round;
     background-clip: padding-box;
     background-size: cover;
@@ -197,17 +197,22 @@ button {
     height: 1.8em;
     width: 120px;
 
-    font-weight: bold;
     font-family: var(--font-family);
+    font-weight: bold;
 }
 
     button:active {
-        background-image: url('/assets/classic/elements/pressed-button.jpg');
-        padding-top: 3px;
+        background: url('/assets/classic/elements/pressed-button.jpg');
+        background-repeat: round;
+        background-clip: padding-box;
+        background-size: cover;
     }
 
     button:disabled {
-        background-image: url('/assets/classic/elements/disabled-button.jpg');
+        background: url('/assets/classic/elements/disable-button.jpg');
+        background-repeat: round;
+        background-clip: padding-box;
+        background-size: cover;
     }
 
 div.loading-screen {
