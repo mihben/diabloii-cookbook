@@ -1,9 +1,12 @@
 ﻿@using DiabloII_Cookbook.Api.DataTransferObjects
 @using DiabloII_Cookbook.Client.Extensions
 @using System.Drawing
+@using DiabloII_Cookbook.Client.Models
+
+@inject IJSRuntime JSRuntime
 
 <div class="tooltip-wrapper">
-    <div id="#tooltip" class="tooltip panel" style="visibility: @IsShownTooltip; left: @TooltipPositionX; top: @TooltipPositionY">
+    <div @ref=Child id="#tooltip" class="tooltip panel" style="visibility: @IsShownTooltip; left: @TooltipPositionX; top: @TooltipPositionY">
         <p class="name">@Rune.Name</p>        
         <p class="description">
             <span class="label">In Weapon:</span>@Rune.InWeapon
@@ -27,26 +30,63 @@
 </div>
 
 @code {
+    private const string VISIBLE = "visible";
+    private const string HIDDEN = "collapse";
+
+    private IJSObjectReference _helper;
+
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public Rune Rune { get; set; }
     [Parameter] public int? Level { get; set; }
+    [Parameter] public ElementReference Parent { get; set; }
 
-    private const string VISIBLE = "visible";
-    private const string HIDDEN = "hidden";
+    public ElementReference Child { get; set; }
 
-    public string IsShownTooltip { get; set; } = "hidden";
-    public string TooltipPositionX { get; set; }
-    public string TooltipPositionY { get; set; }
+    public string IsShownTooltip { get; set; } = HIDDEN;
+    public string TooltipPositionX { get; set; } = "0px";
+    public string TooltipPositionY { get; set; } = "0px";
 
-    private void ShowTooltip(MouseEventArgs args)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        TooltipPositionX = $"{args.OffsetX + 10}px";
-        TooltipPositionY = $"{args.OffsetY + 10}px";        
+        if (firstRender)
+        {
+            _helper = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./helper.js");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task ShowTooltip(MouseEventArgs args)
+    {
+        Console.WriteLine("ShowTooltip");
+        var parentDimensions = await _helper.GetDimensions(Parent);
+        var childDimensions = await _helper.GetDimensions(Child);
+
+        var offset = CalulateOffset(parentDimensions, childDimensions, new Position(args.ClientX, args.ClientY));
+
+        Console.WriteLine($"Offset: X: {offset.X}; Y: {offset.Y}");
+
+        TooltipPositionX = $"{args.OffsetX + offset.X}px";
+        TooltipPositionY = $"{args.OffsetY + offset.Y}px";
+
         if (!IsShownTooltip.Equals(VISIBLE)) IsShownTooltip = VISIBLE;
     }
 
     private void HideTooltip(MouseEventArgs args)
     {
         IsShownTooltip = HIDDEN;
+        TooltipPositionX = "0px";
+        TooltipPositionY = "0px";
+    }
+
+    private Position CalulateOffset(Dimensions parent, Dimensions child, Position position)
+    {
+        var x = 5.0;
+        var y = 5.0;
+
+        if (position.X + child.Width > parent.Width) x -= child.Width + 5;
+        if (position.Y + child.Height > parent.Height) y -= child.Height + 5;
+
+        return new Position(x, y);
     }
 }

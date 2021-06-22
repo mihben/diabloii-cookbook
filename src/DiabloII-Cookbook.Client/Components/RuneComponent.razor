@@ -1,7 +1,7 @@
 ﻿@using DiabloII_Cookbook.Api.DataTransferObjects
 @using DiabloII_Cookbook.Client.Extensions
 
-<RuneTooltip Rune="@Rune" Level="@Level">
+<RuneTooltip Rune="@Rune" Level="@Level" Parent="@Parent">
     <div class="rune @Rune.IsApplicable(Level ?? 0)">
         <img src="@Rune.GetImage()"/>
         <span>@Rune.Name</span>
@@ -13,4 +13,6 @@
     public Rune Rune { get; set; }
     [Parameter]
     public int? Level { get; set; }
+    [Parameter]
+    public ElementReference Parent { get; set; }
 }
