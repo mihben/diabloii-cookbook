@@ -20,12 +20,17 @@
 }
 
 div.tooltip {
-    visibility: hidden;
+    //visibility: hidden;
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -60px;
+    /*bottom: 100%;*/
+    /*left: 50%;*/
+    /*margin-left: -60px;*/
     text-align: center;
+
+    /*top: -5px;
+    left: 115%;*/
+
+    z-index: 4;
 }
 
     div.tooltip::after {
