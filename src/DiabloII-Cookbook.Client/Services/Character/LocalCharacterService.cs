@@ -19,11 +19,14 @@ namespace DiabloII_Cookbook.Client.Services
             _storage = storage;
         }
 
-        public async Task CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken)
+        public async Task<Guid> CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken)
         {
+            var id = Guid.NewGuid();
             var characters = await ReadCharactersAsync(cancellationToken);
-            characters.Add(new Character(Guid.NewGuid(), @class, name, level, isLadder, isExpansion, Enumerable.Empty<Rune>()));
+            characters.Add(new Character(id, @class, name, level, isLadder, isExpansion, Enumerable.Empty<Rune>()));
             await _storage.SetItemAsync(KEY, characters, cancellationToken);
+
+            return id;
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
