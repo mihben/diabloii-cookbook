@@ -4,7 +4,7 @@
     border-color: white;
     border-width: 1px;
     border-style: solid;
-    background-color: rgb(0, 0, 0, 0.8);
+    background-color: rgb(0, 0, 0, 0.9);
     border-image: url("/assets/classic/elements/border.png");
     border-image-width: auto;
     border-image-repeat: stretch;
@@ -39,19 +39,27 @@ div.tooltip {
 }
 
 p {
-    font-size: 12px;
+    font-size: 14px;
 }
 
     p.name {
         color: var(--color-rune);
 
         font-weight: bold;
+
+        margin-block-start: 0px;
+        margin-block-end: 16px;
     }
 
     p.description {
         color: var(--color-text);
         margin-top: 0px;
         margin-bottom: 0px;
+    }
+
+    p.level {
+        margin-block-start: 8px;
+        margin-block-end: 0px;
     }
 
     p.level-applicable {
