@@ -1,6 +1,7 @@
 ﻿using DiabloII_Cookbook.Api.DataTransferObjects;
 using DiabloII_Cookbook.Api.Queries;
 using DiabloII_Cookbook.Client.Extensions;
+using Netension.Request.Abstraction.Senders;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -10,21 +11,21 @@ namespace DiabloII_Cookbook.Client.Services
 {
     public class FilterService : IFilterService
     {
-        private readonly HttpClient _client;
+        private readonly IQuerySender _querySender;
 
-        public FilterService(HttpClient client)
+        public FilterService(IQuerySender querySender)
         {
-            _client = client;
+            _querySender = querySender;
         }
 
         public async Task<IEnumerable<ItemType>> GetItemTypesAsync(CancellationToken cancellationToken)
         {
-            return await _client.QueryAsync<GetItemTypesQuery, IEnumerable<ItemType>>(new GetItemTypesQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetItemTypesQuery(), cancellationToken);
         }
 
         public async Task<IEnumerable<string>> GetClassesAsync(CancellationToken cancellationToken)
         {
-            return await _client.QueryAsync<GetClassesQuery, IEnumerable<string>>(new GetClassesQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetClassesQuery(), cancellationToken);
         }
     }
 }

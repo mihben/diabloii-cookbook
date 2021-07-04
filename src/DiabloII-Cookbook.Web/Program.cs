@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
 using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace DiabloII_Cookbook.Web
 {
