@@ -35,8 +35,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
                                 .ConfigureAwait(false);
 
             return runeWords
-                    .Where(rw => rw.ItemTypes.Any(rwite => query.ItemTypes.Any(itf => itf.Id.Equals(rwite.ItemType.Id))))
-                    .Where(rw => rw.Ingredients.All(rwi => query.Runes.Any(itf => itf.Id.Equals(rwi.Rune.Id))))
+                    .Where(rw => rw.ItemTypes.Any(rwite => query.ItemTypes.Any(itf => itf.Id.Equals(rwite.ItemType.Id))) && rw.Ingredients.All(rwi => query.Runes.Any(itf => itf.Id.Equals(rwi.Rune.Id))))
                     .Select(rw => rw.ToDto());
         }
     }

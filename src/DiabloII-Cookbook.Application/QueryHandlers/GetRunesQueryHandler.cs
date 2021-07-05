@@ -27,9 +27,9 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
         {
             _logger.LogDebug("Get all runes");
 
-            await _context.Database.EnsureCreatedAsync().ConfigureAwait(false);
+            await _context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
-            return (await _context.Runes.OrderBy(r => r.Order).ToListAsync().ConfigureAwait(false))
+            return (await _context.Runes.OrderBy(r => r.Order).ToListAsync(cancellationToken: cancellationToken).ConfigureAwait(false))
                     .Select(re => re.ToDto());
         }
     }

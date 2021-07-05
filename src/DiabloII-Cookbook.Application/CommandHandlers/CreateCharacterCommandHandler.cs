@@ -1,5 +1,4 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
-using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +29,14 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
             var id = Guid.NewGuid();
             _logger.LogDebug("Insert {id} character", id);
 
-            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(command.BattleTag) && c.Name.ToLower().Equals(command.Name.ToLower())).ConfigureAwait(false))
+            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(command.BattleTag, StringComparison.Ordinal) && c.Name.ToLower().Equals(command.Name.ToLower(), StringComparison.Ordinal), cancellationToken: cancellationToken).ConfigureAwait(false))
             {
                 _logger.LogInformation("{name} has been already created", command.Name);
                 throw new VerificationException(402, $"{command.Name} has been already created");
             }
 
             using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
-            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(command.BattleTag)).ConfigureAwait(false);
+            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(command.BattleTag, StringComparison.Ordinal), cancellationToken: cancellationToken).ConfigureAwait(false);
             if (account == null)
             {
                 account = new AccountEntity
