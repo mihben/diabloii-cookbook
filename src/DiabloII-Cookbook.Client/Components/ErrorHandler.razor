@@ -1,0 +1,48 @@
+﻿@using Blazored.Modal
+@using DiabloII_Cookbook.Client.Services
+@using Netension.Request.Blazor.Brokers
+@using Netension.Request.Blazor.ValueObjects
+@using System.Threading
+
+@implements IDisposable
+
+@inject IErrorChannel ErrorChannel
+@inject ILoadingScreenService LoadingScreenService;
+
+<BlazoredModal HideHeader="true">
+    @ChildContent
+</BlazoredModal>
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public Error Error { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) ErrorChannel.Subscribe(OnHandleError);
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    public void Dispose()
+    {
+        ErrorChannel.Unsubscribe(OnHandleError);
+    }
+
+    public Task OnHandleError(Error error, CancellationToken cancellationToken)
+    {
+        LoadingScreenService.IsLoading = false;
+        Error = error;
+
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    public void Close()
+    {
+        Error = null;
+    }
+}

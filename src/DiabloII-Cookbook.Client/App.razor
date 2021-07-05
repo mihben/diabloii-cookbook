@@ -2,15 +2,17 @@
 @inject INavigationInterception NavigationInterception 
 @inject NavigationManager NavigationManager
 
-<Blazored.Modal.CascadingBlazoredModal Class="dialog" HideHeader="true">
-    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        </Found>
-        <NotFound>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <RedirectTo Path="/classic"/>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</Blazored.Modal.CascadingBlazoredModal>
+<ErrorHandler>
+    <Blazored.Modal.CascadingBlazoredModal Class="dialog" HideHeader="true">
+        <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            </Found>
+            <NotFound>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <RedirectTo Path="/classic"/>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </Blazored.Modal.CascadingBlazoredModal>    
+</ErrorHandler>
