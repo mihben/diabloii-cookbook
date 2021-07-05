@@ -25,7 +25,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.NewGuid(), level, Enumerable.Empty<Rune>()), default);
+            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.NewGuid(), level, Enumerable.Empty<Rune>()), default).ConfigureAwait(false);
 
             // Assert
             Assert.True(result.IsValid);
@@ -39,7 +39,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.Empty, new Random().Next(1, 99), Enumerable.Empty<Rune>()), default);
+            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.Empty, new Random().Next(1, 99), Enumerable.Empty<Rune>()), default).ConfigureAwait(false);
 
             // Assert
             Assert.False(result.IsValid);
@@ -55,7 +55,7 @@ namespace DiabloII_Cookbook.Test.Validators
             var sut = CreateSUT();
 
             // Act
-            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.NewGuid(), level, Enumerable.Empty<Rune>()), default);
+            var result = await sut.ValidateAsync(new UpdateCharacterCommand(Guid.NewGuid(), level, Enumerable.Empty<Rune>()), default).ConfigureAwait(false);
 
             // Assert
             Assert.False(result.IsValid);

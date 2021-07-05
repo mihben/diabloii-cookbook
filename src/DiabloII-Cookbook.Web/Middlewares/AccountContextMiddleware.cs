@@ -34,7 +34,7 @@ namespace DiabloII_Cookbook.Web.Middlewares
 
             _accountContextMutator.SetBattleTag(claim.Value);
 
-            await _next.Invoke(httpContext);
+            await _next.Invoke(httpContext).ConfigureAwait(false);
         }
     }
 }

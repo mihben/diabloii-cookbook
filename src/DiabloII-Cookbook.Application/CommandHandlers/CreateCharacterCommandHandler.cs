@@ -1,5 +1,4 @@
 ﻿using DiabloII_Cookbook.Api.Commands;
-using DiabloII_Cookbook.Application.Contexts;
 using DiabloII_Cookbook.Application.DatabaseContexts;
 using DiabloII_Cookbook.Application.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,19 +24,19 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 
         public async Task HandleAsync(CreateCharacterCommand command, CancellationToken cancellationToken)
         {
-            await _context.Database.EnsureCreatedAsync(cancellationToken);
+            await _context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
             var id = Guid.NewGuid();
             _logger.LogDebug("Insert {id} character", id);
 
-            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(command.BattleTag) && c.Name.ToLower().Equals(command.Name.ToLower())))
+            if (await _context.Characters.AnyAsync(c => c.Account.BattleTag.Equals(command.BattleTag, StringComparison.Ordinal) && c.Name.ToLower().Equals(command.Name.ToLower(), StringComparison.Ordinal), cancellationToken: cancellationToken).ConfigureAwait(false))
             {
                 _logger.LogInformation("{name} has been already created", command.Name);
                 throw new VerificationException(402, $"{command.Name} has been already created");
             }
 
-            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(command.BattleTag));
+            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+            var account = await _context.Accounts.SingleOrDefaultAsync(ae => ae.BattleTag.Equals(command.BattleTag, StringComparison.Ordinal), cancellationToken: cancellationToken).ConfigureAwait(false);
             if (account == null)
             {
                 account = new AccountEntity
@@ -45,14 +44,14 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
                     Id = Guid.NewGuid(),
                     BattleTag = command.BattleTag
                 };
-                await _context.Accounts.AddAsync(account, cancellationToken);
+                await _context.Accounts.AddAsync(account, cancellationToken).ConfigureAwait(false);
             }
 
             var character = new CharacterEntity { Id = id, Account = account, Class = command.Class, Name = command.Name, Level = command.Level, IsLadder = command.IsLadder, IsExpansion = command.IsExpansion };
-            await _context.Characters.AddAsync(character, cancellationToken);
+            await _context.Characters.AddAsync(character, cancellationToken).ConfigureAwait(false);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

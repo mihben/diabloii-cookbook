@@ -22,15 +22,15 @@ namespace DiabloII_Cookbook.Client.Extensions
             client.AddMessageType(query.MessageType);
             System.Console.WriteLine(query);
             System.Console.WriteLine(JsonSerializer.Serialize(query));
-            using var response = await client.PostAsJsonAsync("api", query, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.Never, IgnoreReadOnlyProperties = false }, cancellationToken);
-            return await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
+            using var response = await client.PostAsJsonAsync("api", query, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.Never, IgnoreReadOnlyProperties = false }, cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task SendAsync<TCommand>(this HttpClient client, TCommand command, CancellationToken cancellationToken)
             where TCommand : ICommand
         {
             client.AddMessageType(command.MessageType);
-            using var response = await client.PostAsJsonAsync("api", command, cancellationToken);
+            using var response = await client.PostAsJsonAsync("api", command, cancellationToken).ConfigureAwait(false);
         }
     }
 }

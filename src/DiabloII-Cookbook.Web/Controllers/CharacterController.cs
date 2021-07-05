@@ -35,20 +35,20 @@ namespace DiabloII_Cookbook.Web.Controllers
         public async Task<IEnumerable<Guid>> GetAsync(CancellationToken cancellationToken)
         {
             // _httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value
-            return await _querySender.QueryAsync(new GetCharactersQuery("Mihben#1868"), cancellationToken);
+            return await _querySender.QueryAsync(new GetCharactersQuery("Mihben#1868"), cancellationToken).ConfigureAwait(false);
         }
 
         [HttpGet("{id:guid}")]
         public async Task<Character> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetCharacterDetailQuery(id), cancellationToken);
+            return await _querySender.QueryAsync(new GetCharacterDetailQuery(id), cancellationToken).ConfigureAwait(false);
         }
 
         [HttpPost]
         public async Task<IActionResult> InsertAsync([FromBody]CreateCharacter command, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Create {name} character", command.Name);
-            await _commandSender.SendAsync(new CreateCharacterCommand(_httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value, command.Class, command.Name, command.Level, command.IsLadder, command.IsExpansion), cancellationToken);
+            await _commandSender.SendAsync(new CreateCharacterCommand(_httpContextAccessor.HttpContext.User.FindFirst("battle_tag").Value, command.Class, command.Name, command.Level, command.IsLadder, command.IsExpansion), cancellationToken).ConfigureAwait(false);
             return Accepted();
         }
 
@@ -56,7 +56,7 @@ namespace DiabloII_Cookbook.Web.Controllers
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdateCharacter parameter, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Update {id} character", id);
-            await _commandSender.SendAsync(new UpdateCharacterCommand(id, parameter.Level, parameter.Runes), cancellationToken);
+            await _commandSender.SendAsync(new UpdateCharacterCommand(id, parameter.Level, parameter.Runes), cancellationToken).ConfigureAwait(false);
             return Accepted();
         }
 
@@ -64,7 +64,7 @@ namespace DiabloII_Cookbook.Web.Controllers
         public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Delete {id} character", id);
-            await _commandSender.SendAsync(new DeleteCharacterCommand(id), cancellationToken);
+            await _commandSender.SendAsync(new DeleteCharacterCommand(id), cancellationToken).ConfigureAwait(false);
             return Accepted();
         }
     }

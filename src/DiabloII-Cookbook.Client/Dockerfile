@@ -17,9 +17,7 @@ RUN dotnet build "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj
 FROM build AS publish
 RUN dotnet publish "./src/DiabloII-Cookbook.Client/DiabloII-Cookbook.Client.csproj" -c Release -o /app/publish
 
-FROM nginx:alpine
-WORKDIR /var/www/web
-COPY --from=publish /app/publish/wwwroot .
-COPY ./src/DiabloII-Cookbook.Client/nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
-EXPOSE 443
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DiabloII-Cookbook.Client.dll"]

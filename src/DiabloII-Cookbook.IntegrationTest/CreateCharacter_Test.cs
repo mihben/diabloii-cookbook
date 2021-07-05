@@ -7,7 +7,7 @@ using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Netension.Request.NetCore.Asp.ValueObjects;
+using Netension.Request.Http.ValueObjects;
 using System;
 using System.Net;
 using System.Net.Http.Headers;
@@ -39,7 +39,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             var client = _factory.CreateClient();
 
             // Call /api/character POST endpoint without authentication
-            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", new Fixture().Build<CreateCharacterCommand>().Create(), correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 401 - Unathorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -56,14 +56,14 @@ namespace DiabloII_Cookbook.IntegrationTest
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", new Fixture().GenerateCreateCharacter(), correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", new Fixture().GenerateCreateCharacter(), correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             // Character is inserted to the database
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            var entity = await context.Accounts.FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            var entity = await context.Accounts.FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             Assert.NotNull(entity);
             Assert.NotEqual(Guid.Empty, entity.Id);
@@ -81,7 +81,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
@@ -90,7 +90,8 @@ namespace DiabloII_Cookbook.IntegrationTest
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
             var entity = await context.Accounts
                                 .Include(ae => ae.Characters)
-                                .FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+                                .FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token)
+                                .ConfigureAwait(false);
 
             Assert.NotNull(entity);
             Assert.Contains(entity.Characters, ce => ce.Name == command.Name &&
@@ -115,15 +116,15 @@ namespace DiabloII_Cookbook.IntegrationTest
             var command = new Fixture().Build<CreateCharacterCommand>().FromFactory(() => DataFactories.Create(name)).Create();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
@@ -131,7 +132,8 @@ namespace DiabloII_Cookbook.IntegrationTest
             // Character is inserted to the database
             var entity = await context.Accounts
                                 .Include(ae => ae.Characters)
-                                .FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+                                .FirstOrDefaultAsync(ae => ae.BattleTag == "integration_test", new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token)
+                                .ConfigureAwait(false);
 
             Assert.NotNull(entity);
             Assert.Contains(entity.Characters, ce => ce.Name == command.Name &&
@@ -156,20 +158,20 @@ namespace DiabloII_Cookbook.IntegrationTest
             var command = new Fixture().Build<CreateCharacterCommand>().FromFactory(() => DataFactories.Create(name)).Create();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTestScheme");
 
             // Call /api/character POST endpoint with not existing character
-            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PostAsync("/api/character", command, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 400 - Bad Request
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
             // Error code - 402
             Assert.Equal(402, error.Code);
 

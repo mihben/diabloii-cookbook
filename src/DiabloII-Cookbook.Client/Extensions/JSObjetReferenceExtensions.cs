@@ -9,12 +9,12 @@ namespace DiabloII_Cookbook.Client.Extensions
     {
         public static async Task<Dimensions> GetDimensions(this IJSObjectReference reference)
         {
-            return await reference.InvokeAsync<Dimensions>("getScreenDimensions");
+            return await reference.InvokeAsync<Dimensions>("getScreenDimensions").ConfigureAwait(false);
         }
 
         public static async Task<Dimensions> GetDimensions(this IJSObjectReference reference, ElementReference element)
         {
-            return await reference.InvokeAsync<Dimensions>("getDimensions", element);
+            return await reference.InvokeAsync<Dimensions>("getDimensions", element).ConfigureAwait(false);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
         public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient client, PathString path, Guid correlationId, TimeSpan timeout)
         {
             client.DefaultRequestHeaders.Add(CorrelationDefaults.CorrelationId, correlationId.ToString());
-            return await client.DeleteAsync(path, new CancellationTokenSource(timeout).Token);
+            return await client.DeleteAsync(path, new CancellationTokenSource(timeout).Token).ConfigureAwait(false);
         }
 
         public static async Task<HttpResponseMessage> PutAsync<TContent>(this HttpClient client, PathString path, TContent command, Guid correlationId, TimeSpan timeout)
@@ -23,13 +23,13 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
             var content = JsonContent.Create(command);
             content.Headers.SetCorrelationId(correlationId);
 
-            return await client.PutAsync(path, content, new CancellationTokenSource(timeout).Token);
+            return await client.PutAsync(path, content, new CancellationTokenSource(timeout).Token).ConfigureAwait(false);
         }
 
         public static async Task<HttpResponseMessage> PostAsync<TCommand>(this HttpClient client, PathString path, TCommand command, Guid correlationId)
             where TCommand : ICommand
         {
-            return await client.PostAsync(path, command, correlationId, TimeSpan.FromSeconds(5));
+            return await client.PostAsync(path, command, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
         }
 
         public static async Task<HttpResponseMessage> PostAsync<TCommand>(this HttpClient client, PathString path, TCommand command, Guid correlationId, TimeSpan timeout)
@@ -39,7 +39,7 @@ namespace DiabloII_Cookbook.IntegrationTest.Extensions
             content.Headers.SetCorrelationId(correlationId);
             content.Headers.SetMessageType(command);
 
-            return await client.PostAsync(path, content, new CancellationTokenSource(timeout).Token);
+            return await client.PostAsync(path, content, new CancellationTokenSource(timeout).Token).ConfigureAwait(false);
         }
     }
 }

@@ -28,7 +28,8 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 
             var account = await _databaseContext.Accounts
                 .Include(ae => ae.Characters)
-                .FirstOrDefaultAsync(ae => ae.BattleTag.Equals(query.BattleTag), cancellationToken);
+                .FirstOrDefaultAsync(ae => ae.BattleTag.Equals(query.BattleTag), cancellationToken)
+                .ConfigureAwait(false);
 
             if (account is null) return Enumerable.Empty<Guid>();
 

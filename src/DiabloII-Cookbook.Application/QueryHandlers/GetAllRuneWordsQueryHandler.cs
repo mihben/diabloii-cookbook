@@ -25,7 +25,7 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
 
         public async Task<IEnumerable<RuneWord>> HandleAsync(GetAllRuneWordsQuery query, CancellationToken cancellationToken)
         {
-            await _context.Database.EnsureCreatedAsync(cancellationToken);
+            await _context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
             var runeWords = await _context.RuneWords
                             .AsNoTracking()
@@ -36,7 +36,8 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
                             .Include(rw => rw.Properties)
                                 .ThenInclude(rwp => rwp.Skill)
                              .OrderBy(rw => rw.Level)
-                            .ToListAsync(cancellationToken);
+                            .ToListAsync(cancellationToken)
+                            .ConfigureAwait(false);
 
             return runeWords.Select(rw => rw.ToDto());
         }

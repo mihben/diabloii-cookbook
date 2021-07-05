@@ -25,29 +25,29 @@ namespace DiabloII_Cookbook.Client.Services
 
         public async Task<Guid> CreateAsync(string @class, string name, int level, bool isExpansion, bool isLadder, CancellationToken cancellationToken)
         {
-            await _commandSender.SendAsync(new CreateCharacterCommand("Mihben#1868", @class, name, level, isLadder, isExpansion), cancellationToken);
+            await _commandSender.SendAsync(new CreateCharacterCommand("Mihben#1868", @class, name, level, isLadder, isExpansion), cancellationToken).ConfigureAwait(false);
 
             return Guid.Empty;
         }
 
         public async Task<Character> GetCharacterAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetCharacterDetailQuery(id), cancellationToken);
+            return await _querySender.QueryAsync(new GetCharacterDetailQuery(id), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Guid>> GetCharactersAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetCharactersQuery("Mihben#1868"), cancellationToken);
+            return await _querySender.QueryAsync(new GetCharactersQuery("Mihben#1868"), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            await _commandSender.SendAsync(new DeleteCharacterCommand(id), cancellationToken);
+            await _commandSender.SendAsync(new DeleteCharacterCommand(id), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task UpdateAsync(Guid id, int level, IEnumerable<Rune> runes, CancellationToken cancellationToken)
         {
-            await _commandSender.SendAsync(new UpdateCharacterCommand(id, level, runes), cancellationToken);
+            await _commandSender.SendAsync(new UpdateCharacterCommand(id, level, runes), cancellationToken).ConfigureAwait(false);
         }
     }
 }

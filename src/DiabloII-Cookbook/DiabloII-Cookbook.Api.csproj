@@ -4,10 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>DiabloII_Cookbook.Api</RootNamespace>
     <AssemblyName>DiabloII-Cookbook.Api</AssemblyName>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
