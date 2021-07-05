@@ -21,7 +21,7 @@ namespace DiabloII_Cookbook.Client
         public static async Task Main(string[] args)
         {
             var builder = NetensionWebAssemblyHostBuilder.CreateDefaultHostBuilder<ApplicationWireup, App>(args);
-            await builder.Build().RunAsync();
+            await builder.Build().RunAsync().ConfigureAwait(false);
         }
     }
 }

@@ -7,7 +7,7 @@ using DiabloII_Cookbook.IntegrationTest.Extensions;
 using DiabloII_Cookbook.IntegrationTest.Factories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Netension.Request.NetCore.Asp.ValueObjects;
+using Netension.Request.Http.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/{id} PUT endpoint without authentication
-            var response = await client.PutAsync($"/api/character/{fixture.Create<Guid>()}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{fixture.Create<Guid>()}", content, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 403 - Unathorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -71,12 +71,12 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{Guid.NewGuid()}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{Guid.NewGuid()}", content, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 400 - Bad Request
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             // Error code - 204
             Assert.Equal(204, error.Code);
@@ -101,9 +101,9 @@ namespace DiabloII_Cookbook.IntegrationTest
                                                 .Create();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
@@ -115,12 +115,12 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 400 - Bad Request
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            var error = await response.Content.ReadFromJsonAsync<Error>(cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             // Error code - 204
             Assert.Equal(204, error.Code);
@@ -146,9 +146,9 @@ namespace DiabloII_Cookbook.IntegrationTest
                                                 .Create();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
@@ -160,13 +160,13 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             context.ChangeTracker.Clear();
-            var entity = await context.Characters.FindAsync(id);
+            var entity = await context.Characters.FindAsync(id).ConfigureAwait(false);
 
             // Level update to 2
             Assert.Equal(2, entity.Level);
@@ -190,10 +190,10 @@ namespace DiabloII_Cookbook.IntegrationTest
                                                 .Create();
 
             var context = _factory.Services.GetRequiredService<DatabaseContext>();
-            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.Runes.AddAsync(runeEntity, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
-            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            await context.Database.EnsureCreatedAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.Runes.AddAsync(runeEntity, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
+            await context.SaveChangesAsync(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token).ConfigureAwait(false);
 
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
@@ -205,13 +205,13 @@ namespace DiabloII_Cookbook.IntegrationTest
             };
 
             // Call /api/character/<Id> PUT endpoint
-            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.PutAsync($"/api/character/{id}", content, correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 202 - Accepted
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
 
             context.ChangeTracker.Clear();
-            var entity = await context.Characters.Include(ce => ce.Runes).ThenInclude(cre => cre.Rune).FirstAsync(ce => ce.Id == id);
+            var entity = await context.Characters.Include(ce => ce.Runes).ThenInclude(cre => cre.Rune).FirstAsync(ce => ce.Id == id).ConfigureAwait(false);
 
             // Level update to 2
             Assert.Collection(entity.Runes, r => Assert.Equal(runeEntity.Id, r.Rune.Id));

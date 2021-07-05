@@ -20,12 +20,12 @@ namespace DiabloII_Cookbook.Client.Services
 
         public async Task<IEnumerable<ItemType>> GetItemTypesAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetItemTypesQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetItemTypesQuery(), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<string>> GetClassesAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetClassesQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetClassesQuery(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

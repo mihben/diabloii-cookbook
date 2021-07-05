@@ -35,7 +35,7 @@ namespace DiabloII_Cookbook.IntegrationTest
             //await context.Characters.AddAsync(existingCharacter, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 
             // Call /api/character/{id} DELETE endpoint without authentication
-            var response = await client.DeleteAsync($"/api/character/{Guid.NewGuid()}", correlationId, TimeSpan.FromSeconds(5));
+            var response = await client.DeleteAsync($"/api/character/{Guid.NewGuid()}", correlationId, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
             // Response with 403 - Unathorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

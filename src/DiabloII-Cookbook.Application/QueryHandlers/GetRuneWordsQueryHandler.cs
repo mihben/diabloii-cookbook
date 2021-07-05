@@ -31,7 +31,8 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
                                 .Include(rw => rw.Properties)
                                     .ThenInclude(rwp => rwp.Skill)
                                 .OrderBy(rw => rw.Level)
-                                .ToListAsync(cancellationToken);
+                                .ToListAsync(cancellationToken)
+                                .ConfigureAwait(false);
 
             return runeWords
                     .Where(rw => rw.ItemTypes.Any(rwite => query.ItemTypes.Any(itf => itf.Id.Equals(rwite.ItemType.Id))))

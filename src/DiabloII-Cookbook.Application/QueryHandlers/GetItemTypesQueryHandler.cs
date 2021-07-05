@@ -27,9 +27,9 @@ namespace DiabloII_Cookbook.Application.QueryHandlers
         {
             _logger.LogDebug("Get item types");
 
-            await _context.Database.EnsureCreatedAsync(cancellationToken);
+            await _context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
-            return (await _context.ItemTypes.ToListAsync(cancellationToken))
+            return (await _context.ItemTypes.ToListAsync(cancellationToken).ConfigureAwait(false))
                         .Select(ite => ite.ToDto());
         }
     }

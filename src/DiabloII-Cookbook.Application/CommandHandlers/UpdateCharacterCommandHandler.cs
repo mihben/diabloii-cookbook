@@ -27,11 +27,11 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
 
         public async Task HandleAsync(UpdateCharacterCommand command, CancellationToken cancellationToken)
         {
-            await _context.Database.EnsureCreatedAsync(cancellationToken);
+            await _context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
             _logger.LogDebug("Update {id} character", command.Id);
 
-            var character = await _context.Characters.Include(ce => ce.Runes).SingleOrDefaultAsync(ce => ce.Account.BattleTag == _accountContext.BattleTag && ce.Id == command.Id, cancellationToken);
+            var character = await _context.Characters.Include(ce => ce.Runes).SingleOrDefaultAsync(ce => ce.Account.BattleTag == _accountContext.BattleTag && ce.Id == command.Id, cancellationToken).ConfigureAwait(false);
 
             if (character is null)
             {
@@ -51,7 +51,7 @@ namespace DiabloII_Cookbook.Application.CommandHandlers
                     RuneId = rune.Id
                 });
             }
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

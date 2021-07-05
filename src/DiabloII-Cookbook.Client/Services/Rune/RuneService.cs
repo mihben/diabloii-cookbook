@@ -19,17 +19,17 @@ namespace DiabloII_Cookbook.Client.Services
 
         public async Task<IEnumerable<Rune>> GetRunesAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetRunesQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetRunesQuery(), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<RuneWord>> GetRuneWordsAsync(CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetAllRuneWordsQuery(), cancellationToken);
+            return await _querySender.QueryAsync(new GetAllRuneWordsQuery(), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<RuneWord>> GetRuneWordsAsync(IEnumerable<Rune> runes, IEnumerable<ItemType> itemTypes, CancellationToken cancellationToken)
         {
-            return await _querySender.QueryAsync(new GetRuneWordsQuery(itemTypes, runes), cancellationToken);
+            return await _querySender.QueryAsync(new GetRuneWordsQuery(itemTypes, runes), cancellationToken).ConfigureAwait(false);
         }
     }
 }
