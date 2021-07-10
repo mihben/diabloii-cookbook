@@ -1,0 +1,43 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+@using Netension.Request.Blazor.Brokers
+@using System.Threading
+@using Netension.Request.Blazor.ValueObjects
+
+@implements IDisposable
+
+@inject IModalService Modal
+
+@ChildContent
+
+@inject ErrorBroker Broker
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Broker.Subscribe(OnHandleError);
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    public void Dispose()
+    {
+        Broker.Unsubscribe(OnHandleError);
+    }
+
+    public Task OnHandleError(Error error, CancellationToken cancellationToken)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("Message", error.Message);
+
+        Modal.Show<ErrorDialog>("Error", parameters);
+
+        return Task.CompletedTask;
+    }
+}

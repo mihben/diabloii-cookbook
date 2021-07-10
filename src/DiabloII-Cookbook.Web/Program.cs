@@ -13,7 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Netension;
 using Netension.Request.Hosting.LightInject.Builders;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 namespace DiabloII_Cookbook.Web
 {
@@ -52,10 +51,7 @@ namespace DiabloII_Cookbook.Web
                         });
                     });
                 })
-                .UseSerilog((context, configuration) =>
-                {
-                    configuration.ReadFrom.Configuration(context.Configuration);
-                })
+                .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
                 .UseRequesting((builder) =>
                 {
                     builder.RegistrateHandlers<GetRunesQueryHandler>();
@@ -69,10 +65,7 @@ namespace DiabloII_Cookbook.Web
                         register.RegistrateHttpRequestReceiver((builder) => builder.UseCorrelation());
                     });
 
-                    builder.RegistrateRequestSenders(register =>
-                    {
-                        register.RegistrateLoopbackSender(builder => builder.UseCorrelation(), request => true);
-                    });
+                    builder.RegistrateRequestSenders(register => register.RegistrateLoopbackSender(builder => builder.UseCorrelation(), _ => true));
                 })
                 .ConfigureServices((context, services) =>
                 {
@@ -86,10 +79,7 @@ namespace DiabloII_Cookbook.Web
 
                     services.AddCors();
 
-                    services.AddAuthorization(options =>
-                    {
-                        options.AddPolicy("battle-tag", builder => builder.RequireClaim("battle_tag"));
-                    });
+                    services.AddAuthorization(options => options.AddPolicy("battle-tag", builder => builder.RequireClaim("battle_tag")));
                     services.AddAuthentication("blizzard")
                         .AddJwtBearer("blizzard", options => context.Configuration.GetSection("Authentication:Blizzard").Bind(options));
                 })

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace DiabloII_Cookbook.Client
 {
-    public class Program
+    public static class Program
     {
         public static async Task Main(string[] args)
         {
