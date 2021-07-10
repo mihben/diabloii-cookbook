@@ -1,0 +1,43 @@
+﻿span {
+    color: var(--color-text);
+    font-family: var(--font-family);
+}
+
+div.container {
+    display: flex;
+    flex-flow: column wrap;
+
+    margin: 8px;
+}
+
+button {
+    -webkit-appearance: none;
+    background-image: url('/assets/classic/elements/button.png');
+    background-repeat: round;
+    background-clip: padding-box;
+    background-size: cover;
+    border-width: 0px;
+    height: 1.8em;
+    width: 120px;
+    font-weight: bold;
+    font-family: var(--font-family);
+    margin-left: auto;
+
+    margin-top: 32px;
+
+    outline: none;
+}
+
+    button:active {
+        background: url('/assets/classic/elements/pressed-button.jpg');
+        background-repeat: round;
+        background-clip: padding-box;
+        background-size: cover;
+    }
+
+    button:disabled {
+        background: url('/assets/classic/elements/disable-button.jpg');
+        background-repeat: round;
+        background-clip: padding-box;
+        background-size: cover;
+    }

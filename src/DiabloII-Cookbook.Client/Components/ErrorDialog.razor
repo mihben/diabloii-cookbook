@@ -1,6 +1,15 @@
-﻿<p>@Message</p>
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+
+<div class="container">
+    <span>@Message</span>
+    <button @onclick="ModalInstance.CloseAsync">Ok</button>
+</div>
 
 @code {
+    [CascadingParameter] 
+    private BlazoredModalInstance ModalInstance { get; set; }
+
     [Parameter]
     public string Message { get; set; }
 }
